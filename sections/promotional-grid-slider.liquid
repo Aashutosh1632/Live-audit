@@ -29,6 +29,12 @@
   if section.settings.swipe_on_mobile and section.blocks.size > columns_mobile_int
     assign show_mobile_slider = true
   endif
+  assign mobile_image_loading = 'lazy'
+  assign mobile_image_fetchpriority = 'auto'
+  if section.index == 1
+    assign mobile_image_loading = 'eager'
+    assign mobile_image_fetchpriority = 'high'
+  endif
 -%}
   <div class="section-promotional-desktop">
   <div id="{{ section.settings.custom_id }}" class="{{ section.settings.custom-class }}">
@@ -125,8 +131,8 @@
   {{ section.settings.mobile_image | image_url: width: 750 | image_tag:
     sizes: '100vw',
     widths: '375, 500, 750, 1000',
-    loading: 'eager',
-    fetchpriority: 'high'
+    loading: mobile_image_loading,
+    fetchpriority: mobile_image_fetchpriority
   }}
 {%- endif -%}
 
