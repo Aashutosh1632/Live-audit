@@ -1,3 +1,8 @@
+<h1 class="sub-collection-title-txt collection-hero__title">
+          <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+          {{- collection.title | escape -}}
+        </h1>
+
 {{ 'subcollection-section.css' | asset_url | stylesheet_tag: preload: true }}
 <script src="{{ 'subcollection-section.js' | asset_url }}" defer="defer"></script>
 
@@ -8,10 +13,7 @@
   <div class="subcollection-wrapper" style="display: none; opacity: 0; transition: opacity 0.5s ease;"> 
     <div class="page-width">
       <div class="sub-collection-title">
-        <h1 class="sub-collection-title-txt collection-hero__title">
-          <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
-          {{- collection.title | escape -}}
-        </h1>
+        
       </div>
 
       <div class="subcoll swiper-container">
