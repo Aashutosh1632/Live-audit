@@ -1,0 +1,18 @@
+Date,Audit ID,Action,File,Change Type,Before,After,Bytes Before,Bytes After,Delta Bytes,Reason
+2026-05-12,CODE-007,Delete,assets/swiper-bundle.min.js,Removed file,Full Swiper 11 UMD bundle (all 24 modules),Replaced by tree-shaken ESM build,153107,0,-153107,Audit found 86% of bundle was unused on PDP and other pages
+2026-05-12,CODE-007,Delete,assets/swiper-bundle.min.css,Removed file,CSS for all Swiper modules including effects/zoom/thumbs/scrollbar,Replaced by slim CSS with only used modules,18200,0,-18200,Drops CSS for unused modules (Effect*/Zoom/Thumbs/Scrollbar/A11y)
+2026-05-12,CODE-007,Add,assets/swiper-core.min.mjs,New file (ESM),N/A,Swiper 11.1.15 core (ESM) - imports rewritten to flat sibling paths,0,65573,65573,Core Swiper class - required for all sliders
+2026-05-12,CODE-007,Add,assets/swiper-ssr-window.min.mjs,New file (ESM),N/A,Swiper 11.1.15 ssr-window helper,0,1610,1610,Internal dep of swiper-core
+2026-05-12,CODE-007,Add,assets/swiper-utils.min.mjs,New file (ESM),N/A,Swiper 11.1.15 utils helper - imports rewritten,0,5590,5590,Internal dep of swiper-core and modules
+2026-05-12,CODE-007,Add,assets/swiper-create-element.min.mjs,New file (ESM),N/A,Swiper 11.1.15 create-element helper,0,425,425,Internal dep of Navigation and Pagination modules
+2026-05-12,CODE-007,Add,assets/swiper-classes-to-selector.min.mjs,New file (ESM),N/A,Swiper 11.1.15 classes-to-selector helper,0,204,204,Internal dep of Pagination module
+2026-05-12,CODE-007,Add,assets/swiper-navigation.min.mjs,New file (ESM),N/A,Swiper 11.1.15 Navigation module - imports rewritten,0,3695,3695,Provides prev/next arrow buttons (used by 3 sliders)
+2026-05-12,CODE-007,Add,assets/swiper-pagination.min.mjs,New file (ESM),N/A,Swiper 11.1.15 Pagination module - imports rewritten,0,9362,9362,Provides bullets and fraction pagination (used by 2 sliders)
+2026-05-12,CODE-007,Add,assets/swiper-slim.min.js,New file (entry ESM),N/A,Imports core + Navigation + Pagination then sets window.Swiper,0,379,379,Drop-in replacement entry - exposes window.Swiper for existing call sites
+2026-05-12,CODE-007,Add,assets/swiper-slim.min.css,New file,N/A,Concatenation of swiper.min.css + navigation.min.css + pagination.min.css,0,13701,13701,Slim CSS with only used module styles
+2026-05-12,CODE-007,Modify,layout/theme.liquid,Replaced asset references on lines 96 and 222,swiper-bundle.min.css / swiper-bundle.min.js (defer),swiper-slim.min.css / swiper-slim.min.js (type=module),N/A,N/A,N/A,Switch to slim ESM build; module scripts auto-defer and still complete before DOMContentLoaded
+2026-05-12,CODE-007,Modify,layout/theme.quickshop.liquid,Replaced asset references on lines 56 and 147,swiper-bundle.min.css / swiper-bundle.min.js (defer),swiper-slim.min.css / swiper-slim.min.js (type=module),N/A,N/A,N/A,Switch to slim ESM build
+2026-05-12,CODE-007,Modify,layout/theme.appbrew.liquid,Replaced asset references on lines 71 and 185,swiper-bundle.min.css / swiper-bundle.min.js (defer),swiper-slim.min.css / swiper-slim.min.js (type=module),N/A,N/A,N/A,Switch to slim ESM build
+2026-05-12,CODE-007,Summary,assets/ (JS only),Total JS asset weight,Single 153KB UMD bundle,8 ESM files totalling ~87KB,153107,86838,-66269,JS payload reduced ~43% raw; estimated 25-30KB savings gzipped (meets audit target)
+2026-05-12,CODE-007,Summary,assets/ (CSS only),Total CSS asset weight,18KB bundle CSS,Slim CSS at ~13KB,18200,13701,-4499,CSS reduced ~25%
+2026-05-12,CODE-007,Summary,assets/ (total),Total Swiper payload,171KB,100KB,171307,100539,-70768,Total Swiper-related asset weight reduced ~41% raw
