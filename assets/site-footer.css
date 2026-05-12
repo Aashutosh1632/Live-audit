@@ -128,7 +128,8 @@
     border-bottom: none !important
   }
   .site-footer-information img {
-  width: 50px
+  width: 50px;
+  height: auto;
 }
 }
 
