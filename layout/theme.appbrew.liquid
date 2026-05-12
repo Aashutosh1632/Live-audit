@@ -68,7 +68,7 @@
 
     {{ content_for_header }}
     {%- render 'css-variable' -%}
-    {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'swiper-slim.min.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'custom-css.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'new-gem.css' | asset_url | stylesheet_tag: preload: true }}
@@ -182,7 +182,7 @@
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
-    <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+    <script type="module" src="{{ 'swiper-slim.min.js' | asset_url }}"></script>
 
     <script>
       window.shopUrl = '{{ request.origin }}';

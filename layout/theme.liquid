@@ -93,7 +93,7 @@
       {{ content_for_header }}
       {%- render 'css-variable' -%}
       {%- unless template == 'index' -%}
-      {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag: preload: true }}
+      {{ 'swiper-slim.min.css' | asset_url | stylesheet_tag: preload: true }}
       {%- endunless -%}
       {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
       {{ 'custom-css.css' | asset_url | stylesheet_tag: preload: true }}
@@ -219,7 +219,7 @@
          <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
       </ul>
       {%- unless template == 'index' -%}
-      <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+      <script type="module" src="{{ 'swiper-slim.min.js' | asset_url }}"></script>
       {%- endunless -%}
       <script>
          window.shopUrl = '{{ request.origin }}';
