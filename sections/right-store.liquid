@@ -1,0 +1,166 @@
+{{ 'section-store-locator.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-store-locator.js' | asset_url }}" defer="defer"></script>
+
+<div class="map-container-frame">
+  <div class="map-rig-container">
+    <!-- Placeholder for the dynamic right side content -->
+    {% for block in section.blocks %}
+      {% assign has_images = false %}
+      <div class="map-rig" id="{{ block.settings.block_id }}">
+        <div class="riggg">
+          <h2 class="right-title">
+            {{ block.settings.title }}
+          </h2>
+          <div class="right-overview">
+            {{ block.settings.overview }}
+            <p class="franchise-idd">{{ block.settings.franchise }}</p>
+          </div>
+          <div class="image-grid">
+            {% for i in (1..6) %}
+              {% assign image_key = 'image' | append: i %}
+              {% assign image = block.settings[image_key] %}
+              {% if image != blank %}
+                {% assign has_images = true %}
+                {% if forloop.index <= 2 %}
+                  {{ image | image_url: width: 600 | image_tag: widths: '300,450,600', sizes: '(min-width: 750px) 400px, 90vw', loading: 'lazy', class: 'popup-img' }}
+                {% endif %}
+                {{ image | image_url: width: 1200 | image_tag: widths: '600,900,1200', sizes: '90vw', loading: 'lazy', class: 'popup-img-all', style: 'display: none;' }}
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% if has_images %}
+            <div class="img-btn">
+              <button class="show-gallery-btn">{{ block.settings.img_btn }}</button>
+            </div>
+          {% endif %}
+        </div>
+        <div class="map-lft map-frame">
+          <div class="cst-map" id="{{ block.settings.block_id }}">
+            {{ block.settings.html }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<!-- Popup structure -->
+<div class="popup-overlay" style="display: none;">
+  <div class="popup-content">
+    <button class="close-popup-btn">&times;</button>
+    <div class="slider-container">
+      <div class="main-image">
+        <img src="" alt="Main Image" class="main-img">
+      </div>
+      <div class="thumbnail-container">
+        <!-- Thumbnails will be dynamically inserted here -->
+      </div>
+      <button class="prev-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" height="25" width="25" viewBox="0 0 448 512">
+          <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path fill="#000000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+        </svg>
+      </button>
+      <button class="next-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" height="25" width="25" viewBox="0 0 448 512">
+          <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path fill="#000000" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "right-store",
+  "settings": [
+
+     {
+          "type": "text",
+          "id": "sec_id",
+          "label": "sec_id"
+        },
+
+     {
+          "type": "text",
+          "id": "heading",
+          "label": "Add Heading"
+        }
+  ],
+  "blocks": [
+    {
+      "type": "locations",
+      "name":"locations",
+      "settings": [
+         {
+          "type": "text",
+          "id": "block_id",
+          "label": "block_id"
+        },
+         {
+          "type": "text",
+          "id": "title",
+          "label": "Add title"
+        },
+        {
+          "type": "html",
+          "id": "html",
+          "label": "map"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "image1",
+          "label": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image3",
+          "label": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image4",
+          "label": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image5",
+          "label": "image"
+        },
+          {
+          "type": "image_picker",
+          "id": "image6",
+          "label": "image"
+        },
+          {
+          "type": "text",
+          "id": "img_btn",
+          "label": "Image Button"
+        },
+        {
+          "type": "liquid",
+          "id": "overview",
+          "label": "overview"
+        },
+         {
+          "type": "textarea",
+          "id": "franchise",
+          "label": "franchise",
+           "default":"<strong>franchise id:</strong>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "right-store"
+    }
+  ]
+}
+{% endschema %}

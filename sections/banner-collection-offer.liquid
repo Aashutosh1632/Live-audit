@@ -1,0 +1,82 @@
+{{ 'banner-collection-offer.css' | asset_url | stylesheet_tag: preload: true }}
+
+<section class="banner-collection-offer-section">
+  <div class="page-width">
+  {% if section.settings.banner_image %}
+  <div class="banner-image-wrapper">
+    <a href="{{ section.settings.collection.url}}">
+    <img src="{{ section.settings.banner_image | image_url: width: auto }}" alt="Banner Image" class="banner-img-tag" /> 
+     </a>
+  </div>
+{% endif %}
+    <div class="offer-collection-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'collection_block' and block.settings.collection %}
+          <div class="offer-collection-item">
+            <a href="{{ block.settings.collection.url }}">
+              {% if block.settings.custom_image %}
+                <img src="{{ block.settings.custom_image | image_url: width: auto }}" alt="{{ block.settings.collection.title }}" class="offer-collection-image" />
+              {% elsif block.settings.collection.image %}
+                <img src="{{ block.settings.collection.image | image_url: width: auto }}" alt="{{ block.settings.collection.title }}" class="offer-collection-image" />
+              {% endif %}
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Banner Collection Offer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Banner Heading",
+      "default": "Your Banner Heading Here"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "add-collection"
+    }
+  ],
+  "blocks": [
+    {
+  "type": "collection_block",
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_image",
+      "label": "Custom Collection Image (optional)"
+    }
+  ]
+}
+
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "banner-collection-offer",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+
+
+
+

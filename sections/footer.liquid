@@ -1,0 +1,790 @@
+{% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{%- comment -%} Footer is below-the-fold; load its CSS async so it doesn't block LCP. {%- endcomment -%}
+<link rel="stylesheet" href="{{ 'section-footer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-newsletter.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-list-payment.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-list-social.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'site-footer.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>
+  {{ 'section-footer.css' | asset_url | stylesheet_tag }}
+  {{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+  {{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
+  {{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+  {{ 'site-footer.css' | asset_url | stylesheet_tag }}
+</noscript>
+{%- style -%}
+  .footer {
+    margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;}
+  .section-{{ section.id }}-padding { padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;  padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px; }
+
+  @media screen and (min-width: 750px) {
+    .footer {
+      margin-top: {{ section.settings.margin_top }}px;   } .section-{{ section.id }}-padding {  padding-top: {{ section.settings.padding_top }}px;   padding-bottom: {{ section.settings.padding_bottom }}px;  } }
+.footer-nav-icon { display: flex;}
+  span.site-footer-block-icon.accordion--icon {  color: #f32424;}
+  [data-accordion-trigger] .accordion--icon svg {
+    display: block; transition: transform .2scubic-bezier(.4,0,.2,1), color .2scubic-bezier(.4,0,.2,1);fill: currentColor;}
+
+a.googleplay-icon img, a.appstore-icon img {
+    height: 35px;
+    width: auto;
+}
+
+{%- endstyle -%}
+<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  {%- liquid
+    assign has_social_icons = true
+    if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
+      assign has_social_icons = false
+    endif
+    if settings.brand_image == blank and settings.brand_headline == blank and settings.brand_description == blank
+      assign brand_empty = true
+    endif
+    if section.blocks.size == 1 and section.blocks[0].type == 'brand_information' and brand_empty and has_social_icons == false and section.settings.newsletter_enable == false and section.settings.enable_follow_on_shop == false
+      assign only_empty_brand = true
+    endif
+  -%}
+  {%- if section.blocks.size > 0
+    or section.settings.newsletter_enable
+    or section.settings.show_social
+    and has_social_icons == true
+    or section.settings.enable_follow_on_shop
+  -%}
+    {%- unless only_empty_brand -%}
+      <div class="footer__content-top page-width">
+        {%- if section.blocks.size > 0 -%}
+          {%- liquid
+            if section.blocks.size == 9
+              assign footer_grid_class = 'grid--3-col-tablet'
+            elsif section.blocks.size > 6
+              assign footer_grid_class = 'grid--4-col-desktop'
+            elsif section.blocks.size > 4
+              assign footer_grid_class = 'grid--3-col-tablet'
+            endif
+          -%}
+          <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {% if settings.animations_reveal_on_scroll %} data-cascade{% endif %}>
+            {%- for block in section.blocks -%}
+              <div class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {{ block.shopify_attributes }} {% if settings.animations_reveal_on_scroll %} data-cascade style="--animation-order:{};" {% endif %}>
+                {%- if block.settings.heading != blank -%}
+                  <div class="footer-nav-icon">
+                  <h2 class="footer-block__heading inline-richtext">{{- block.settings.heading -}}</h2> <span class="site-footer-block-icon accordion--icon footer-icon-accor">{%- render 'icon-chevron-down' -%}
+                  </span>
+                </div>
+                {%- endif -%}
+                {%- case block.type -%}
+                  {%- when '@app' -%}
+                    {%- render block -%}
+                  {%- when 'social_accounts' -%}
+
+                    <div class="">
+
+                    </div>
+                    {%- if block.settings.cst_icon != blank -%} <div class="ftr-logo-dv">
+                      {{ block.settings.cst_icon | image_url: width: 300 | image_tag: widths: '150,200,300', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: 'Logo', class: 'ftr-logo-cst' }}
+                    <div class="flex-link-play link-play-mob-only">
+                      <a class="googleplay-icon" href="https://play.google.com/store/apps/details?id=com.deodap.gallery" target="_blank">  <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Google_play_2e3b1860-7d55-4844-a5fe-03a2f3205373.png?v=1777615235" alt="Get it on Google Play" width="135" height="40" loading="lazy">  </a>
+                      <a class="appstore-icon" href="https://apps.apple.com/us/app/deodap/id1661765661" target="_blank">   <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/app_store_2.png?v=1777615607" alt="Download on the App Store" width="135" height="40" loading="lazy">    </a>
+                    </div>
+                    </div>
+                    {%- endif -%}
+
+                    
+
+                    {%- if block.settings.heading != blank -%}   <p class="ftr-hd">{{ block.settings.heading }}</p>
+                    {%- endif -%}
+                    {%- if block.settings.subhead != blank -%}   <p class="ftr-subhd">{{ block.settings.subhead }}</p>
+                    {%- endif -%}
+                    <div class="flex-link-play link-play-desk-only">
+                      <a class="googleplay-icon" href="https://play.google.com/store/apps/details?id=com.deodap.gallery" target="_blank">  <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Google_play_2e3b1860-7d55-4844-a5fe-03a2f3205373.png?v=1777615235" alt="" style="" loading="lazy">  </a>
+                      <a class="appstore-icon" href="https://apps.apple.com/us/app/deodap/id1661765661" target="_blank">   <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/app_store_2.png?v=1777615607" alt="" style="" loading="lazy">    </a>
+                    </div>
+                   
+                    <div class="ftr-social-icon">
+                      <h2 class="site-footer-block-title">FOLLOW US :</h2> {%- render 'social-icons', context: 'footer', block: 'block' -%}
+                    </div>
+                   
+                    <div class="FTR-cont">
+                      {%- for block in section.blocks -%}
+                        {%- if block.settings.add_cont != blank -%}
+                          {{ block.settings.add_cont }}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                    <p class="site-footer-credits">Copyright © 2026 DeoDap.</p>
+                  {%- when 'text' -%}
+                    <div class="footer-block__details-content rte"> {{ block.settings.subtext }}  </div>
+                  {%- when 'link_list' -%}
+                    {%- if block.settings.menu != blank -%}
+                      <ul class="footer-block__details-content list-unstyled custom-lists" >
+                        {%- for link in block.settings.menu.links -%}
+                          <li {%- if link.url == 'https://deodap.in/account?tab=tickets' -%} class="kplogin" {%- endif -%}>  <a href="{% if link.url == 'https://deodap.in/account?tab=tickets' %}{% if customer %}{{ link.url }}{% else %}/account{% endif %}{% else %}{{ link.url }}{% endif %}" class=" link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %} " data-footer-link="true">  {{ link.title | escape }} </a>  </li>
+                           {%- if link.url == 'https://deodap.in/account?tab=tickets' -%}
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            document.querySelectorAll('a[data-footer-link="true"]').forEach(link => {
+                                                link.addEventListener("click", function () {
+                                                    if (!{{ customer | json }}) { 
+                                                        localStorage.setItem("redirect_after_login", "/account?tab=tickets");
+                                                    }
+                                                });
+                                            });
+                                            if ({{ customer | json }} && localStorage.getItem("redirect_after_login")) {
+                                                window.location.href = localStorage.getItem("redirect_after_login"); 
+                                                localStorage.removeItem("redirect_after_login"); 
+                                            }
+                                        });
+                                        </script>
+                             {%- endif -%}
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  {%- when 'brand_information' -%}
+                    <div class="footer-block__brand-info">
+                      {%- if settings.brand_image != blank -%}
+                        {%- assign brand_image_height = settings.brand_image_width
+                          | divided_by: settings.brand_image.aspect_ratio -%}
+                        <div class="footer-block__image-wrapper" style="max-width: min(100%, {{ settings.brand_image_width }}px);" >
+                          {{
+                            settings.brand_image
+                            | image_url: width: 1100
+                            | image_tag:
+                              loading: 'lazy',
+                              widths: '50, 100, 150, 200, 300, 400, 550, 800, 1100',
+                              height: brand_image_height,
+                              width: settings.brand_image_width
+                          }}
+                        </div>
+                      {%- endif -%}
+                      {%- if settings.brand_headline != blank -%}   <h2 class="footer-block__heading rte">{{ settings.brand_headline }}</h2> {%- endif -%}
+                      {%- if settings.brand_description != blank -%}       <div class="rte">{{ settings.brand_description }}</div> {%- endif -%}
+                      {%- if block.settings.show_social and has_social_icons -%} {%- render 'social-icons', class: 'footer__list-social' -%} {%- endif -%}
+                    </div>
+                  {%- when 'image' -%}
+                    <div class="footer-block__details-content footer-block-image {{ block.settings.alignment }}">
+                      {%- if block.settings.image != blank -%}
+                        {%- assign image_size_2x = block.settings.image_width | times: 2 | at_most: 5760 -%}
+                        <div
+                          class="footer-block__image-wrapper"
+                          style="max-width: min(100%, {{ block.settings.image_width }}px);" >
+                          <img srcset="{{ block.settings.image | image_url: width: block.settings.image_width }}, {{ block.settings.image | image_url: width: image_size_2x }} 2x"
+                            src="{{ block.settings.image | image_url: width: 760 }}"
+                            alt="{{ block.settings.image.alt | escape }}"
+                            loading="lazy"
+                            width="{{ block.settings.image.width }}"
+                            height="{{ block.settings.image.height }}">
+                        </div>
+                      {%- else -%} {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                      {%- endif -%}
+                    </div>
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        <div
+          class="footer-block--newsletter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {%- if settings.animations_reveal_on_scroll -%}
+            data-cascade
+          {%- endif -%}  >
+          {%- if section.settings.newsletter_enable -%}
+            <div class="footer-block__newsletter">
+              {%- if section.settings.newsletter_heading != blank -%}
+                <h2 class="footer-block__heading inline-richtext">{{ section.settings.newsletter_heading }}</h2>
+                <span class="site-footer-block-icon accordion--icon">
+        {%- render 'icon-chevron-down' -%}
+      </span>
+              {%- endif -%}
+              {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="newsletter-form__field-wrapper">
+                  <div class="field">
+                    <input
+                      id="NewsletterForm--{{ section.id }}"
+                      type="email"
+                      name="contact[email]"
+                      class="field__input"
+                      value="{{ form.email }}"
+                      aria-required="true"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      {%- if form.errors -%}
+                        autofocus
+                        aria-invalid="true"
+                        aria-describedby="ContactFooter-error"
+                      {%- elsif form.posted_successfully? -%}
+                        aria-describedby="ContactFooter-success"
+                      {%- endif -%}
+                      placeholder="{{ 'newsletter.label' | t }}"
+                      required>
+                    <label class="field__label" for="NewsletterForm--{{ section.id }}">
+                      {{ 'newsletter.label' | t }}
+                    </label>
+                    <button
+                      type="submit"
+                      class="newsletter-form__button field__button"
+                      name="commit"
+                      id="Subscribe"
+                      aria-label="{{ 'newsletter.button_label' | t }}">
+                      <span class="svg-wrapper">
+                        {{- 'icon-arrow.svg' | inline_asset_content -}}
+                      </span>
+                    </button>
+                  </div>
+                  {%- if form.errors -%}
+                    <small class="newsletter-form__message form__message" id="ContactFooter-error">
+                      <span class="svg-wrapper">
+                        {{- 'icon-error.svg' | inline_asset_content -}}
+                      </span>
+                      {{- form.errors.translated_fields.email | capitalize }}
+                      {{ form.errors.messages.email -}}
+                    </small>
+                  {%- endif -%}
+                </div>
+                {%- if form.posted_successfully? -%}
+                  <h3
+                    class="newsletter-form__message newsletter-form__message--success form__message"
+                    id="ContactFooter-success"
+                    tabindex="-1"
+                    autofocus >
+                    <span class="svg-wrapper">
+                      {{- 'icon-success.svg' | inline_asset_content -}}
+                    </span>
+                    {{- 'newsletter.success' | t }}
+                  </h3>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+          {%- if shop.features.follow_on_shop? and section.settings.enable_follow_on_shop -%}
+            <div class="footer__follow-on-shop"> {{ shop | login_button: action: 'follow' }}  </div>
+          {%- endif -%}
+          {%- if section.settings.show_social and has_social_icons -%}
+            {%- render 'social-icons', class: 'footer__list-social' -%}
+          {%- endif -%}
+        </div>
+        <div class="site-footer-item link-img ">
+          <div class="site-footer-item-top hide-desktop-footer-img">
+           <div class="home-section--content logolist--inner pxu-lia-block pxu-lia-block--play site-footer-information">
+
+              <a href="https://trustseal.indiamart.com/members/deodap" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/image_11_1.png?v=1712144923" alt="Trade India " style="" loading="lazy">
+              </a>
+              <a href="https://www.tradeindia.com/truststamp-member/deodap-international-private-limited-16255471/" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/trusted-seller_image_svg.png?v=1712130837" alt="Trade India " loading="lazy">
+              </a>
+              <a href="https://maps.app.goo.gl/JnFycYC95unmMcfk8" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0791/8921/3461/files/Google-Review-Emblem_1.png?v=1712150302" alt="Google Review " style="" loading="lazy">
+              </a>
+              
+              <a href="https://www.mouthshut.com/product-reviews/Deodap-reviews-925962010" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/muthut_rating.png?v=1713589334" alt="Mouthshut Reviews" style="" loading="lazy">
+              </a>
+              <a href="https://www.amazon.in/s?k=deodap&crid=ZXTGQ2AMMRNW&sprefix=deodap%2Caps%2C205&ref=nb_sb_noss_1" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/amazon_rating.png?v=1713589218" alt="Amazon Reviews" style="" loading="lazy">
+              </a>
+            </div>
+          </div>
+          <div class="site-footer-item-top hide-mobile-footer-img">
+            <div class="home-section--content logolist--inner pxu-lia-block pxu-lia-block--play site-footer-information">
+              <a href="https://razorpay.com/trustedbusiness/?merchant_key=rzp_live_fBUJ2Iditv68LQ" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/rezorpay_img.png?v=1713586201" alt="rezorpay" loading="lazy">
+              </a>
+              <a href="https://trustseal.indiamart.com/members/deodap" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/image_11_1.png?v=1712144923" alt="Trade India " style="" loading="lazy">
+              </a>
+              <a href="https://www.tradeindia.com/truststamp-member/deodap-international-private-limited-16255471/" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/trusted-seller_image_svg.png?v=1712130837" alt="Trade India " loading="lazy">
+              </a>
+            </div>
+            <div class="home-section--content logolist--inner pxu-lia-block pxu-lia-block--play site-footer-information">
+              <a href="https://maps.app.goo.gl/B3cjEBnQd3rHNaFG6" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0791/8921/3461/files/Google-Review-Emblem_1.png?v=1712150302" alt="Google Review" style="" loading="lazy">
+                <span>3038 Reviews</span>
+              </a>
+              <a href="https://www.mouthshut.com/product-reviews/Deodap-reviews-925962010" class="logolist--item pxu-lia-element" target="_blank">
+               <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/muthut_rating.png?v=1713589334" alt="Mouthshut Reviews" style="" loading="lazy">
+                <span>2568 Reviews</span>
+              </a>
+              <a href="https://www.amazon.in/s?k=deodap&crid=ZXTGQ2AMMRNW&sprefix=deodap%2Caps%2C205&ref=nb_sb_noss_1" class="logolist--item pxu-lia-element" target="_blank">
+                <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/amazon_rating.png?v=1713589218" alt="Amazon Reviews" style="" loading="lazy">
+                <span>7331 Reviews</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endunless -%}
+  {%- endif -%}
+  <div
+    class="footer__content-bottom{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    {%- if settings.animations_reveal_on_scroll -%}
+      data-cascade
+    {%- endif -%}
+  >
+    <div class="footer__content-bottom-wrapper page-width">
+      <div class="footer__column footer__localization isolate">
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+          <localization-form>
+            {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+              <div>
+                <h2 class="caption-large text-body" id="FooterCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                {%- render 'country-localization', localPosition: 'FooterCountry' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+          <localization-form>
+            {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+              <div>
+                <h2 class="caption-large text-body" id="FooterLanguageLabel">
+                  {{ 'localization.language_label' | t }}
+                </h2>
+                {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+      </div>
+      <div class="footer__column footer__column--info">
+        {%- if section.settings.payment_enable -%}
+          <div class="footer__payment">
+            <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+            <ul class="list list-payment" role="list">
+              {%- for type in shop.enabled_payment_types -%}
+                <li class="list-payment__item">
+                  {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="footer__content-bottom-wrapper page-width{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
+      <div class="footer__copyright caption">
+        <small class="copyright__content"
+          >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
+        </small>
+        <small class="copyright__content">{{ powered_by_link }}</small>
+        {%- if section.settings.show_policy -%}
+          <ul class="policies list-unstyled">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li>
+                  <small class="copyright__content"><a href="{{ policy.url }}">{{ policy.title | escape }}</a></small >
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+ <script>
+document.addEventListener("DOMContentLoaded", function() {
+  if (window.innerWidth <= 749) {
+  document.querySelectorAll(".footer-nav-icon").forEach(function(footerNav) {
+    footerNav.addEventListener("click", function() {
+      let parentBlock = this.closest(".footer-block");
+      let detailsContent = parentBlock.querySelector(".footer-block__details-content");
+
+      if (detailsContent) {
+        if (detailsContent.style.display === "none" || detailsContent.style.display === "") {
+          detailsContent.style.display = "block";
+        } else {
+          detailsContent.style.display = "none";
+        }
+        this.classList.toggle("active");
+      }
+    });
+  });
+  }
+});
+</script>
+<style>
+  @media (min-width:767px){ .footer-icon-accor{display:none !important; } } @media (max-width:768px){ .footer-block__details-content { display: none; }.footer-nav-icon {cursor: pointer;display: flex;align-items: center; justify-content: space-between;}.footer-nav-icon .accordion--icon { transition: transform 0.3s ease-in-out;}.footer-nav-icon.active .accordion--icon { transform: rotate(180deg);} }
+</style>
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "social_accounts",
+      "name": "social_accounts",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.footer.blocks.social_accounts.paragraph_1.content"
+        },
+         {
+          "type": "image_picker",
+          "id": "cst_icon",
+           "label":"logo"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+           "label":"Add Heading"
+        },
+        {
+          "type": "text",
+          "id": "subhead",
+           "label":"Add Sub Heading"
+        },
+         {
+          "type": "liquid",
+          "id": "add_cont",
+           "label":"Add Content"
+        }
+      ]
+    },
+    {
+      "type": "link_list",
+      "name": "t:sections.footer.blocks.link_list.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "t:sections.footer.blocks.link_list.settings.heading.default",
+          "label": "t:sections.footer.blocks.link_list.settings.heading.label"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "t:sections.footer.blocks.link_list.settings.menu.label",
+          "info": "t:sections.footer.blocks.link_list.settings.menu.info"
+        }
+      ]
+    },
+    {
+      "type": "brand_information",
+      "name": "t:sections.footer.blocks.brand_information.name",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.footer.blocks.brand_information.settings.paragraph.content"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.footer.blocks.brand_information.settings.header__1.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "default": true,
+          "label": "t:sections.footer.blocks.brand_information.settings.show_social.label",
+          "info": "t:sections.footer.blocks.brand_information.settings.show_social.info"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.footer.blocks.text.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "t:sections.footer.blocks.text.settings.heading.default",
+          "label": "t:sections.footer.blocks.text.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "default": "t:sections.footer.blocks.text.settings.subtext.default",
+          "label": "t:sections.footer.blocks.text.settings.subtext.label"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 50,
+          "max": 550,
+          "step": 5,
+          "unit": "px",
+          "label": "Image width",
+          "default": 100
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Image alignment on large screen",
+          "options": [
+            {
+              "value": "",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__1.content",
+      "info": "t:sections.footer.settings.header__1.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.newsletter_enable.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_heading",
+      "default": "t:sections.footer.settings.newsletter_heading.default",
+      "label": "t:sections.footer.settings.newsletter_heading.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__9.content",
+      "info": "t:sections.footer.settings.header__9.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_follow_on_shop",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_follow_on_shop.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__2.content",
+      "info": "t:sections.footer.settings.header__2.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "t:sections.footer.settings.show_social.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__3.content",
+      "info": "t:sections.footer.settings.header__4.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_country_selector.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__5.content",
+      "info": "t:sections.footer.settings.header__6.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_language_selector.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__7.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.payment_enable.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__8.content",
+      "info": "t:sections.footer.settings.header__8.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy",
+      "default": true,
+      "label": "t:sections.footer.settings.show_policy.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.footer.settings.margin_top.label",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "text"
+      }
+    ]
+  }
+}
+{% endschema %}
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.innerWidth <= 749) {
+
+    let footerWrapper = document.querySelector(".footer__blocks-wrapper");
+
+    if (!footerWrapper) return;
+
+    let menuBlocks = footerWrapper.querySelectorAll(".footer-block--menu");
+
+    if (menuBlocks.length >= 4) {
+
+      // Create main accordion wrapper
+      let mainAccordion = document.createElement("div");
+      mainAccordion.classList.add("footer-main-accordion");
+
+      // Header
+      let header = document.createElement("div");
+      header.classList.add("footer-main-header");
+      header.innerHTML = `
+        <h2 class="abcd">Menu Links</h2>
+        <span class="accordion--icon">▼</span>
+      `;
+
+      // Content wrapper
+      let content = document.createElement("div");
+      content.classList.add("footer-main-content");
+
+      // Move first 4 menu blocks inside
+      for (let i = 0; i < 4; i++) {
+        content.appendChild(menuBlocks[i]);
+      }
+
+      mainAccordion.appendChild(header);
+      mainAccordion.appendChild(content);
+
+      // Insert at top
+      footerWrapper.prepend(mainAccordion);
+
+      // Toggle behavior
+      header.addEventListener("click", function () {
+        content.classList.toggle("active");
+        header.classList.toggle("active");
+      });
+    }
+  }
+});
+</script>
+
+<style>
+  @media (max-width: 749px) {
+
+  .footer-main-content {
+    display: none;
+  }
+
+  .footer-main-content.active {
+    display: block;
+  }
+
+  .footer-main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .footer-main-header.active .accordion--icon {
+    transform: rotate(180deg);
+  }
+
+  .footer-main-header .accordion--icon {
+    transition: 0.3s;
+  }
+}
+
+.footer-main-accordion {
+    width: 100%;
+}
+
+.footer-main-header h2 {
+    margin: 20px 0;
+    font-size: 18px;
+    font-family: helvetica;
+    font-weight: 700;
+}
+h2.abcd {
+    margin: 0 !important;
+    color:#f32424;  
+}
+span.accordion--icon {
+    color:#f32424;  
+}
+
+</style>
+

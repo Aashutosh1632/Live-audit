@@ -1,0 +1,15 @@
+{%- comment -%}
+  Async-load wizzy + cart-card CSS (rendered at body-bottom; not critical for initial paint).
+  Saves ~50KB of render-blocking CSS on mobile.
+{%- endcomment -%}
+{%- assign wizzy_css = 'wizzyCustom.css' | asset_url -%}
+{%- assign card_css = 'component-card.css' | asset_url -%}
+{%- assign qty_css = 'quantity-selector-setup.css' | asset_url -%}
+<link rel="stylesheet" href="{{ wizzy_css }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ card_css }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ qty_css }}" media="print" onload="this.media='all'">
+<noscript>
+  <link rel="stylesheet" href="{{ wizzy_css }}">
+  <link rel="stylesheet" href="{{ card_css }}">
+  <link rel="stylesheet" href="{{ qty_css }}">
+</noscript>

@@ -1,0 +1,12 @@
+<script type="text/javascript" src="{{ 'wizzyCustom.js' | asset_url  }}" defer></script>
+<script type="text/javascript" src="{{ 'quick-add.js' | asset_url  }}" defer></script>
+<script type="text/javascript" src="{{ 'wishlist-engine-app.js' | asset_url  }}" defer></script>
+
+<script type="text/template" id="wizzy-search-results-product" wizzy-override>
+  {% render 'wizzy.search.results.product' %}
+</script>
+<script type="text/javascript" src="{{ 'product-form.js' | asset_url  }}" defer></script>
+{%  render 'wizzy-autocomplete-topproducts' %}
+{% render 'wizzy-common-select' %}
+
+

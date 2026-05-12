@@ -1,0 +1,161 @@
+{%- comment -%} Async-load CSS - sticky nav is rendered in footer group, fixed-position so doesn't impact LCP {%- endcomment -%}
+<link rel="stylesheet" href="{{ 'new-sticky-nav.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'site-header.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>
+  {{ 'new-sticky-nav.css' | asset_url | stylesheet_tag }}
+  {{ 'site-header.css' | asset_url | stylesheet_tag }}
+</noscript>
+{%- assign has_box_shadow = false -%}
+{%- if settings.color_background == settings.color_header_background -%}
+  {% assign has_box_shadow = true %}
+{%- endif -%}
+<div class="new-sticky-nav">
+  <div class="new-sticky">
+    {%- for block in section.blocks -%}
+      <div class="new-navv">
+        <a class="new-navv-a {% if block.settings.enable_search != blank %} search-bottomm new-navv-src{% endif %} {% if block.settings.menu_show != blank %} hambcoll  {% endif %} {% if block.settings.enable_cart != blank %}link focus-inset site-header-cart--button cart-icon-bubble {% endif %}  {% if block.settings.enable_ac != blank %} hide-accc {% endif %}" {% if block.settings.menu_show != blank %} href="javascript:void(0);"{% else %} href="{%- if block.settings.enable_ac == blank and block.settings.enable_cart == blank -%} {{ block.settings.url_hand }} {%- endif -%}{%- if block.settings.enable_ac != blank -%} {{ routes.account_login_url }} {%- endif -%}{%- if block.settings.enable_cart != blank -%}/cart{%- endif -%}" {% endif %}>
+          {%- if block.settings.enable_cart != blank -%}
+            <span class="footer-cart-count cart-updt-new site-header-cart--count {% if cart.item_count > 0 %}visible{% endif %}" data-header-cart-count="{% if cart.item_count > 0 %}{{ cart.item_count }}{% endif %}">{%- if cart.item_count > 0 -%}{{ cart.item_count }}{%- endif -%}</span>
+            <style>
+                .site-header-cart--count.visible { display: block;height: 22px; min-width: 22px; padding: 3px;   font-size: .6875rem; line-height: 12px;color: #fff; text-align: center; text-decoration: none;  background-color: #f04f36; border: 2px solid rgb(13, 22, 39); border-radius: 50%; }
+             .site-header-cart--count:after{ display:none !important;}
+            </style>
+          {%- endif -%}
+          {{ block.settings.logo | image_url: width: 240 | image_tag: widths: '80, 120, 180, 240', sizes: '60px', loading: 'lazy', alt: block.settings.url_text, class: 'new-navv-img' }}
+          <div> <div class="new-navv-src {% if block.settings.enable_search != blank %} new-navv-srcshow {% endif %}" data-site-header-main {% if section.settings.show_mobile_search_bar %} data-site-header-mobile-search-bar{% else %} data-site-header-mobile-search-button{% endif %}>
+              {%- unless section.settings.show_mobile_search_bar -%}
+                {%- capture search_button -%}
+                      <div class="" tabindex="-1">{{ block.settings.logo | image_url: width: 240 | image_tag: widths: '80, 120, 180, 240', sizes: '60px', loading: 'lazy', alt: 'Search', class: 'new-navv-img' }}</div>
+                {%- endcapture -%}
+                {%- if section.settings.enable_live_search -%}
+                  <a id="showSearch" class="" data-mobile-search-button>{{ search_button }}</a>
+                {%- endif -%}
+              {%- endunless -%}
+            </div></div>
+          {%- if block.settings.enable_ac != blank -%}
+            <li class="site-header-actions__account-link kplogin" style="display:flex;margin-right:0!important;width:190px;justify-content:flex-end">
+              <a class="site-header_account-link-anchor" href="/account"><span class="site-header__account-icon">{{ block.settings.logo | image_url: width: 240 | image_tag: widths: '80, 120, 180, 240', sizes: '60px', loading: 'lazy', alt: 'Account', class: 'new-navv-img' }}</span></a>
+            </li>
+            <li class="site-header-actions__account-link kpaccount" style="">              
+              <span class="site-header__account-links"><a class="site-header__account-link--account" href="/account" style="text-decoration:none;"><p class="new-navv-p">Account</p></a></span>
+            </li>
+          {%- endif -%}
+          <p class="new-navv-p">{{ block.settings.url_text }}</p>
+        </a>    
+      </div>
+    {%- endfor -%}
+  </div>
+   {%- for block in section.blocks -%}
+   {%- if block.settings.menu_show != blank -%}
+   <div class="hamburger-coll" style="display: none; ">
+     <div class="close-hambur-div">
+       {%- if section.settings.menu != blank -%}<p class="close-hambur-p">{{ section.settings.hmb_name }}</p>{%- endif -%}
+         <button class="menu-drawer__close-buttonss close-hamburger-stk" aria-expanded="true"><svg class="" aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="15" height="30" viewBox="0 0 13 13">
+              <path fill="currentColor" fill-rule="evenodd" d="M5.306 6.5L0 1.194 1.194 0 6.5 5.306 11.806 0 13 1.194 7.694 6.5 13 11.806 11.806 13 6.5 7.694 1.194 13 0 11.806 5.306 6.5z"></path>
+            </svg></button> 
+     </div>
+    {%- render 'sticky-mobile-nav', blocks: section.blocks -%}
+  </div>
+     {%- endif -%}
+  {%- endfor -%}
+</div>
+<script src="{{ 'Sticky-mobile-nav.js' | asset_url }}" defer="defer"></script>
+{% schema %}
+{
+  "name": "New-sticky-nav",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_mobile_search_bar",
+      "label": "show_mobile_search_bar",
+      "default": true
+    },
+      {
+      "type": "checkbox",
+      "id": "enable_live_search",
+      "label": "enable_live_search",
+      "default": true
+    },
+     {
+      "type": "checkbox",
+      "id": "enable_live_search_images",
+      "label": "enable_live_search_images",
+      "default": true
+    },
+     {
+      "type": "link_list",
+      "id": "quick_links",
+      "label": "quick_links"
+    },
+      {
+          "type": "link_list",
+          "id": "menu",
+          "label": "menu",
+          
+        },
+       {
+          "type": "text",
+          "id": "hmb_name",
+          "label": "hamburger name",
+          
+        }
+  ],
+  "blocks": [
+    {
+      "type": "Menus",
+      "name": "Menus",
+      "settings": [
+ {
+          "type":"image_picker",
+          "id":"logo",
+          "label":"Logo"
+        },
+        {
+          "type":"text",
+          "id":"url_text",
+          "label":"Url Text"
+        },
+         {
+          "type":"image_picker",
+          "id":"search_logo",
+          "label":"Search Logo"
+        },
+          {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "enable_search",
+      "default": false
+    },
+           {
+      "type": "checkbox",
+      "id": "enable_ac",
+      "label": "enable_accoount",
+      "default": false
+    },
+          {
+      "type": "checkbox",
+      "id": "enable_cart",
+      "label": "enable_cart",
+      "default": false
+    },
+
+         {
+          "type":"url",
+          "id":"url_hand",
+          "label":"Url"
+        },
+          {
+          "type": "checkbox",
+            "id": "menu_show",
+            "label": "check for menu show"
+        }
+  ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky-navigation"
+    }
+  ]
+}
+{% endschema %}

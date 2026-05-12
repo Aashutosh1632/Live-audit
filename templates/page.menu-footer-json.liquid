@@ -1,0 +1,32 @@
+{%- layout none -%}
+{
+  "items": [
+    {% for link in linklists.footer-sticky.links %}
+      {
+        "title": "{{ link.title | escape }}",
+        "handle": "{{ link.handle }}",
+        "url": "{{ link.url }}",
+        "image": {% if link.type == "collection_link" and link.object.metafields.custom.collection_image_megamenu_ != blank %}
+          "{{ link.object.metafields.custom.collection_image_megamenu_ | img_url: 'master' }}"
+        {% else %}
+          null
+        {% endif %},
+        "children": [
+          {% for sublink in link.links %}
+            {
+              "title": "{{ sublink.title | escape }}",
+              "url": "{{ sublink.url }}",
+              "handle": "{{ sublink.handle }}",
+              "current": {{ sublink.current | json }},
+              "image": {% if sublink.type == "collection_link" and sublink.object.metafields.custom.collection_image_megamenu_ != blank %}
+                "{{ sublink.object.metafields.custom.collection_image_megamenu_ | img_url: 'master' }}"
+              {% else %}
+                null
+              {% endif %}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}

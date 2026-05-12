@@ -1,0 +1,43 @@
+<div class="menu-rawer-bottom-bar">
+  <a class="googleplay-icon" href="https://play.google.com/store/apps/details?id=com.deodap.gallery" target="_blank">
+    <img loading="lazy" decoding="async" src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Google_play_2e3b1860-7d55-4844-a5fe-03a2f3205373.png?v=1777615235" 
+      alt="Google Play" 
+      width="135" height="40"
+      loading="lazy">
+  </a>
+  <a class="appstore-icon" href="https://apps.apple.com/us/app/deodap/id1661765661" target="_blank">
+    <img loading="lazy" decoding="async" src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/app_store_2.png?v=1777615607" 
+      alt="App Store" 
+      width="120" height="40"
+      loading="lazy">
+  </a>
+</div>
+
+<style>
+@media (min-width: 768px) {
+  .mobile-utility-bar { display: none; }
+}
+
+@media (max-width: 768px) {
+  .menu-rawer-bottom-bar a { display: flex; }
+  .menu-rawer-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5px;
+    padding: 6px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    margin-top: 10px;
+  }
+  .googleplay-icon img {
+    width: 135px;
+    height: 40px;
+    object-fit: contain;
+  }
+  .appstore-icon img {
+    width: 120px;
+    height: 40px;
+    object-fit: contain;
+  }
+}
+</style>

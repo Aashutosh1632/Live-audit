@@ -1,0 +1,194 @@
+{%- if settings.goEnable -%}
+<link rel="stylesheet" href="{{ 'gokwik.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{{ 'gokwik.css' | asset_url }}"></noscript>
+{%- endif -%}
+{%- if settings.envType == 'production' -%}
+{%- assign env = 'pdp' -%}
+{%- elsif settings.envType == 'sandbox' -%}
+{%- assign env = 'sandbox.pdp' -%}
+{%- endif -%}
+{% if settings.goEnable %}
+  <script>
+window.merchantInfo  = {
+        mid: "{{ settings.mid }}",
+        environment: "{{ settings.envType }}",
+        type: "merchantInfo",
+  		storeId: "{{shop.id}}",
+  		fbpixel: "{{settings.fbpixel}}",
+      }
+var productFormSelector = '';
+var cart = {{ cart | json }}
+var templateName = '{{template.name}}'
+</script>
+<script src="{{ 'jquery-3.6.0.min.js' | asset_url }}" defer></script>
+<script src="https://{{ env }}.gokwik.co/merchant-integration/build/merchant.integration.js?v4" defer></script>
+
+<script>
+     
+  window.addEventListener('gokwikLoaded', e => {
+   $('.gokwik-checkout button').prop('disabled', false);
+              $('.gokwik-checkout button').removeClass('disabled');
+         $('#gokwik-buy-now').prop('disabled', false);
+              $('#gokwik-buy-now').removeClass('disabled');
+  const targetElement = document.querySelector("body");
+  function debounce(func, delay) {
+    let timeoutId;
+    return function () {
+      const context = this;
+      const args = arguments;
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(function () {
+        func.apply(context, args);
+      }, delay);
+    };
+  }
+  const observer = new MutationObserver(() => {
+    let gkButtonCode = '<div class="gokwik-checkout" {% if settings.hideFlow %} style="display:none !important;" {% endif %}><button type="button" class="btn disabled" disabled onclick="onCheckoutClick(this)"><span class="btn-text"><span>{{ settings.main-titile }}</span><span>{{ settings.sub-titile }}</span></span><span class="pay-opt-icon"></span><div style="display:none" class="addloadr" id="btn-loader"><div class="cir-loader">Loading..</div></div></button></div>'
+  let parsedBtnCode = new DOMParser().parseFromString(gkButtonCode, 'text/html').querySelectorAll('.gokwik-checkout')[0];
+       let sideCartButton = document.querySelector('[data-rebuy-component="checkout-area"]');
+      let buttonAdded = document.querySelector('.gokwik-checkout');
+       if(sideCartButton && !buttonAdded){
+                      buttonAdded = true
+                     sideCartButton  &&   sideCartButton.replaceWith(parsedBtnCode);
+                  }
+    debouncedMyTimer();
+  });
+  const debouncedMyTimer = debounce(() => {
+    observer.disconnect();
+    enableGokwikCart();
+    observer.observe(targetElement, { childList: true, subtree: true });
+  }, 700);
+  function enableGokwikCart() {
+      $('.gokwik-checkout button').prop('disabled', false);
+              $('.gokwik-checkout button').removeClass('disabled');
+  }
+  const config = { childList: true, subtree: true };
+  observer.observe(targetElement, config);
+});
+</script>
+   <script>
+  /* The original code attached a MutationObserver to <html> with
+     attributes/childList/subtree:true synchronously during head parse.
+     That fired the callback on EVERY DOM mutation while sections
+     rendered (mega-menu/slideshow/4x collection-list-mobile/footer)
+     - massive TBT cost on throttled mobile.
+
+     Now: defer setup until after DOMContentLoaded + a tick. By then
+     the bulk of the page DOM is stable so the observer only fires on
+     subsequent mutations (e.g. apps injecting their checkout button
+     into the cart drawer later). Both desktop and mobile benefit. */
+  (function () {
+    function startGokwikSideCartObserver() {
+      var targetNode = document.querySelector('html');
+      if (!targetNode) return;
+      var gkButtonCode = '<div class="gokwik-checkout flex items-center justify-center flex-1 hover:basis-1/2 bg-cowi-cta-bg-hover-state text-center cursor-pointer p-4 bg-cowi-accent-bg text-cowi-accent-fg font-base font-bold  transition-all text-lg" {% if settings.hideFlow %} style="display:none !important;" {% endif %}><button type="button" style="width:100%!important;height:50px%!important;background: var(--corner-cowi-accent-bg);" class="btn-theme" onclick="onCheckoutClick(this)"><span class="btn-text"><span style="color: white!important;font-size: 16px;">{{ settings.main-titile }}</span><span>{{ settings.sub-titile }}</span></span> <div style="display:none"><div class="cir-loader">Loading..</div></div></button></div>';
+      var parsedBtnCode = new DOMParser().parseFromString(gkButtonCode, 'text/html').querySelectorAll('.gokwik-checkout')[0];
+      var sideCartCallback = function (mutationList) {
+        mutationList.forEach(function (mutation) {
+          var sideCartButton = document.querySelector('[data-rebuy-component="checkout-area"]');
+          sideCartButton && sideCartButton.replaceWith(parsedBtnCode);
+        });
+      };
+      var config = { attributes: true, childList: true, subtree: true };
+      new MutationObserver(sideCartCallback).observe(targetNode, config);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { setTimeout(startGokwikSideCartObserver, 50); });
+    } else {
+      setTimeout(startGokwikSideCartObserver, 50);
+    }
+  })();
+</script>
+{% if customer.b2b? %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const observer = new MutationObserver(() => {
+    const drawers = document.querySelectorAll("cart-drawer, #CartDrawer");
+    drawers.forEach((drawer) => {
+      if (!drawer) return;
+      drawer.style.display = "";
+      drawer.style.opacity = "";
+      drawer.style.height = "";
+      drawer.style.width = "";
+      drawer.style.visibility = "";
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    childList: true,
+    subtree: true
+  });
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const cartIcon = document.querySelector('.header__icon--cart, .cart-icon, a[href="/cart"]');
+  if (!cartIcon) return;
+  cartIcon.replaceWith(cartIcon.cloneNode(true)); // removes all attached JS listeners
+  const newCartIcon = document.querySelector('.header__icon--cart, .cart-icon, a[href="/cart"]');
+  newCartIcon.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation(); // stops GoKwik from catching event
+    const cartDrawer = document.querySelector('cart-drawer');
+    document.body.classList.add('overflow-hidden');
+    cartDrawer.open();
+  });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll('style').forEach(style => {
+      if (style.innerText && style.innerText.includes("cart-drawer:not(html):not(body)")) {
+        console.log("GoKwik suppression CSS removed");
+        style.parentNode.removeChild(style);
+      }
+    });
+  });
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
+});
+</script>
+<script>
+  function updateCartBubble() {
+    fetch('/cart.js')
+      .then(res => res.json())
+      .then(cart => {
+        const bubble = document.querySelector('#cart-icon-bubble .cart-count-bubble span[aria-hidden="true"]');
+        if (bubble) {
+          bubble.textContent = cart.item_count;
+        }
+      });
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(updateCartBubble, 500);  // wait for GoKwik to override CSS
+  });
+  document.addEventListener('cart:updated', updateCartBubble);
+</script>
+{% endif %}
+<style>
+{% if settings.goEnable %}
+.gokwik-checkout button {
+  background: {{ settings.priClr }}!important;
+}
+.gokwik-checkout button > span.btn-text {
+  color: {{ settings.secClr }};
+}
+{% endif %}
+{% if settings.goBuynowEnable %}
+ #gokwik-buy-now {
+   background: {{ settings.btnBClr }};
+   width: 100%;
+   color: {{ settings.btnTextClr }};
+   cursor: pointer;
+   line-height: 1;
+   border: none;
+   padding: 15px 10px;
+   font-size: 15px;
+    margin-bottom: 10px;
+   position:relative;
+ }
+{% endif %}
+</style> 
+{% endif %}

@@ -1,0 +1,106 @@
+{{ 'app-download-section.css' | asset_url | stylesheet_tag }}
+
+<section class="app-download-section">
+  <div class="page-width">
+    <div class="app-download-container">
+      <div class="title-logo">
+        <img src="{{ section.settings.logo | image_url: width: 62 }}">
+        <h3>{{ section.settings.main_text }}</h3>
+      </div>
+      <div class="store-buttons">
+        {% if section.settings.googleplay_img %}
+          <a href="{{ section.settings.googleplay_url }}" class="store-btn" target="_blank">
+            <img
+              src="{{ section.settings.googleplay_img | image_url: width: 167 }}"
+              alt="Google Play"
+              width="{{ section.settings.googleplay_img.width }}"
+              height="{{ section.settings.googleplay_img.height }}"
+            >
+          </a>
+        {% endif %}
+
+        {% if section.settings.appstore_img %}
+          <a href="{{ section.settings.appstore_url }}" class="store-btn" target="_blank">
+            <img
+              src="{{ section.settings.appstore_img | image_url: width: 167 }}"
+              alt="App Store"
+              width="{{ section.settings.appstore_img.width }}"
+              height="{{ section.settings.appstore_img.height }}"
+            >
+          </a>
+        {% endif %}
+      </div>
+      <div class="down-info-right">
+        <div class="download-text">{{ section.settings.download }}</div>
+        <div class="divider"></div>
+        <div class="rating-text">{{ section.settings.rating }}</div>
+        <div class="divider"></div>
+        <div class="rating-text">{{ section.settings.review }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "App Download Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "main_text",
+      "label": "Main Text",
+      "default": "Download our app"
+    },
+    {
+      "type": "header",
+      "content": "Store Buttons"
+    },
+    {
+      "type": "image_picker",
+      "id": "googleplay_img",
+      "label": "Google Play Image"
+    },
+    {
+      "type": "url",
+      "id": "googleplay_url",
+      "label": "Google Play Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "appstore_img",
+      "label": "App Store Image"
+    },
+    {
+      "type": "url",
+      "id": "appstore_url",
+      "label": "App Store Link"
+    },
+    {
+      "type": "richtext",
+      "id": "download",
+      "label": "Download text"
+    },
+    {
+      "type": "richtext",
+      "id": "rating",
+      "label": "rating text"
+    },
+    {
+      "type": "richtext",
+      "id": "review",
+      "label": "Review text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "App Download Section"
+    }
+  ]
+}
+{% endschema %}

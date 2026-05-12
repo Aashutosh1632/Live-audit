@@ -1,0 +1,96 @@
+<div class="menu-ttl is-active">
+  <h2 class="mnu-hed">{{ section.settings.mn_head }}</h2>
+  <svg aria-hidden="true" class="icon-chevron-down" fill="none" focusable="false" height="6" role="presentation" viewBox="0 0 8 6" width="8" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 4.5L7 1.5" stroke="currentColor" stroke-linecap="square" stroke-width="1.25"></path>
+    <path d="M4 4.5L1 1.5" stroke="currentColor" stroke-linecap="square" stroke-width="1.25"></path>
+  </svg>
+</div>
+
+<ul class="main-menu active">
+  {%- for link in section.settings.menu.links -%}
+    {%- assign level1_active = false -%}
+    {%- if link.active or link.current %}{% assign level1_active = true %}{% endif %}
+    {%- for child in link.links -%}
+      {%- if child.active or child.current %}{% assign level1_active = true %}{% endif %}
+      {%- for grandchild in child.links -%}
+        {%- if grandchild.active or grandchild.current %}{% assign level1_active = true %}{% endif %}
+      {%- endfor -%}
+    {%- endfor -%}
+
+    <li class="menu-item {% if level1_active %}is-open{% endif %}">
+      <div class="menu-itm-div">
+        <a 
+          class="mnu-tll menu-{{ link.title | handleize }}" 
+          href="{{ link.url }}"
+          {% if link.active or link.current %}style="font-weight: 600;"{% endif %}
+        >
+          {{ link.title }}
+        </a>
+
+        {%- if link.links != blank -%}
+          <button 
+            class="accordion-toggle {% if level1_active %}is-active{% endif %}" 
+            aria-expanded="{% if level1_active %}true{% else %}false{% endif %}"
+          >
+            <svg class="icon-chevron-down" width="8" height="6" viewBox="0 0 8 6">
+              <path d="M4 4.5L7 1.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"></path>
+              <path d="M4 4.5L1 1.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"></path>
+            </svg>
+          </button>
+        {%- endif -%}
+      </div>
+
+      {%- if link.links != blank -%}
+        <ul class="submenu {% if level1_active %}active{% endif %}">
+          {%- for child in link.links -%}
+            {%- assign level2_active = false -%}
+            {%- if child.active or child.current %}{% assign level2_active = true %}{% endif %}
+            {%- for grandchild in child.links -%}
+              {%- if grandchild.active or grandchild.current %}{% assign level2_active = true %}{% endif %}
+            {%- endfor -%}
+
+            <li class="submenu-item {% if level2_active %}is-open{% endif %}">
+              <div class="secmenu-itm-div">
+                <a 
+                  class="mnu-tll menu-{{ child.title | handleize }}" 
+                  href="{{ child.url }}"
+                  {% if child.active or child.current %}style="font-weight: 600;"{% endif %}
+                >
+                  {{ child.title }}
+                </a>
+
+                {%- if child.links != blank -%}
+                  <button 
+                    class="accordion-toggle {% if level2_active %}is-active{% endif %}" 
+                    aria-expanded="{% if level2_active %}true{% else %}false{% endif %}"
+                  >
+                    <svg class="icon-chevron-down" width="8" height="6" viewBox="0 0 8 6">
+                      <path d="M4 4.5L7 1.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"></path>
+                      <path d="M4 4.5L1 1.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"></path>
+                    </svg>
+                  </button>
+                {%- endif -%}
+              </div>
+
+              {%- if child.links != blank -%}
+                <ul class="sub-submenu {% if level2_active %}active{% endif %}">
+                  {%- for grandchild in child.links -%}
+                    <li {% if grandchild.active or grandchild.current %}class="current"{% endif %}>
+                      <a 
+                        class="mnu-tll menu-{{ grandchild.title | handleize }}" 
+                        href="{{ grandchild.url }}"
+                        {% if grandchild.active or grandchild.current %}style="font-weight: 600;"{% endif %}
+                      >
+                        {{ grandchild.title }}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </li>
+  {%- endfor -%}
+</ul>

@@ -1,0 +1,97 @@
+<script src="{{ 'faq-section.js' | asset_url }}" defer="defer"></script>
+
+<div class="faq-container">
+  <!-- Left Sidebar (Sticky) -->
+  <div class="faq-sidebar">
+    {% for category in section.blocks %}
+      {% if category.type == 'category' %}
+        <div class="faq-category">
+          {% if category.settings.category_image %}
+            <img
+              src="{{ category.settings.category_image | img_url: 'small' }}"
+              alt="{{ category.settings.category_title }}"
+              class="category-image"
+            >
+          {% endif %}
+          <a href="#{{ category.settings.category_title | handleize }}">{{ category.settings.category_title }}</a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Right Content (Scrollable) -->
+  <div class="faq-content">
+    {% for category in section.blocks %}
+      {% if category.type == 'category' %}
+        <h2 id="{{ category.settings.category_title | handleize }}">{{ category.settings.category_title }}</h2>
+      {% endif %}
+      {% for question in section.blocks %}
+        {% if question.type == 'question' and question.settings.category == category.settings.category_title %}
+          <div class="faq-item">
+            <button class="faq-question">{{ question.settings.question }}</button>
+            <div class="faq-answer">
+              <p>{{ question.settings.answer }}</p>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ Section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "FAQ Category",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "text",
+          "id": "category_title",
+          "label": "Category Title",
+          "default": "Orders"
+        },
+        {
+          "type": "image_picker",
+          "id": "category_image",
+          "label": "Category Image"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "FAQ Question",
+      "limit": 50,
+      "settings": [
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Select Category (must match a category title)",
+          "default": "Orders"
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Section"
+    }
+  ]
+}
+{% endschema %}
+
+

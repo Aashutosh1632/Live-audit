@@ -1,0 +1,41 @@
+{% style %}
+    @media (max-width:768px){
+  #shopify-section-{{ section.id }} {
+      order: {{section.settings.order_no }};
+  }
+    }
+{% endstyle %}
+<div id="shopify-section-{{ section.id }}" class="{% if section.settings.include_padding %}product-section--container{% endif %} page-width">
+  {% for block in section.blocks %}
+    {% render block %}
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "App-Wrapper",
+  "settings": [
+      {
+    "type": "text",
+    "id": "order_no",
+    "label": "Add Order number"
+  },
+    {
+      "type": "checkbox",
+      "id": "include_padding",
+      "default": true,
+      "label": "Make section margins the same as theme"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "App-Wrapper"
+    }
+  ]
+}
+{% endschema %}

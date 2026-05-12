@@ -1,0 +1,68 @@
+{{ 'section-store-locator.css' | asset_url | stylesheet_tag }}
+
+<div class=" map-page-2 ">
+  <div class="map-left-rig-2">
+    <div class="map-heads-2 store-item">
+      {% for block in section.blocks %}
+        <div
+          class="map-head-2 {{ section.settings.sec_id }}"
+          id="{{ block.settings.block_id }}"
+        >
+          <h2 class="left-title-2">{{ block.settings.name }}</h2>
+          <div class="svg-titl-2">
+            <svg xmlns="http://www.w3.org/2000/svg" height="15" width="15" viewBox="0 0 384 512">
+             <path fill="#ec1a23" d="M172.3 501.7C27 291 0 269.4 0 192 0 86 86 0 192 0s192 86 192 192c0 77.4-27 99-172.3 309.7-9.5 13.8-29.9 13.8-39.5 0zM192 272c44.2 0 80-35.8 80-80s-35.8-80-80-80-80 35.8-80 80 35.8 80 80 80z"/>
+            </svg>
+            <div class="left-content-2">{{ block.settings.content }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "store-locator-2",
+  "settings": [
+     {
+       "type": "text",
+       "id": "sec_id",
+       "label": "Section ID"
+     },
+     {
+       "type": "text",
+       "id": "heading",
+       "label": "Add Heading"
+     }
+  ],
+  "blocks": [
+    {
+      "type": "locations",
+      "name":"locations",
+      "settings": [
+            {
+          "type": "text",
+          "id": "block_id",
+          "label": "block_id"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+         {
+          "type": "textarea",
+          "id": "content",
+          "label": "content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store-locator-2"
+    }
+  ]
+}
+{% endschema %}

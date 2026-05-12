@@ -1,0 +1,102 @@
+{{ 'history-success.css' | asset_url | stylesheet_tag }}
+
+<div class="{{ section.settings.custom-class }}">
+<section class="history-success">
+  <div class="page-width">
+
+    {% if section.settings.badge_text != blank %}
+      <span class="history-badge">{{ section.settings.badge_text }}</span>
+    {% endif %}
+
+    {{ section.settings.heading }}
+
+
+    {% if section.settings.description != blank %}
+        {{ section.settings.description }}
+    {% endif %}
+
+    <div class="history-stats">
+      {% for block in section.blocks %}
+        <div class="stat-card">
+          {% if block.settings.icon != blank %}
+            {{ block.settings.icon | image_url: width: 120 | image_tag: widths: '60,90,120', sizes: '60px', loading: 'lazy', alt: block.settings.title }}
+          {% endif %}
+
+          <p class="stat-title">{{ block.settings.title }}</p>
+          <div class="stat-value">{{ block.settings.value }}</div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+</div>
+
+
+{% schema %}
+{
+  "name": "History Success",
+  "settings": [
+    {
+      "type": "text",
+      "id": "custom-class",
+      "label": "Custom-Class"
+    },
+    {
+      "type": "liquid",
+      "id": "badge_text",
+      "label": "Top Badge Text",
+      "default": "History"
+    },
+    {
+      "type": "liquid",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "History of Deodap Success & Growth"
+    },
+    {
+      "type": "liquid",
+      "id": "description",
+      "label": "Description Text",
+      "default": "DeoDap’s success story extends to over 5 million satisfied customers. Positive reviews, repeat business, and a large customer base are indicators of a safe and trustworthy e-commerce platform."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Statistic Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Stat Title",
+          "default": "Satisfied Customers"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Stat Value",
+          "default": "5M"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "History Success",
+      "blocks": [
+        { "type": "stat" },
+        { "type": "stat" },
+        { "type": "stat" },
+        { "type": "stat" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,151 @@
+{%- liquid    
+    assign localization_forms = false
+    if section.settings.enable_language_selector and localization.available_languages.size > 1
+      assign localization_forms = true
+    endif
+  -%}
+<div class="utillity-bar-main" id="utillity-bar-main">
+  <div class="utillity-bar-sub-main">
+    <div class="utillity-bar-main-left">
+      <div class="utillity-bar-main-left-content">
+        <a class="mobile-email-inline" href="tel:+919638666607"><span> {%- render 'icon-phone' -%}</span>+91 9638666607</a>
+        <a class="mobile-email-inline" href="mailto:care@deodap.com"><span> {%- render 'icon-envelope' -%}</span>care@deodap.com</a><span class="pp-sgn">|</span>
+        <a class="mobile-email-inline">9:00 AM to 7:00 PM</a>
+      </div>
+    </div>
+    <div class="utillity-bar-main-right">
+      <div class="utillity-bar-main-right-app-icons">
+        <a class="googleplay-icon" href="https://play.google.com/store/apps/details?id=com.deodap.gallery" target="_blank">
+          <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Google_play_2e3b1860-7d55-4844-a5fe-03a2f3205373.png?v=1777615235"
+            alt="Google Play"
+            width="135"
+            height="40"
+            decoding="async">
+        </a>
+        <a class="appstore-icon" href="https://apps.apple.com/us/app/deodap/id1661765661" target="_blank">
+          <img src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/app_store_2.png?v=1777615607"
+            alt="App Store"
+            width="135"
+            height="40"
+            decoding="async">
+        </a>
+      </div>
+        <header class="{% if localization_forms %} header--has-localizations{% endif %}">
+         <div class="header__icons{% if  section.settings.enable_language_selector %} header__icons--localization header-localization utility-langg {% endif %}">
+          <div class="desktop-localization-wrapper">
+                {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+                  <localization-form class="small-hide medium-hide" data-prevent-hide>
+                    {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                        {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {%- endif -%}
+              </div>
+               </div>
+          </header>
+    </div> 
+  </div>
+</div>
+<style>
+  .utillity-bar-main {
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    will-change: transform;
+  }
+  .utillity-bar-main.is-hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Pin the main header when the page is scrolled */
+  body.header-is-stuck .section-header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+  /* Reserve the space the header used to occupy so content doesn't jump */
+  body.header-is-stuck {
+    padding-top: var(--section-header-height, 0px);
+  }
+</style>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    var bar    = document.getElementById('utillity-bar-main');
+    var header = document.querySelector('.section-header');
+    if (!bar || !header) return;
+
+    document.documentElement.style.setProperty(
+      '--announcement-bar-height', bar.offsetHeight + 'px'
+    );
+
+    function setHeaderHeight() {
+      document.documentElement.style.setProperty(
+        '--section-header-height', header.offsetHeight + 'px'
+      );
+    }
+    setHeaderHeight();
+    window.addEventListener('resize', setHeaderHeight, { passive: true });
+
+    var threshold = 10;
+    var ticking = false;
+
+    function update() {
+      var stuck = window.scrollY > threshold;
+      bar.classList.toggle('is-hidden', stuck);
+      document.body.classList.toggle('header-is-stuck', stuck);
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    update();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "utility-bar",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "order_no",
+      "label": "Add Order number"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.header__5.content",
+      "info": "t:sections.header.settings.header__6.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": false,
+      "label": "t:sections.header.settings.enable_language_selector.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "utility-bar"
+    }
+  ]
+}
+{% endschema %}

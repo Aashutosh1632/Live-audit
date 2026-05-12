@@ -1,0 +1,120 @@
+{{ '404-page.css' | asset_url | stylesheet_tag: preload: true }}
+<div class="err-newpage" id="{{ section.settings.sec_id }}">
+  <div class="page__container page-width">
+    <div class="err-page-img">
+      {{ section.settings.image | image_url: width: 800 | image_tag: widths: '400,600,800', sizes: '(min-width: 750px) 600px, 90vw', loading: 'eager', alt: '404 not found' }}
+    </div>
+    <div class="err-txt">
+      <h2>{{ section.settings.text1 }}</h2>
+      <p>{{ section.settings.text2 }}</p>
+    </div>
+    <div class="err-txt2">
+      <p>{{ section.settings.text3 }}</p>
+    </div>
+    {% if section.settings.btn_txt != blank %}
+      <div class="err-btn">
+        <a href="{{ section.settings.btn_url }}">{{ section.settings.btn_txt }}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404-page",
+  "settings": [
+     {
+      "type": "text",
+      "id":"sec_id",
+      "label": "sec_id"
+    },
+    {
+      "type": "image_picker",
+      "id":"image",
+      "label": "image"
+    },
+     {
+      "type": "text",
+      "id":"text1",
+      "label": "Text1"
+    },
+     {
+      "type": "text",
+      "id":"text2",
+      "label": "Text2"
+    },
+      {
+      "type": "text",
+      "id":"text3",
+      "label": "Text3"
+    },
+     {
+      "type": "text",
+      "id":"btn_txt",
+      "label": "btn_txt"
+    },
+      {
+      "type": "url",
+      "id":"btn_url",
+      "label": "btn_txt"
+    },
+       {
+        "type": "range",
+        "id": "padding-top",
+        "label": "Section Padding Top",
+        "min": 0,
+        "max":100,
+        "step": 1,
+        "unit": "px",
+        "default":40
+     },
+    {
+        "type": "range",
+        "id": "padding-bottom",
+        "label": "Section Padding Bottom",
+        "min": 0,
+        "max":100,
+        "step": 1,
+        "unit": "px",
+        "default":40
+     },
+    {
+        "type": "range",
+        "id": "margin-top",
+        "label": "Section Margin Top",
+        "min": 0,
+        "max":100,
+        "step": 1,
+        "unit": "px",
+        "default":20
+     },
+    {
+        "type": "range",
+        "id": "margin-bottom",
+        "label": "Section Margin Bottom",
+        "min": 0,
+        "max":100,
+        "step": 1,
+        "unit": "px",
+        "default":20
+     },
+     {
+        "type": "color",
+        "id": "background",
+        "label": "Background Color",
+        "default": "#000000"
+      },
+    {
+        "type": "color",
+        "id": "text-color",
+        "label": "Text Color",
+        "default": "#fff"
+      }
+  ],
+  "presets": [
+    {
+      "name": "404-page"
+    }
+  ]
+}
+{% endschema %}

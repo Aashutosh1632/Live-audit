@@ -1,0 +1,470 @@
+{{ 'mobile-hamburger.css' | asset_url | stylesheet_tag: preload: true }}
+<script src="{{ 'header-drawer-menu.js' | asset_url }}" defer="defer"></script>
+
+<header-drawer data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}">
+  <details id="Details-menu-drawer-container" class="menu-drawer-container">
+    <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="{{ 'sections.header.menu' | t }}">
+      <span>
+        {{- 'icon-hamburger.svg' | inline_asset_content -}}
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+    {%- comment -%} Perf: heavy mobile drawer content is wrapped in a <template> so the browser does not build it as live DOM during initial page load. On first hamburger click a small inline script clones the template into the live tree and removes the template. Saves DOM/layout/paint work and dramatically reduces JS query times across the site. Bytes on the wire are unchanged (use a true AJAX lazy-load for that). {%- endcomment -%}
+    
+    <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-{{ section.settings.menu_color_scheme }}">
+      <div class="menu-drawer__inner-container">
+        <div class="menu-drawer__navigation-container">
+          <nav class="menu-drawer__navigation">
+            <div class="logClose">
+                <div class="header__icon header__icon--account link focus-inset small-hide welcome-user customerHeaderLogout">
+                  <p class="logo-text">
+                    Welcome,
+                    {%- if customer.first_name -%}{{ customer.first_name | default: customer.email }} {%- endif -%}
+                  </p>
+                  <p class="logo-text">
+                    Mobile No.:
+                    {%- if customer.phone -%}
+                      {{ customer.phone }}
+                    {%- endif -%}
+                  </p>
+                </div>
+                <a href="/account" class="header__icon header__icon--account link focus-inset small-hide customerHeaderLogin" rel="nofollow"><account-icon><span class="jeet">
+                      <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" id="svgkp">
+                        <path d="M22.9129 12.935L13.7571 23.0474C13.5348 23.2929 13.1284 23.1084 13.1669 22.7794L14.0816 14.9731H10.6991C10.4034 14.9731 10.2484 14.6219 10.4478 14.4035L20.3133 3.59739C20.5589 3.32834 20.9984 3.58134 20.8891 3.92887L18.2354 12.3664H22.6607C22.9557 12.3664 23.1109 12.7163 22.9129 12.935Z" fill="#FEA203"></path>
+                        <path id="svgkp-path" fill-rule="evenodd" clip-rule="evenodd" d="M16.6079 5.35819C16.4805 5.1933 16.3421 5.03582 16.1932 4.8869C15.2702 3.96387 14.0183 3.44531 12.7129 3.44531C11.4075 3.44531 10.1556 3.96387 9.2326 4.8869C8.30957 5.80993 7.79102 7.06183 7.79102 8.36719C7.79102 9.67255 8.30957 10.9244 9.2326 11.8475C9.48368 12.0986 9.75909 12.3197 10.0533 12.5086L11.0235 11.4503C10.7335 11.2914 10.4649 11.0911 10.227 10.8531C9.56766 10.1938 9.19727 9.29959 9.19727 8.36719C9.19727 7.43479 9.56766 6.54057 10.227 5.88127C10.8863 5.22196 11.7805 4.85156 12.7129 4.85156C13.6453 4.85156 14.5395 5.22196 15.1988 5.88127C15.3636 6.04604 15.5103 6.22549 15.6377 6.41654L16.6079 5.35819ZM20.6413 18.6497L19.6746 19.7132C20.1676 20.4122 20.4473 21.2264 20.4473 22.0781V23.8359C20.4473 24.2243 20.7621 24.5391 21.1504 24.5391C21.5387 24.5391 21.8535 24.2243 21.8535 23.8359V22.0781C21.8535 20.7863 21.4016 19.6103 20.6413 18.6497ZM12.3111 17.5078H10.3026C7.27113 17.5078 4.97852 19.6394 4.97852 22.0781V23.8359C4.97852 24.2243 4.66372 24.5391 4.27539 24.5391C3.88707 24.5391 3.57227 24.2243 3.57227 23.8359V22.0781C3.57227 18.6922 6.67684 16.1016 10.3026 16.1016H12.4885L12.3111 17.5078Z" fill="currentColor" stroke="currentColor"></path>
+                      </svg></span></account-icon><span class="logo-text"> LOGIN </span>
+                </a>
+              <div class="drawer_close_btn">
+                <svg class="" aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg"  width="13" height="13" viewBox="0 0 13 13">
+                  <path fill="currentColor" fill-rule="evenodd" d="M5.306 6.5L0 1.194 1.194 0 6.5 5.306 11.806 0 13 1.194 7.694 6.5 13 11.806 11.806 13 6.5 7.694 1.194 13 0 11.806 5.306 6.5z"></path>
+                </svg>
+              </div>
+            </div>
+
+            {% comment %} Menu drawer content {% endcomment %}
+<div id="HeaderDrawerMenu">
+            <ul class="menu-drawer__menu has-submenu list-menu" role="list"> 
+              
+              {%- assign health_personal_care_link = blank -%} 
+              {%- assign home_kitchen_link = blank -%}
+              {%- assign home_improvement_link = blank -%}
+              {%- assign jewellery_link = blank -%}
+              {%- assign office_products_link = blank -%}
+              {%- assign electronics_link = blank -%}
+              {%- assign toys_games_link = blank -%}
+              {%- assign more_link = blank -%}
+              {%- assign home_essentials_link = blank -%}
+              {%- assign kids_link = blank -%}
+              {%- assign gift_link = blank -%}
+              {%- assign fashion_beauty_link = blank -%}
+              {%- assign health_beauty_link = blank -%}
+              {%- assign kitchen_tools_link = blank -%} 
+
+              {%- for top_link in linklists.new-menu-pcg-mobile.links -%}
+                {%- if top_link.title == 'Home Essentials' -%}
+                  {%- assign home_essentials_link = top_link -%}
+                {%- elsif top_link.title == 'Kids' -%}
+                  {%- assign kids_link = top_link -%}
+                {%- elsif top_link.title == 'Gift' -%}
+                  {%- assign gift_link = top_link -%}
+                {%- elsif top_link.title == 'Fashion & Beauty' -%}
+                  {%- assign fashion_beauty_link = top_link -%}
+                {%- elsif top_link.title == 'Health & Beauty' -%}
+                  {%- assign fashion_beauty_link = top_link -%}
+                {%- elsif top_link.title == 'Kitchen Tools' -%} 
+                  {%- assign kitchen_tools_link = top_link -%}
+                {%- elsif top_link.title == 'Health & Personal Care' -%}
+                  {%- assign health_personal_care_link = top_link -%}
+                {%- elsif top_link.title == 'Home & Kitchen' -%}
+                  {%- assign home_kitchen_link = top_link -%}
+                {%- elsif top_link.title == 'Home Improvement' -%}
+                  {%- assign home_improvement_link = top_link -%}
+                {%- elsif top_link.title == 'Jewellery' -%}
+                  {%- assign jewellery_link = top_link -%}
+                {%- elsif top_link.title == 'Office Products' -%}
+                  {%- assign office_products_link = top_link -%}
+                {%- elsif top_link.title == 'Electronics' -%}
+                  {%- assign electronics_link = top_link -%}
+                {%- elsif top_link.title == 'Toys & Games' -%}
+                  {%- assign toys_games_link = top_link -%}
+                {%- elsif top_link.title == 'More' -%}
+                  {%- assign more_link = top_link -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- for link in linklists.new-menu-pcg-mobile.links -%}
+                {%- if 
+                       link.title == 'Home Essentials' or 
+                       link.title == 'Kids' or 
+                       link.title == 'Gift' or 
+                       link.title == 'Fashion & Beauty' or
+                       link.title == 'Health & Beauty' or  
+                       link.title == 'Kitchen' or 
+                       link.title == 'Kitchen Tools' or
+                       link.title == 'Health & Personal Care' or
+                       link.title == 'Home & Kitchen' or
+                       link.title == 'Home Improvement' or
+                       link.title == 'Jewellery' or
+                       link.title == 'Office Products' or
+                       link.title == 'Electronics' or
+                       link.title == 'Toys & Games' or
+                       link.title == 'More'              
+                -%}
+                  {%- continue -%}
+                {%- endif -%}
+                {%- if link.title == 'Shop By' -%}
+                  {% assign use_links = '' | split: ',' %}
+                  
+                  {%- if home_essentials_link != blank -%}
+                    {% assign use_links = use_links | concat: home_essentials_link.links %}
+                  {%- endif -%}
+                  {%- if kids_link != blank -%}
+                    {% assign use_links = use_links | concat: kids_link.links %}
+                  {%- endif -%}
+                  {%- if gift_link != blank -%}
+                    {% assign use_links = use_links | concat: gift_link.links %}
+                  {%- endif -%}
+                  {%- if fashion_beauty_link != blank -%}
+                    {% assign use_links = use_links | concat: fashion_beauty_link.links %}
+                  {%- endif -%}
+                  {%- if health_beauty_link != blank -%}
+                    {% assign use_links = use_links | concat: health_beauty_link.links %}
+                  {%- endif -%}
+                  {%- if kitchen_tools_link != blank -%} 
+                    {% assign use_links = use_links | concat: kitchen_tools_link.links %}
+                  {%- endif -%}
+                  {%- if health_personal_care_link != blank -%}
+                    {% assign use_links = use_links | concat: health_personal_care_link.links %}
+                  {%- endif -%}
+                  {%- if home_kitchen_link != blank -%}
+                    {% assign use_links = use_links | concat: home_kitchen_link.links %}
+                  {%- endif -%}
+                  {%- if home_improvement_link != blank -%}
+                    {% assign use_links = use_links | concat: home_improvement_link.links %}
+                  {%- endif -%}
+                  {%- if jewellery_link != blank -%}
+                    {% assign use_links = use_links | concat: jewellery_link.links %}
+                  {%- endif -%}
+                  {%- if office_products_link != blank -%}
+                    {% assign use_links = use_links | concat: office_products_link.links %}
+                  {%- endif -%}
+                  {%- if electronics_link != blank -%}
+                    {% assign use_links = use_links | concat: electronics_link.links %}
+                  {%- endif -%}
+                  {%- if toys_games_link != blank -%}
+                    {% assign use_links = use_links | concat: toys_games_link.links %}
+                  {%- endif -%}
+                  {%- if more_link != blank -%}
+                    {% assign use_links = use_links | concat: more_link.links %}
+                  {%- endif -%}
+                {%- else -%}
+                  {% assign use_links = link.links %}
+                {%- endif -%}
+            
+                <li>
+                  {%- if use_links != blank -%}
+                    {%- assign has_grandchild = false -%}
+                    {%- for child_link in use_links -%}
+                      {%- if child_link.links.size > 0 -%}
+                        {%- assign has_grandchild = true -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+            
+                    <details id="Details-menu-drawer-menu-item-{{ forloop.index }}" class="hambur-custom">
+                      <summary id="HeaderDrawer-{{ link.handle }}" class="first-lvl-menu jeet menu-drawer__menu-item list-menu__item link link--text focus-inset">
+                        <span class="left-menu-link" data-target="section-{{ link.title | handleize }}">{{ link.title | escape }}</span>
+                        <span class="svg-wrapper">
+                          <svg aria-hidden="true" class="icon-chevron-down" fill="none" focusable="false" height="6" role="presentation" viewBox="0 0 8 6" width="8" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 4.5L7 1.5" stroke="currentColor" stroke-linecap="square" stroke-width="1.25"></path>
+                            <path d="M4 4.5L1 1.5" stroke="currentColor" stroke-linecap="square" stroke-width="1.25"></path>
+                          </svg>
+                        </span>
+                      </summary>
+            
+                      <div id="link-{{ link.handle | escape }}" class="second-lvl-menu has-submenu gradient motion-reduce" tabindex="-1">
+                        <div class="close-hamlogo">
+                          <a class="ham-lg-a header__heading-link link link--text focus-inset">
+                            <span>{{ link.title | escape }}</span>
+                          </a>
+                          <button class="menu-drawer__close-buttonss" aria-expanded="true">
+                            <svg aria-hidden="true" focusable="false" width="15" height="30" viewBox="0 0 13 13">
+                              <path fill="currentColor" fill-rule="evenodd" d="M5.306 6.5L0 1.194 1.194 0 6.5 5.306 11.806 0 13 1.194 7.694 6.5 13 11.806 11.806 13 6.5 7.694 1.194 13 0 11.806 5.306 6.5z"></path>
+                            </svg>
+                          </button>
+                        </div>
+            
+                        <div class="menu-drawer__inner-submenu {% if has_grandchild %}second-lvl-hmb{% else %}second-lvl-not{% endif %}">
+                          <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                            <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+                            <span>{{ link.title | escape }}</span>
+                          </button>
+            
+                          {%- if link.title == 'Shop By' -%}
+                          <div class="collection-header-group">
+                      
+                            {%- if home_essentials_link.type == 'collection_link' and home_essentials_link.object.metafields.custom.collection_image_megamenu_ != blank and home_essentials_link.links.size > 0 -%}
+                              {%- assign first_home_child = home_essentials_link.links[0] -%}
+                              <div class="collection-summary" data-scroll-target="section-{{ first_home_child.title | handleize }}">
+                                {{ home_essentials_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: home_essentials_link.title, class: 'collection_image' }}
+                                <h2 class="collection-title">{{ home_essentials_link.title }}</h2>
+                              </div>
+                            {%- endif -%}
+
+                            {%- if kids_link.type == 'collection_link' and kids_link.object.metafields.custom.collection_image_megamenu_ != blank and kids_link.links.size > 0 -%}
+                              {%- assign first_kids_child = kids_link.links[0] -%}
+                              <div class="collection-summary" data-scroll-target="section-{{ first_kids_child.title | handleize }}">
+                                {{ kids_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: kids_link.title, class: 'collection_image' }}
+                                <h2 class="collection-title">{{ kids_link.title }}</h2>
+                              </div>
+                            {%- endif -%}
+                          
+                            {%- if gift_link.type == 'collection_link' and gift_link.object.metafields.custom.collection_image_megamenu_ != blank and gift_link.links.size > 0 -%}
+                              {%- assign first_gift_child = gift_link.links[0] -%}
+                              <div class="collection-summary" data-scroll-target="section-{{ first_gift_child.title | handleize }}">
+                                {{ gift_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: gift_link.title, class: 'collection_image' }}
+                                <h2 class="collection-title">{{ gift_link.title }}</h2>
+                              </div>
+                            {%- endif -%}
+                          
+                            {%- if fashion_beauty_link.type == 'collection_link' and fashion_beauty_link.object.metafields.custom.collection_image_megamenu_ != blank and fashion_beauty_link.links.size > 0 -%}
+                              {%- assign first_fashion_child = fashion_beauty_link.links[0] -%}
+                              <div class="collection-summary" data-scroll-target="section-{{ first_fashion_child.title | handleize }}">
+                                {{ fashion_beauty_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: fashion_beauty_link.title, class: 'collection_image' }}
+                                <h2 class="collection-title">{{ fashion_beauty_link.title }}</h2>
+                              </div>
+                            {%- endif -%}
+                          
+                            {%- if health_beauty_link.type == 'collection_link' and health_beauty_link.object.metafields.custom.collection_image_megamenu_ != blank and health_beauty_link.links.size > 0 -%}
+                              {%- assign first_health_child = health_beauty_link.links[0] -%}
+                              <div class="collection-summary" data-scroll-target="section-{{ first_health_child.title | handleize }}">
+                                {{ health_beauty_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: health_beauty_link.title, class: 'collection_image' }}
+                                <h2 class="collection-title">{{ health_beauty_link.title }}</h2>
+                              </div>
+                            {%- endif -%}
+
+                            {%- if kitchen_tools_link.type == 'collection_link' and kitchen_tools_link.object.metafields.custom.collection_image_megamenu_ != blank and kitchen_tools_link.links.size > 0 -%}
+                              {%- assign first_kitchen_child = kitchen_tools_link.links[0] -%}
+                              <div class="collection-summary" data-scroll-target="section-{{ first_kitchen_child.title | handleize }}">
+                                {{ kitchen_tools_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: kitchen_tools_link.title, class: 'collection_image' }}
+                                <h2 class="collection-title">{{ kitchen_tools_link.title }}</h2>
+                              </div>
+                            {%- endif -%}
+
+                            {%- if health_personal_care_link.type == 'collection_link' and health_personal_care_link.object.metafields.custom.collection_image_megamenu_ != blank and health_personal_care_link.links.size > 0 -%}
+                              {%- assign first_health_personal_care_child = health_personal_care_link.links[0] -%}
+                              <div class="collection-summary" data-scroll-target="section-{{ first_health_personal_care_child.title | handleize }}">
+                                {{ health_personal_care_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: health_personal_care_link.title, class: 'collection_image' }}
+                                <h2 class="collection-title">{{ health_personal_care_link.title }}</h2>
+                              </div>
+                            {%- endif -%}
+
+                          {%- if home_kitchen_link.type == 'collection_link' and home_kitchen_link.object.metafields.custom.collection_image_megamenu_ != blank and home_kitchen_link.links.size > 0 -%}
+                            {%- assign first_home_kitchen_child = home_kitchen_link.links[0] -%}
+                            <div class="collection-summary" data-scroll-target="section-{{ first_home_kitchen_child.title | handleize }}">
+                              {{ home_kitchen_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: home_kitchen_link.title, class: 'collection_image' }}
+                              <h2 class="collection-title">{{ home_kitchen_link.title }}</h2>
+                            </div>
+                          {%- endif -%}
+
+                          {%- if home_improvement_link.type == 'collection_link' and home_improvement_link.object.metafields.custom.collection_image_megamenu_ != blank and home_improvement_link.links.size > 0 -%}
+                            {%- assign first_home_improvement_child = home_improvement_link.links[0] -%}
+                            <div class="collection-summary" data-scroll-target="section-{{ first_home_improvement_child.title | handleize }}">
+                              {{ home_improvement_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: home_improvement_link.title, class: 'collection_image' }}
+                              <h2 class="collection-title">{{ home_improvement_link.title }}</h2>
+                            </div>
+                          {%- endif -%}
+
+                          {%- if jewellery_link.type == 'collection_link' and jewellery_link.object.metafields.custom.collection_image_megamenu_ != blank and jewellery_link.links.size > 0 -%}
+                            {%- assign first_jewellery_child = jewellery_link.links[0] -%}
+                            <div class="collection-summary" data-scroll-target="section-{{ first_jewellery_child.title | handleize }}">
+                              {{ jewellery_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: jewellery_link.title, class: 'collection_image' }}
+                              <h2 class="collection-title">{{ jewellery_link.title }}</h2>
+                            </div>
+                          {%- endif -%}
+
+                          {%- if office_products_link.type == 'collection_link' and office_products_link.object.metafields.custom.collection_image_megamenu_ != blank and office_products_link.links.size > 0 -%}
+                            {%- assign first_office_products_child = office_products_link.links[0] -%}
+                            <div class="collection-summary" data-scroll-target="section-{{ first_office_products_child.title | handleize }}">
+                              {{ office_products_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: office_products_link.title, class: 'collection_image' }}
+                              <h2 class="collection-title">{{ office_products_link.title }}</h2>
+                            </div>
+                          {%- endif -%}
+
+                          {%- if electronics_link.type == 'collection_link' and electronics_link.object.metafields.custom.collection_image_megamenu_ != blank and electronics_link.links.size > 0 -%}
+                            {%- assign first_electronics_child = electronics_link.links[0] -%}
+                            <div class="collection-summary" data-scroll-target="section-{{ first_electronics_child.title | handleize }}">
+                              {{ electronics_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: electronics_link.title, class: 'collection_image' }}
+                              <h2 class="collection-title">{{ electronics_link.title }}</h2>
+                            </div>
+                          {%- endif -%}
+
+                          {%- if toys_games_link.type == 'collection_link' and toys_games_link.object.metafields.custom.collection_image_megamenu_ != blank and toys_games_link.links.size > 0 -%}
+                            {%- assign first_toys_games_child = toys_games_link.links[0] -%}
+                            <div class="collection-summary" data-scroll-target="section-{{ first_toys_games_child.title | handleize }}">
+                              {{ toys_games_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: toys_games_link.title, class: 'collection_image' }}
+                              <h2 class="collection-title">{{ toys_games_link.title }}</h2>
+                            </div>
+                          {%- endif -%}
+
+                          {%- if more_link.type == 'collection_link' and more_link.object.metafields.custom.collection_image_megamenu_ != blank and more_link.links.size > 0 -%}
+                            {%- assign first_more_child = more_link.links[0] -%}
+                            <div class="collection-summary" data-scroll-target="section-{{ first_more_child.title | handleize }}">
+                              {{ more_link.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: more_link.title, class: 'collection_image' }}
+                              <h2 class="collection-title">{{ more_link.title }}</h2>
+                            </div>
+                          {%- endif -%}
+
+                          
+                          </div>
+
+                          {%- endif -%}
+            
+                          <div class="menu-drawer__menu list-menu second-lvl-hamburger {% if has_grandchild %}second-lvl-hamburger11{% endif %}" role="list" tabindex="-1">
+                            {%- for childlink in use_links -%}
+                              {%- if childlink.links == blank -%}
+                                <div id="ham-{{ childlink.handle }}">
+                                  <a href="{{ childlink.url }}" class="menu-drawer__menu-item link list-menu__item focus-inset" {% if childlink.current %}aria-current="page"{% endif %}>
+                                    {%- if childlink.type == 'collection_link' and childlink.object.metafields.custom.collection_image_megamenu_ != blank -%}
+                                      {{ childlink.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: childlink.title, class: 'collection_image' }}
+                                    {%- endif -%}
+                                    <span class="childlink_title">{{ childlink.title | escape }}</span>
+                                  </a>
+                                </div>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </div>
+            
+                          {%- if has_grandchild -%}
+                          <div class="menu-drawer__menu list-menu third-lvl-hamburger scrollable-menu" role="list" tabindex="-1">
+                            {%- for childlink in use_links -%}
+                              {%- if childlink.links.size > 0 -%}
+                                <div class="third-lvl-group" id="section-{{ childlink.title | handleize }}">
+                                  <h3 class="childlink_title third-lvl-heading"><a href="{{ childlink.url }}">{{ childlink.title | escape }}</a></h3>
+                                  <div class="third-hamcoll">
+                                    {%- for grandchildlink in childlink.links -%}
+                                      <div class="third-divv">
+                                        <a href="{{ grandchildlink.url }}" class="menu-drawer__menu-item link list-menu__item focus-inset" {% if grandchildlink.current %}aria-current="page"{% endif %}>
+                                          {%- if grandchildlink.type == 'collection_link' and grandchildlink.object.metafields.custom.collection_image_megamenu_ != blank -%}
+                                            {{ grandchildlink.object.metafields.custom.collection_image_megamenu_ | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: grandchildlink.title, class: 'collection_image' }}
+                                          {%- endif -%}
+                                          <span class="childlink_title grandchildlink_title {% if grandchildlink.current %}grandchild-curnt{% endif %}">{{ grandchildlink.title | escape }}</span>
+                                        </a>
+                                      </div>
+                                    {%- endfor -%}
+                                  </div>
+                                </div>
+                              {%- else -%}
+                                <div class="third-lvl-group">
+                                  <h3 class="childlink_title third-lvl-heading"><a href="{{ childlink.url }}">{{ childlink.title | escape }}</a></h3>
+                                </div>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </div>
+                          {%- endif -%}
+            
+                        </div>
+                      </div>
+                    </details>
+            
+                  {%- else -%}
+                    <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link focus-inset" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+</div>
+          </nav>
+ <div class="drawer-content-wrapper">
+  <div class="mobile-new-launch-section">
+    <div class="mobile-new-launch-section-heading">
+      <h3 class="mobile-new-launch-heading">
+        <a href="/collections/just-arrived">Newly Launched</a>
+      </h3>
+      <a class="mobile-new-launch-view-all" href="/collections/just-arrived">View all</a>
+    </div>
+
+    <div class="mobile-new-launch-products">
+      {% assign just_arrived_collection = collections['just-arrived'] %}
+      
+      {% for product in just_arrived_collection.products limit: 6 %} 
+        <div class="mobile-product-card"> 
+          
+          <a href="{{ product.url }}"> 
+            <img loading="lazy" decoding="async" src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ product.title | escape }}" width="200" height="{% if product.featured_image.aspect_ratio %}{{ 200 | divided_by: product.featured_image.aspect_ratio | round }}{% else %}200{% endif %}">
+            <p class="product-title-header-drawer">{{ product.title }}</p>
+          </a>
+
+          <div class="product-price">
+            {% if product.compare_at_price > product.price %}
+              
+              <span class="sale-price" style="color: #e60023; font-weight: bold; font-size:12px;">
+                {{ product.price | money }}
+              </span>
+              <span class="compare-price" style="text-decoration: line-through; color: #888; font-size:12px;">
+                {{ product.compare_at_price | money }}
+              </span>
+            {% else %}
+              <span class="regular-price">
+                {{ product.price | money }}
+              </span>
+            {% endif %}
+          </div>
+
+        </div> 
+      {% endfor %} 
+
+    </div> 
+  </div> 
+</div>
+
+          <div class="menu-drawer__utility-links">
+            <div class="drawer_menu_info">
+              <a class="mobile-email-inline" href="tel:+919638666607"><span>
+                  <svg width="16px" height="16px" fill="#ec1a23" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm90.7 96.7c9.7-2.6 19.9 2.3 23.7 11.6l20 48c3.4 8.2 1 17.6-5.8 23.2L168 231.7c16.6 35.2 45.1 63.7 80.3 80.3l20.2-24.7c5.6-6.8 15-9.2 23.2-5.8l48 20c9.3 3.9 14.2 14 11.6 23.7l-12 44C336.9 378 329 384 320 384C196.3 384 96 283.7 96 160c0-9 6-16.9 14.7-19.3l44-12z"></path>
+                  </svg></span>+91 96386 66607</a>
+              <a class="mobile-email-inline" href="mailto:care@deodap.com"><span>
+                  <svg width="16px" height="16px" fill="#ec1a23" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"></path>
+                  </svg></span>care@deodap.com</a>
+              <p style="font-weight:600;color:#290000;text-decoration:none;font-size:14px;margin:0px;" class="mobile-email-inline">
+                9:00 AM to 7:00 PM
+              </p>
+            </div>
+            {%- if localization.available_countries or localization.available_languages -%}
+              <div class="menu-drawer__localization header-localization">
+                {%- if localization.available_countries and localization.available_countries.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'HeaderCountryMobileForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="visually-hidden" id="HeaderCountryMobileLabel">
+                          {{ 'localization.country_label' | t }}
+                        </h2>
+                        {%- render 'country-localization', localPosition: 'HeaderCountryMobile' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {% endif %}
+                {%- if localization.available_languages and localization.available_languages.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'HeaderLanguageMobileForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="visually-hidden" id="HeaderLanguageMobileLabel">
+                          {{ 'localization.language_label' | t }}
+                        </h2>
+                        {%- render 'language-localization', localPosition: 'HeaderLanguageMobile' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+   
+    
+  </details>
+</header-drawer>
+          

@@ -1,0 +1,200 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "faq_section_4d34cE": {
+      "type": "faq-section",
+      "blocks": {
+        "category_iqnBCR": {
+          "type": "category",
+          "settings": {
+            "category_title": "Orders",
+            "category_image": "shopify://shop_images/orders_100x100_7d981d57-1afb-4ee6-b046-11bb853f6082.jpg"
+          }
+        },
+        "question_eFtJdk": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "How To Order?",
+            "answer": "<p>To begin ordering, you may visit the Deodap website on your desktop or mobile browser. If you are using an Android phone, you may download and install the Deodap Shopping app here to place an order.</p><p>If you are using an iPhone, you may download the Deodap shopping app here to place an order.</p><p><br/>Steps to place an order:<br/><br/>1.Select the items which you want to order.<br/>2. Add those items to your “Shopping Cart”.<br/>3. After reviewing your shopping cart, click on “Proceed to Checkout”.<br/>4. You’ll be prompted to sign in to your Deodap account. You can sign in using your<br/>mobile number or email address if you already have an account. If you’re a new<br/>customer, you can create account with email or phone.<br/>5. Enter the address where you want to receive your order/select the Pickup store as<br/>per availability by searching in the available criteria.<br/>6. Select the payment method, add the details, and click on “Continue”.<br/>7. Review your order and click on the “Place your Order” button and Pay to complete<br/>the transaction.</p>"
+          }
+        },
+        "question_EkPPqT": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "How to change the quantity of orders in the cart?",
+            "answer": "<p>To change the quantity for items you have not yet added to the cart:</p><p></p><p>To change the quantity for items you have not yet added to the cart:<br/>Once you click on the \"Add to Cart\" button and add the item to your shopping cart,<br/>enter the desired quantity in the \"Quantity\" dropdown option on the right side of the<br/>page.<br/>To change the quantity for items already added to the cart:<br/><br/>Go to Cart, click on the quantity dropdown box to the right of the title, and choose the<br/>desired quantity. The quantity number for the item and order amount will be updated<br/>automatically.<br/>If the entered quantity is not available with us, you'll see an error message. </p>"
+          }
+        },
+        "question_t7JXG8": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "Why am I unable to place orders?",
+            "answer": "<p>This could be due to the following issues:</p><ul><li>Check if there is a Payment decline. Please click here to know more about<br/>Payment issues.</li><li>The item you have selected is out of stock.</li><li>There is some technical or internet connectivity issue.</li><li> Undeliverable to the selected location/pincode.</li><li>Check if there is a quantity limit.<br/></li></ul>"
+          }
+        },
+        "question_wzNBQq": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "I’m unable to complete my order on the website. What do I do?",
+            "answer": "<p>Please contact customer care at +91 96386 66607 or care@deodap.com. We’ll be<br/>happy to assist you.</p>"
+          }
+        },
+        "question_KGAgxd": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order has been shipped we will email you a tracking number and a link to<br/>the courier’s website. Please contact our customer service team if you do not receive<br/>this email.</p>"
+          }
+        },
+        "question_Q39z7L": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "Do I need to open an account to shop on your website?",
+            "answer": "<p>No, you don’t need to open an account to place an order on our website. Simply checkout as a guest and provide the necessary details for us to process and deliver your order.<br/><br/>Note: We try to honor your delivery instructions whenever possible. However, we can't always guarantee that our carriers can meet these requests.<br/></p>"
+          }
+        },
+        "question_UCjMpw": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "Can I change or modify orders that are already placed?",
+            "answer": "<p>You would not be able to change or modify the number of items once you have already placed an order. You can place another fresh order with the desired modifications. <br/></p>"
+          }
+        },
+        "category_Y9zqkL": {
+          "type": "category",
+          "settings": {
+            "category_title": "Shipping",
+            "category_image": "shopify://shop_images/shipping-2_100x100_f2c5ad21-bf16-4bb7-817e-c07543a382b4.png"
+          }
+        },
+        "question_zFX7tW": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "Where do you ship?",
+            "answer": "<p>We currently ship within India.</p>"
+          }
+        },
+        "question_Cg8P8H": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "Do you deliver outside of India?",
+            "answer": "<p>No, sorry, currently we only deliver within India.</p>"
+          }
+        },
+        "question_GHka9X": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "How long does it typically take for your products to be dispatched?",
+            "answer": "<p>Usually within 48 hours of processing your order.</p>"
+          }
+        },
+        "question_3jxH4y": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "How long does it typically take for my purchase to arrive once it’s dispatched?",
+            "answer": "<p>Usually 3-7 business days, however, some larger items can take longer.</p>"
+          }
+        },
+        "question_czPWXh": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "Are all your products actually held in stock?",
+            "answer": "<p>Yes, all products listed in our shop are held in stock. We ship our products directly from our stock so you can be assured of speedy delivery.</p>"
+          }
+        },
+        "question_fEC8th": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "Is it safe to use my banking and card details on your website?",
+            "answer": "<p>Yes, shopping on our website is completely safe. We use gokwik leading payment gateway providers that are Verisign Secured and PCI Compliant. At no point during the payment process do we handle your banking and card details, or store your banking and card details after the order is placed.</p>"
+          }
+        },
+        "question_FVeax8": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "Are my personal details safe on the website?",
+            "answer": "<p>Yes, we take utmost care in keeping your personal information safe and secure. We do not sell your information to any third-parties. For more details, refer to our Privacy Policy.<br/></p>"
+          }
+        },
+        "category_df9XWP": {
+          "type": "category",
+          "settings": {
+            "category_title": "Returns",
+            "category_image": "shopify://shop_images/returns_100x100_14518ce8-c3af-4d4c-a6b0-dbb95c5c6e39.png"
+          }
+        },
+        "question_dQcR9P": {
+          "type": "question",
+          "settings": {
+            "category": "Returns",
+            "question": "Can I exchange or return an item?",
+            "answer": "<p>We do accept exchanges and they follow the same conditions as returns:</p><p>The item must have been sold on our online store<br/></p><ul><li>The item must have been sold on our online store</li><li>The item shouldn’t have been used in any way<br/></li><li>The item should be in its original packaging with all the tags, etc.<br/><br/><br/>To request an exchange, please submit your request via the “contact us” form. A<br/>member of our support staff shall respond as soon as possible.</li></ul>"
+          }
+        },
+        "question_tBzAJ7": {
+          "type": "question",
+          "settings": {
+            "category": "Returns",
+            "question": "I ordered the wrong item. How can I stop the order?",
+            "answer": "<p>We do not offer cancellations or returns. Please check your order details before purchasing, as orders cannot be stopped once placed.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "category_iqnBCR",
+        "question_eFtJdk",
+        "question_EkPPqT",
+        "question_t7JXG8",
+        "question_wzNBQq",
+        "question_KGAgxd",
+        "question_Q39z7L",
+        "question_UCjMpw",
+        "category_Y9zqkL",
+        "question_zFX7tW",
+        "question_Cg8P8H",
+        "question_GHka9X",
+        "question_3jxH4y",
+        "question_czPWXh",
+        "question_fEC8th",
+        "question_FVeax8",
+        "category_df9XWP",
+        "question_dQcR9P",
+        "question_tBzAJ7"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "faq_section_4d34cE"
+  ]
+}

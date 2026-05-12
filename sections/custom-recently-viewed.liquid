@@ -1,0 +1,15 @@
+  {{ 'pdp-recently-viewed.css' | asset_url | stylesheet_tag }}
+<div class="page-width">
+{%- render 'pdp-slick' -%}
+</div>
+{% schema %}
+  {
+    "name": "custom-recently-view",
+    "settings": [],
+    "presets": [
+      {
+        "name": "custom-recently-view"
+      }
+    ]
+  }
+{% endschema %}

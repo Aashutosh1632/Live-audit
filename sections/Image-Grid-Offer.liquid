@@ -1,0 +1,57 @@
+{{ 'image-grid-offer.css' | asset_url | stylesheet_tag }}
+
+<div class="custom-image-grid-section">
+  <div class="image-grid page-width">
+    <div class="grid-row top-row">
+      {% for block in section.blocks limit: 3 %}
+        <div class="grid-item">
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | img_url: 'master' }}" alt="Image {{ forloop.index }}" />
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="grid-row bottom-row">
+      {% assign second_row = section.blocks | slice: 3, 2 %}
+      {% for block in second_row %}
+        <div class="grid-item {% if forloop.index == 2 %}wide-item{% endif %}">
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | img_url: 'master' }}" alt="Image {{ forloop.index | plus: 3 }}" />
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": "Image-Grid-Offer",
+  "tag": "section",
+  "class": "custom-image-grid-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "image_block",
+      "name": "Image Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Image-Grid-Offer"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,136 @@
+
+{{ 'wholesale.css' | asset_url | stylesheet_tag: preload: true }}
+
+
+{% style %}
+.bg-with-content {
+  position: relative;
+  width: 100%;
+  min-height: {{ section.settings.section_height }}px;
+  background-image: url({{ section.settings.bg_desktop | image_url }});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  padding: 40px;
+  overflow: hidden;
+}
+
+/* Brown overlay */
+.bg-with-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #240e0399;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .bg-with-content {
+    background-image: url({{ section.settings.bg_mobile | image_url }});
+    padding: 20px;
+    min-height: {{ section.settings.section_height_mobile }}px;
+  }
+  .bg-with-content__content {
+    left: 0!important;
+  }
+  .bg-with-content__content {
+    padding: 0!important;
+  }
+}
+
+.bg-with-content__content {
+  position: relative;
+  z-index: 2;
+  max-width: {{ section.settings.content_width }}px;
+  background: {{ section.settings.content_bg }};
+  padding: 30px;
+  border-radius: {{ section.settings.border_radius }}px;
+  left: 15%;
+}
+{% endstyle %}
+
+<div class="bg-with-content">
+  <div class="bg-with-content__content">
+    {{ section.settings.content }}
+    {{ section.settings.custom_liquid }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "BG Image with Content",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_desktop",
+      "label": "Background Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_mobile",
+      "label": "Background Image (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section Height (Desktop)",
+      "min": 300,
+      "max": 1000,
+      "step": 50,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "section_height_mobile",
+      "label": "Section Height (Mobile)",
+      "min": 200,
+      "max": 800,
+      "step": 50,
+      "default": 400
+    },
+    
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content Width",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "default": 500
+    },
+    {
+      "type": "color",
+      "id": "content_bg",
+      "label": "Content Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Content Border Radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content Text",
+      "default": "<p>Add your content here</p>"
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom Liquid"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Background Image with Content"
+    }
+  ]
+}
+{% endschema %}

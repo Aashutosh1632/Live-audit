@@ -1,0 +1,127 @@
+<link rel="stylesheet" href="{{ 'social-media-icons.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'social-media-icons.css' | asset_url | stylesheet_tag }}</noscript>
+{% style %}
+    @media (max-width:768px){
+  #shopify-section-{{ section.id }} {
+      order: {{section.settings.order_no }};
+  }
+    }
+{% endstyle %}
+<div class="new-custom-logo featured-collection__container page-width">
+  <div class="child-div">
+    <div class="left-div">
+      <h2 class="social-media-title">Find us on</h2>
+      <div class="social-center">
+        <div class="grid-containers follower-counter-1">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'text' -%}
+              <div class="counter-item-1">
+                <a href="{{ block.settings.add_sociel_url }}" target="_blank" rel="noopener noreferrer" style="border:1px solid {{ block.settings.add_border }};">
+                  <div class="image-container2">{{ block.settings.add_image | image_url: width: 200 | image_tag: widths: '60, 100, 150, 200', sizes: '(min-width: 750px) 50px, 25px', loading: 'lazy', alt: 'Social icon' }}</div>
+                  <div class="text-container">
+                    <span class="counter-count {% if section.settings.show_count != blank  %} count {% endif %}" data-target="{{ block.settings.add_count }}">{{- block.settings.add_count -}}</span>
+                    <span class="counter-label">{{ block.settings.add_sociel_text }}</span>
+                  </div>
+                </a>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+    <div class="devider"></div>
+    <div class="right-div">
+      <div class="child-inner">
+        <h2 class="social-media-title">Also Available On</h2>
+        <div class="grid-containers follower-counter-2 ">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'image_picker' -%}
+              <div class="counter-item-2 justify-content">
+                <a href="{{ block.settings.add_ship_url }}" target="_blank" style="border:1px solid {{ block.settings.add_border_2 }};"><div class="image-container">{{ block.settings.add_icon | image_url: width: 400 | image_tag: widths: '150, 220, 300, 400', sizes: '(min-width: 750px) 140px, 74px', loading: 'lazy', alt: 'Marketplace logo' }}</div></a>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{{ 'social-media-icons.js' | asset_url }}" defer="defer"></script>
+{% schema %}
+{
+  "name": "Sociel-media-icons",
+  "settings": [
+       {
+      "type": "text",
+      "id": "order_no",
+      "label": "Add Order number"
+    },
+     {
+        "type": "checkbox",
+        "id":"show_count",
+        "label":"Show counter"
+      }
+  ],
+  "blocks":[
+
+  {
+    "type": "text",
+    "name": "Add Sociel Icons",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id":"add_image",
+        "label":"ADD Image"
+      },
+       {
+    "type": "text",
+    "id": "add_count",
+    "label": "Add Text"
+  },
+       {
+    "type": "text",
+    "id": "add_sociel_text",
+    "label": "Add Text"
+  },
+       {
+      "type": "color",
+    "id": "add_border",
+    "label": "Add Border"
+  },
+        {
+      "type": "url",
+    "id": "add_sociel_url",
+    "label": "Add Link"
+  }
+    ]
+  },
+     {
+    "type": "image_picker",
+    "name": "Add Icons",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id":"add_icon",
+        "label":"ADD Image"
+      },
+       {
+      "type": "color",
+    "id": "add_border_2",
+    "label": "Add Border"
+  },
+       {
+      "type": "url",
+    "id": "add_ship_url",
+    "label": "Add Link"
+  }
+
+    ]
+  }
+],
+  "presets": [
+  {
+    "name": "Sociel-media-icons"
+  }
+]
+}
+{% endschema %}

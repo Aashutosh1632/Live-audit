@@ -1,0 +1,126 @@
+<script type='text/template' id='wizzy-autocomplete-topproducts' wizzy-override>
+    <div class="wizzy-autocomplete-top-products">
+        <p class="top-products-title">[[topProductsTitle]]</p>
+        <ul class="autocomplete-top-products">
+            [[#products]]
+[[^isFreebie]]
+  <li class="
+    grid__item wizzy-result-product wizzy-product-[[id]]
+    [[#groupId]]has-variations wizzy-group-product-[[groupId]][[/groupId]]"
+  data-product-handle="[[handle]]"
+  title="[[& name ]]"
+  data-id="[[id]]"
+  data-groupId="[[#groupId]][[groupId]][[/groupId]][[#singleVarientGroupId]][[singleVarientGroupId]][[/singleVarientGroupId]]"
+  data-product-handle="[[handle]]">
+  <div class="card-coll-new card-wrapper product-card-wrapper underline-links-hover" data-animation-state="">
+    <div class="card card--standard  card--media" style="--ratio-percent: 100%;">
+      <div class="Quick-veiew-icon">
+       
+      </div>
+      <a href="[[&url]]"> </a>
+      <div class="card__inner color-scheme-1 gradient ratio" style="--ratio-percent: 100%;">
+        <a href="[[&url]]">
+          <div class="card__media">
+            <div class="media media--transparent media--hover-effect">
+              <img
+                srcset="[[mainImage]]"
+                src="[[&url]]"
+                sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                alt="Cute Cartoon Unicorn Keychain with Silicone Strap (1 Pc / Mix design)"
+                class="motion-reduce"
+                width="1500"
+                height="1500"
+
+              ><img
+                srcset="[[hoverImage]]"
+                src="[[&url]]"
+                sizes="(min-width: 1400px) 317px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                alt=""
+                class="motion-reduce"
+                loading="lazy"
+                width="1500"
+                height="1500"
+              >
+            </div>
+          </div></a>
+        
+      </div>
+
+      <div class="card__content">
+        <div class="card__information">
+          <div class="card_info-top">
+            <div class="price       price--on-sale   ">
+              <div class="pdp-price-badge-alignment">
+                <div class="price__container">
+                  <div class="price__sale">
+                    <span class="visually-hidden visually-hidden--inline">Regular price</span
+                    ><span class="visually-hidden visually-hidden--inline">Sale price</span
+                    ><span class="custom-price price-item price-item--sale price-item--last">
+                      [[#priceWithCurrency]][[ sellingPrice ]][[/priceWithCurrency]]</span
+                    ><span>
+                      <s class="price-item price-item--regular"
+                        >[[#priceWithCurrency]][[ price ]][[/priceWithCurrency]]</s
+                      ></span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="new-div-wraper">
+             [[#reviewAvailable]]
+            <div
+              class="jdgm-widget jdgm-preview-badge jdgm-preview-badge--with-link jdgm--done-setup"
+              data-widget-name="preview_badge"
+              data-impressions-tracked="true"
+              data-views-tracked="true"
+            >
+               [[#reviewData]] [[& reviewData]] [[/reviewData]]
+              <span class="jdgm-prev-badge__text wizzy-product-review-badge"
+                >[[avgRatings]] ([[numberOfReviews]])</span
+              >
+            </div>
+            [[/reviewAvailable]]
+            <div class="cus-coll card-information">
+              <div class="rating" role="img" aria-label="4.63 out of 5.0 stars"></div>
+              <p class="rating-text caption"><span aria-hidden="true">4.63 / 5.0</span></p>
+              <p class="rating-count caption">
+                <span aria-hidden="true">(46)</span>
+                <span class="visually-hidden">46 total reviews</span>
+              </p>
+            </div>
+            <h3 class="card__heading h5" id="title-template--25101918634294__product-grid-10103172170038">
+              <a
+                href="[[&url]]"
+                id="CardLink-template--25101918634294__product-grid-10103172170038"
+                class="full-unstyled-link"
+                aria-labelledby="CardLink-template--25101918634294__product-grid-10103172170038 Badge-template--25101918634294__product-grid-10103172170038"
+                >[[& name ]]</a
+              >
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .card-coll-new .card__information {display: flex;flex-direction: column;justify-content: space-between;height: 100%;}
+    .card-coll-new .card.card--standard.card--media, .card-coll-new.card-wrapper.product-card-wrapper .card--standard>.card__content {height: 100% !important;}
+
+      @media (min-width:768px){.card-coll-new .card__heading{min-width:100%!important;min-height:40px}.grid__item:hover .card-coll-new .quick-add{height:58px!important;bottom:-47px!important;grid-row-start:4;margin:0 0 1rem;z-index:1;position:absolute;border:1px solid rgb(128 128 128 / .16);border-top:0;box-shadow:0 1px 4px #8080801c;transition:all .25scubic -bezier(.4,0,.2,1);margin-top:0;display:flex;align-items:center;width:calc(100% + 1.8px);gap:5%;order:4;left:-1px;background:#fff;padding-left:10px;padding-right:10px;box-sizing:border-box;z-index:1;overflow:hidden;margin-top:10px;justify-content:space-between;box-shadow:0 1px 4px #8080801c;left:-1px;margin:0}.grid__item .card-coll-new .quick-add{left:-1px;margin:0;height:0!important;bottom:0;position:absolute;border:1px solid rgb(128 128 128 / .16);border-top:0;box-shadow:0 1px 4px #8080801c;transition:all .25scubic-bezier(.4,0,.2,1);margin-top:0;align-items:center;width:calc(100% + 1.6px);gap:5%;background:#fff;padding-left:10px;padding-right:10px;box-sizing:border-box;z-index:1;overflow:hidden;justify-content:space-between}}.card-coll-new{padding:10px;border:1px solid;border:1px solid rgb(128 128 128 / .16);box-shadow:0 1px 4px #8080801c;transition:padding-bottom 0sease,border-bottom 0sease}.custom-collection-page-grid .product-grid-container .grid__item:hover .card-coll-new .quick-add.customer-print-quick-add-hover{visibility:hidden}
+  </style>
+  
+</li>
+[[/isFreebie]]
+            [[/products]]
+        </ul>
+        [[^isForDefault]]
+        <div class="autocomplete-top-products-view-more">
+            <button type="button" class="btn btn--small wizzy-autocomplete-top-products-view-more">
+                View More
+            </button>
+        </div>
+        [[/isForDefault]]
+    </div>
+</script>

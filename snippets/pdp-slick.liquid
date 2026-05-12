@@ -1,0 +1,15 @@
+{{ 'recently-viewed.css' | asset_url | stylesheet_tag }}
+<div class="pdp-viewed-wrapper">
+  <div class="pdp-viewed-header js-pdp-viewed-header">
+    <h2 class="pdp-viewed-title">Recently Viewed Products</h2>
+    <button class="clear-all-btn" onclick="clearAllProducts()">Clear All</button>
+  </div>
+  <div class="slick-slider pdp-viewed-section js-pdp-viewed">
+    <!-- Slick slider content will go here -->
+  </div>
+  <div class="no-products-message js-no-products" style="display: none;"></div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" defer="defer"></script>
+<script src="{{ 'recently-viewed-product.js' | asset_url }}" defer="defer"></script>

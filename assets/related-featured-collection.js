@@ -1,0 +1,1 @@
+var shuffled=!1;setInterval(function(){if(!shuffled)try{for(var e=document.querySelector("#product--grid"),r=Array.from(e.getElementsByClassName("productgrid--item")),f=r.length-1;f>0;f--){var o=Math.floor(Math.random()*(f+1));e.insertBefore(r[o],r[f])}shuffled=!0}catch{console.log("failed")}},1e3);

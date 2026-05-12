@@ -1,0 +1,26 @@
+{{ 'gokwik-pendent.css' | asset_url | stylesheet_tag }}
+{% if settings.goBuynowEnable %}
+  <button type="button" class="custom-buy-btn {% if variant_available == false or product.available == false %} hidden{% endif %} {% if product.tags contains 'Newbutton' %} pendant-buy {% endif %}" onclick="onBuyNowClick(this)" id="gokwik-buy-now" {% if settings.hideFlow %}style="display:none !important;"{% endif %}>
+    {%- unless product.tags contains 'Newbutton' -%}
+      
+      {{ settings['buynow-titile'] }} <img style="margin-left:10px;width:45px;" class="payment-icons digiron" src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/upi_options.svg" alt="Google Pay | Phone Pay | UPI"> <img style="margin-left:10px;" src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/right_arrow.svg" class="sr-pl-15 sr-checkout-visible1 digiron" alt="right_arrow">
+      
+    
+    {%- endunless -%}
+    {%- if product.tags contains 'Newbutton' -%}
+      <div class="pendant-taxt-btn">
+        <div style="margin:0 10px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 15 17" fill="none">
+            <path d="M10.1626 8.62314C10.2293 8.68981 10.2626 8.78981 10.2626 8.92314C10.2626 9.05648 10.2293 9.17314 10.1626 9.27314L7.3126 12.0732C7.24593 12.1732 7.14593 12.2232 7.0126 12.2232C6.87926 12.2232 6.7626 12.1732 6.6626 12.0732L5.2626 10.6732C5.1626 10.5732 5.1126 10.4649 5.1126 10.3482C5.1126 10.2315 5.1626 10.1232 5.2626 10.0232C5.3626 9.92314 5.47093 9.87314 5.5876 9.87314C5.70426 9.87314 5.8126 9.92314 5.9126 10.0232L7.0126 11.0732L9.4626 8.62314C9.5626 8.52314 9.67926 8.47314 9.8126 8.47314C9.94593 8.47314 10.0626 8.52314 10.1626 8.62314ZM7.4626 1.92314C8.09593 1.92314 8.64593 2.14814 9.1126 2.59814C9.57926 3.04814 9.8126 3.60648 9.8126 4.27314V4.72314H5.1126V4.27314C5.1126 3.60648 5.34593 3.04814 5.8126 2.59814C6.27926 2.14814 6.82926 1.92314 7.4626 1.92314ZM10.7626 4.72314V4.27314C10.7626 3.67314 10.6126 3.12314 10.3126 2.62314C10.0126 2.12314 9.6126 1.72314 9.1126 1.42314C8.6126 1.12314 8.0626 0.973145 7.4626 0.973145C6.8626 0.973145 6.3126 1.12314 5.8126 1.42314C5.3126 1.72314 4.9126 2.12314 4.6126 2.62314C4.3126 3.12314 4.1626 3.67314 4.1626 4.27314V4.72314H0.912598V14.0732C0.912598 14.6065 1.09593 15.0565 1.4626 15.4232C1.82926 15.7899 2.2626 15.9732 2.7626 15.9732H12.1626C12.6626 15.9732 13.0959 15.7899 13.4626 15.4232C13.8293 15.0565 14.0126 14.6065 14.0126 14.0732V4.72314H10.7626ZM1.8626 5.67314H13.1126V14.0732C13.1126 14.3399 13.0209 14.5649 12.8376 14.7482C12.6543 14.9315 12.4293 15.0232 12.1626 15.0232H2.7626C2.49593 15.0232 2.27926 14.9315 2.1126 14.7482C1.94593 14.5649 1.8626 14.3399 1.8626 14.0732V5.67314Z" fill="white" stroke="white" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <div style="color: #FFFFFF !important;">
+          <span class="es-button-title">Order Now - Free Cash On Delivery</span>
+          <div class="es-button-subtitle" style="margin-top: 7px;">Click here for Offer🎁</div>
+        </div>
+      </div>
+    {%- endif -%}
+    <div style="display:none"><div class="cir-loader">Loading..</div></div>
+  </button>
+{%- endif -%}
+<script src="{{ 'pendant-buy.js' | asset_url }}" defer="defer"></script>

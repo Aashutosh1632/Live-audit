@@ -1,0 +1,77 @@
+
+{{ 'offer-pg-explore-sec.css' | asset_url | stylesheet_tag: preload: true }}
+<script src="{{ 'offer-pg-explore-sec.js' | asset_url }}" defer="defer"></script>
+
+<section class="explore-section page-width">
+  <h2 class="explore-heading">{{ section.settings.heading }}</h2>
+
+  <div class="explore-marquee" data-speed="{{ section.settings.speed }}">
+    <div class="explore-track">
+      {% for block in section.blocks %}
+      <a href="{{ block.settings.link }}" class="explore-card">
+        <div class="explore-img">
+          <img src="{{ block.settings.image | img_url: '400x' }}" alt="{{ block.settings.title }}">
+        </div>
+        <div class="explore-title">{{ block.settings.title }}</div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Explore Continuous Scroll",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Explore these also"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll speed (px/sec)",
+      "min": 20,
+      "max": 400,
+      "step": 5,
+      "default": 120
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Explore Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Category title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 40,
+  "presets": [
+    {
+      "name": "Explore Continuous Scroll",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+
+

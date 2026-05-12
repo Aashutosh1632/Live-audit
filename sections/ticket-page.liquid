@@ -1,0 +1,20 @@
+{{ 'ticket-page.css' | asset_url | stylesheet_tag: preload: true }}
+<script src="{{ 'ticket-page.js' | asset_url }}" defer="defer"></script>
+
+<div class="page-width">
+<h2 class="trk-head ticket-pg">Tickets</h2>
+<div class="ticket-page" id="ticketsResults"></div>
+
+{% schema %}
+  {
+    "name": "ticket_page",
+    "settings": [
+      
+    ],
+    "presets": [
+      {
+        "name":"ticket_page"
+      }
+    ]
+  }
+{% endschema %}

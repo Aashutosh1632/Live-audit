@@ -1,0 +1,121 @@
+{%- assign cart_total = cart.total_price -%}
+{%- assign tier1 = 49900 -%}
+{%- assign tier2 = 99900 -%}
+{%- assign tier1_pct = tier1 | times: 100 | divided_by: tier2 -%}
+{%- assign bar_pct = cart_total | times: 100 | divided_by: tier2 -%}
+{%- if bar_pct > 100 -%}{%- assign bar_pct = 100 -%}{%- endif -%}
+
+<div id="gwp-tracker" class="gwp-tracker" data-tier1="{{ tier1 }}" data-tier2="{{ tier2 }}">
+  <style>
+    .gwp-tracker{padding:12px 16px 8px;background:#f5f5f5;border-bottom:1px solid #f0e8df}
+    .gwp-tracker__msg{font-size:12.5px;color:#3a2a1a;margin-bottom:10px;text-align:center;font-weight:500}
+    .gwp-tracker__msg span{color:#ff0000;font-weight:700}
+    .gwp-tracker__bar-wrap{position:relative;height:7px;background:#e8ddd5;border-radius:99px;margin-bottom:4px}
+    .gwp-tracker__fill{height:100%;border-radius:99px;background: linear-gradient(90deg, #ffdada, #ff0000);transition:width .45s cubic-bezier(.4,0,.2,1);max-width:100%;
+    display: block !important;
+    }
+    .gwp-tracker__dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;border:2px solid #e8ddd5;background:#fff8f2;display:flex;align-items:center;justify-content:center;font-size:9px;z-index:2;transition:border-color .3s,background .3s,box-shadow .3s}
+    .gwp-tracker__dot.on{border-color:#c8612a;background:#c8612a;box-shadow:0 0 0 3px rgba(200,97,42,.2)}
+    .gwp-tracker__dot::after{content:'🎁';opacity:.3;filter:grayscale(1)}
+    .gwp-tracker__dot.on::after{opacity:1;filter:none}
+    .gwp-tracker__labels{position:relative;height:16px;margin-top:2px}
+    .gwp-tracker__lbl{position:absolute;transform:translateX(-50%);font-size:10px;color:#aaa;font-weight:500;transition:color .3s}
+    .gwp-tracker__lbl.on{color:#c8612a;font-weight:700}
+    @keyframes gwp-pop{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.5)}}
+    .gwp-tracker__dot.pop{animation:gwp-pop .35s ease}
+  </style>
+
+  <div class="gwp-tracker__msg" id="gwp-msg">
+    {%- if cart_total == 0 -%}
+      Add items to unlock free gifts!
+    {%- elsif cart_total < tier1 -%}
+      {%- assign rem = tier1 | minus: cart_total | money -%}
+      Add <span>{{ rem }}</span> more for a free gift 🎁
+    {%- elsif cart_total < tier2 -%}
+      {%- assign rem = tier2 | minus: cart_total | money -%}
+      🎁 Gift 1 unlocked! Add <span>{{ rem }}</span> more for another gift!
+    {%- else -%}
+      🎉 You've unlocked both free gifts!
+    {%- endif -%}
+  </div>
+
+  <div class="gwp-tracker__bar-wrap">
+    <div class="gwp-tracker__fill" id="gwp-fill" style="width:{{ bar_pct }}%"></div>
+    <div class="gwp-tracker__dot {% if cart_total >= tier1 %}on{% endif %}" id="gwp-dot1" style="left:{{ tier1_pct }}%"></div>
+    <div class="gwp-tracker__dot {% if cart_total >= tier2 %}on{% endif %}" id="gwp-dot2" style="left:100%"></div>
+  </div>
+
+  <div class="gwp-tracker__labels">
+    <div class="gwp-tracker__lbl {% if cart_total >= tier1 %}on{% endif %}" style="left:{{ tier1_pct }}%">₹499</div>
+    <div class="gwp-tracker__lbl {% if cart_total >= tier2 %}on{% endif %}" style="left:97%">₹999</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Only run once
+  if(window.__gwpInit) return;
+  window.__gwpInit = true;
+
+  var TIER1 = 49900, TIER2 = 99900;
+  var prevT1 = false, prevT2 = false;
+
+  function money(paise){
+    return '₹' + Math.ceil(paise/100);
+  }
+
+  function update(total){
+    var fill  = document.getElementById('gwp-fill');
+    var msg   = document.getElementById('gwp-msg');
+    var dot1  = document.getElementById('gwp-dot1');
+    var dot2  = document.getElementById('gwp-dot2');
+    var lbls  = document.querySelectorAll('.gwp-tracker__lbl');
+    if(!fill || !msg) return;
+
+    // Bar width
+    fill.style.width = Math.min(total/TIER2*100, 100) + '%';
+
+    // Dots
+    var t1on = total >= TIER1, t2on = total >= TIER2;
+    dot1.classList.toggle('on', t1on);
+    dot2.classList.toggle('on', t2on);
+    if(lbls[0]) lbls[0].classList.toggle('on', t1on);
+    if(lbls[1]) lbls[1].classList.toggle('on', t2on);
+
+    // Pop animation on unlock
+    if(t1on && !prevT1){ dot1.classList.add('pop'); setTimeout(function(){dot1.classList.remove('pop')},400); }
+    if(t2on && !prevT2){ dot2.classList.add('pop'); setTimeout(function(){dot2.classList.remove('pop')},400); }
+    prevT1 = t1on; prevT2 = t2on;
+
+    // Message
+    if(total === 0){
+      msg.innerHTML = 'Add items to unlock free gifts!';
+    } else if(total < TIER1){
+      msg.innerHTML = 'Add <span>' + money(TIER1-total) + '</span> more for a free gift 🎁';
+    } else if(total < TIER2){
+      msg.innerHTML = '🎁 Gift 1 unlocked! Add <span>' + money(TIER2-total) + '</span> more for another gift!';
+    } else {
+      msg.innerHTML = '🎉 You\'ve unlocked both free gifts!';
+    }
+  }
+
+  // Listen to Dawn's native cart:updated event (fired by cart.js)
+  document.addEventListener('cart:updated', function(e){
+    var total = e.detail && (e.detail.cart ? e.detail.cart.total_price : e.detail.totalPrice);
+    if(typeof total === 'number') update(total);
+  });
+
+  // Fallback: fetch cart after any quantity-input change (debounced, targeted)
+  var debounceTimer;
+  document.addEventListener('change', function(e){
+    if(!e.target.classList.contains('quantity__input')) return;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function(){
+      fetch('/cart.js')
+        .then(function(r){ return r.json(); })
+        .then(function(c){ update(c.total_price); });
+    }, 600);
+  }, true);
+
+})();
+</script>

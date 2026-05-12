@@ -1,0 +1,187 @@
+
+<!-- Recently Viewed Products Section -->
+<div class="recently-viewed-wrapper">
+  <div class="recently-viewed-header js-recently-viewed-header">
+    <h2 class="recently-viewed-title">Recently Viewed Products</h2>
+    <button class="clear-all-btn" onclick="clearAllProducts()">Clear All</button>
+  </div>
+
+  <div class="swiper-container recently-viewed-section js-recently-viewed">
+    <div class="swiper-wrapper"></div>
+    <div class="swiper-pagination swiper-pagination-rec"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+
+  <div class="no-products-message js-no-products" style="display: none;">
+    <p class="bfr-txt-rc">
+      <span>Looks like you haven’t checked out any of our products recently.</span><br>
+      <span>We have a vast collection of quality products.</span><br>
+      <span class="bfr-txt-span">So why wait? Check out our products.</span>
+    </p>
+    <div class="recent-viw"><a href="/collections/all" class="view-products-btn">View Products</a></div>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  let mySwiper;
+
+  function renderRecentlyViewedProducts() {
+    let recentlyViewed = JSON.parse(localStorage.getItem("recently_viewed")) || [];
+    recentlyViewed = recentlyViewed.filter(product => product.id && product.variantId);
+
+    const container = document.querySelector(".swiper-wrapper");
+    const noProductsMessage = document.querySelector(".js-no-products");
+    const header = document.querySelector(".js-recently-viewed-header");
+    const swiperContainer = document.querySelector(".recently-viewed-section");
+    const swiperButtons = swiperContainer.querySelectorAll('.swiper-button-next, .swiper-button-prev');
+
+    if (recentlyViewed.length === 0) {
+      container.innerHTML = '';
+      header.style.display = 'none';
+      noProductsMessage.style.display = 'block';
+      swiperButtons.forEach(button => button.style.display = 'none');
+    } else {
+      header.style.display = 'flex';
+      noProductsMessage.style.display = 'none';
+      const reversedProducts = recentlyViewed.slice().reverse();
+      const productsHtml = reversedProducts.map((product, index) => {
+       const hasCustomTag = product.tag.some(tag =>
+          ["Custom Print", "CUSTOM PRINT 2", "Customer print 2"].includes(tag)
+        );
+
+        let buttonHtml = "";
+        if (hasCustomTag) {
+          buttonHtml = `<a href="${product.url}"  data-product-id="${product.id}" data-variant-id="${product.variantId}" class="view-more-btn">View More</a>`;
+        } else if (product.inventory > 0) {
+          buttonHtml = `<button class="cstm-atc btn" data-product-id="${product.id}" data-variant-id="${product.variantId}">Add to cart</button>`;
+        } else {
+          buttonHtml = `<button class="sold-out-btn" disabled>Sold Out</button>`;
+        }
+
+        return `
+          <div class="swiper-slide recently-viewed-item" data-index="${index}">
+            <button class="close-btn-rcc" data-index="${recentlyViewed.length - 1 - index}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M18.3 5.7a1 1 0 00-1.4 0L12 10.6 7.1 5.7a1 1 0 00-1.4 1.4L10.6 12l-4.9 4.9a1 1 0 101.4 1.4l4.9-4.9 4.9 4.9a1 1 0 001.4-1.4L13.4 12l4.9-4.9a1 1 0 000-1.4z"/>
+              </svg>
+            </button>
+            <div class="nw-recent">
+            <a class="recent-img-a" href="${product.url}">
+              <img src="${product.image}" alt="${product.title}" loading="lazy">
+            </a>
+            <div class="recently-views-des">
+              <p class="recently-view-prc-com"><span class="recently-viewed-price">${product.price}</span>
+               <span class="recently-viewed-compare-at-price" style="text-decoration: line-through;">${product.compareAtPrice}</span>
+               </p>
+              <h3 class="recently-viewed-product-title">${product.title}</h3>
+             <!--<div class="cstm-atcbtn">${buttonHtml}</div>-->
+            </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      container.innerHTML = productsHtml;
+      swiperButtons.forEach(button => button.style.display = 'flex');
+
+      // Swiper Init
+      if (mySwiper) mySwiper.destroy();
+      mySwiper = new Swiper('.recently-viewed-section', {
+        pagination: { el: '.swiper-pagination-rec', dynamicBullets: true, clickable: true },
+        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+        slidesPerView: 5,
+        spaceBetween: 10,
+        breakpoints: { 340: { slidesPerView: 1.8 }, 420: { slidesPerView: 2 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 4.5 } },
+      });
+
+      // Add to Cart Button Click Event
+      document.querySelectorAll(".cstm-atc.btn").forEach(button => {
+        button.addEventListener("click", async function () {
+          const variantId = this.getAttribute("data-variant-id");
+          await addToCart(variantId);
+        });
+      });
+
+     
+
+      // Remove Product from Recently Viewed
+      document.querySelectorAll(".close-btn-rcc").forEach(button => {
+        button.addEventListener("click", function () {
+          const index = this.getAttribute("data-index");
+          removeProduct(index);
+        });
+      });
+    }
+  }
+
+async function addToCart(variantId) {
+    try {
+        const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: variantId, quantity: 1 })
+        });
+
+        if (!response.ok) throw new Error('Error adding to cart');
+
+        console.log("Product added to cart!");
+
+        // Open the Cart Drawer by Adding Active Class
+        const cartDrawer = document.querySelector('cart-drawer');
+        if (cartDrawer) {
+            cartDrawer.classList.add('active'); // Open the drawer
+        }
+
+        // Now update the cart drawer with the latest data
+        await updateCartDrawer();
+
+    } catch (error) {
+        console.error("Add to cart failed:", error);
+    }
+}
+
+// Function to Update the Cart Drawer Content
+ async function updateCartDrawer() {
+  try {
+    const response = await fetch('/?section_id=cart-drawer');
+    if (!response.ok) throw new Error('Error fetching cart drawer');
+
+    const text = await response.text();
+    const html = new DOMParser().parseFromString(text, 'text/html');
+    const newCartContent = html.querySelector('cart-drawer');
+    const cartDrawer = document.querySelector('cart-drawer');
+
+    if (newCartContent && cartDrawer) {
+      cartDrawer.innerHTML = newCartContent.innerHTML;
+
+      // Remove 'is-empty' class if it exists
+      if (cartDrawer.classList.contains('is-empty')) {
+        cartDrawer.classList.remove('is-empty');
+      }
+    }
+  } catch (error) {
+    console.error("Cart drawer update failed:", error);
+  }
+}
+
+  window.removeProduct = function (index) {
+    let recentlyViewed = JSON.parse(localStorage.getItem("recently_viewed")) || [];
+    recentlyViewed.splice(index, 1);
+    localStorage.setItem("recently_viewed", JSON.stringify(recentlyViewed));
+    renderRecentlyViewedProducts();
+  };
+
+  // Clear all recently viewed products
+  window.clearAllProducts = function () {
+    localStorage.removeItem("recently_viewed");
+    document.querySelector(".swiper-wrapper").innerHTML = '';
+    document.querySelector(".js-recently-viewed-header").style.display = "none";
+    document.querySelector(".js-no-products").style.display = 'block';
+  };
+
+  renderRecentlyViewedProducts();
+});
+
+
+</script>

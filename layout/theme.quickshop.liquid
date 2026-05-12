@@ -1,0 +1,219 @@
+<!doctype html>
+<html class="js" lang="{{ request.locale.iso_code }}">
+  <head>
+    {% render 'shogun-optimizer' %}
+
+    <script>
+      customElements.define("line-loader-root",class extends HTMLElement{constructor(){super(),this.shadow=this.attachShadow({mode:"open"}),this.shadow.innerHTML='\n            <style>\n            #hs-load-bar .hs-bar {\n                background: #000000;\n                position: fixed;\n                z-index: 1031;\n                top: 0;\n                left: 0;\n                width: 100%;\n                height: 2px;\n            }\n            #hs-load-bar .peg {\n                display: block;\n                position: absolute;\n                right: 0px;\n                width: 100px;\n                height: 100%;\n                box-shadow: 0 0 10px #000000, 0 0 5px #000000;\n                opacity: 1.0;\n                -webkit-transform: rotate(3deg) translate(0px, -4px);\n                -ms-transform: rotate(3deg) translate(0px, -4px);\n                transform: rotate(3deg) translate(0px, -4px);\n            }\n            #hs-bg {\n              top: 0;\n              left: 0;\n              font-size: 3000px;\n              word-wrap:break-word;\n              color: transparent;\n              overflow: hidden;\n              line-height: 1;\n              width: 99vw;\n              height: 99vh;\n              max-width: 99vw;\n              max-height: 99vh;\n              position: absolute;\n              z-index: 99;\n              pointer-events: none;\n            }\n            </style>\n            <div id="hs-bg">▯</div>\n        '}connectedCallback(){!function(t){var n,e,r={},i=r.settings={minimum:.08,easing:"linear",positionUsing:"translate",speed:200,trickle:!0,trickleSpeed:200,barSelector:".hs-bar",parent:t.shadow,template:'<div class="hs-bar"><div class="peg"></div></div></div></div>'};function o(t,n,e){return t<n?n:t>e?e:t}function a(t){return 100*(-1+t)}r.status=null,r.set=function(t){var n=r.isStarted();t=o(t,i.minimum,1),r.status=1===t?null:t;var e=r.render(!n),l=e.querySelector(i.barSelector),u=i.speed,c=i.easing;return e.offsetWidth,s(function(n){""===i.positionUsing&&(i.positionUsing=r.getPositioningCSS()),d(l,function(t,n,e){var r;return(r="translate3d"===i.positionUsing?{transform:"translate3d("+a(t)+"%,0,0)"}:"translate"===i.positionUsing?{transform:"translate("+a(t)+"%,0)"}:{"margin-left":a(t)+"%"}).transition="all "+n+"ms "+e,r}(t,u,c)),1===t?(d(e,{transition:"none",opacity:1}),e.offsetWidth,setTimeout(function(){d(e,{transition:"all "+u+"ms linear",opacity:0}),setTimeout(function(){r.remove(),n()},u)},u)):setTimeout(n,u)}),this},r.isStarted=function(){return"number"==typeof r.status},r.start=function(){r.status||r.set(0);var t=function(){setTimeout(function(){r.status&&(r.trickle(),t())},i.trickleSpeed)};return i.trickle&&t(),this},r.done=function(t){return t||r.status?r.inc(.3+.5*Math.random()).set(1):this},r.inc=function(t){var n=r.status;return n?n>1?void 0:("number"!=typeof t&&(t=n>=0&&n<.2?.1:n>=.2&&n<.5?.04:n>=.5&&n<.8?.02:n>=.8&&n<.99?.005:0),n=o(n+t,0,.994),r.set(n)):r.start()},r.trickle=function(){return r.inc()},n=0,e=0,r.promise=function(t){return t&&"resolved"!==t.state()?(0===e&&r.start(),n++,e++,t.always(function(){0==--e?(n=0,r.done()):r.set((n-e)/n)}),this):this},r.render=function(n){if(r.isRendered())return t.shadow.getElementById("hs-load-bar");var e=document.createElement("div");e.id="hs-load-bar",e.innerHTML=i.template;var o=e.querySelector(i.barSelector),s=n?"-100":a(r.status||0),l=i.parent;return d(o,{transition:"all 0 linear",transform:"translate3d("+s+"%,0,0)"}),l.appendChild(e),e},r.remove=function(){var n=document.getElementById("hs-load-bar");n&&l(n);var e=t.shadow.getElementById("hs-bg");e&&l(e)},r.isRendered=function(){return!!t.shadow.getElementById("hs-load-bar")},r.getPositioningCSS=function(){var t={},n="WebkitTransform"in t?"Webkit":"MozTransform"in t?"Moz":"msTransform"in t?"ms":"OTransform"in t?"O":"";return n+"Perspective"in t?"translate3d":n+"Transform"in t?"translate":"margin"};var s=function(){var t=[];function n(){var e=t.shift();e&&e(n)}return function(e){t.push(e),1==t.length&&n()}}(),d=function(){var t=["Webkit","O","Moz","ms"],n={};function e(e){return e=e.replace(/^-ms-/,"ms-").replace(/-([\da-z])/gi,function(t,n){return n.toUpperCase()}),n[e]||(n[e]=function(n){var e={};if(n in e)return n;for(var r,i=t.length,o=n.charAt(0).toUpperCase()+n.slice(1);i--;)if((r=t[i]+o)in e)return r;return n}(e))}function r(t,n,r){n=e(n),t.style[n]=r}return function(t,n){var e,i=arguments;if(2==i.length)for(e in n)r(t,e,n[e]);else r(t,i[1],i[2])}}();function l(t){t&&t.parentNode&&t.parentNode.removeChild(t)}r.start(),document.addEventListener("DOMContentLoaded",function(){r.set(1)})}(this)}}),document.head.insertAdjacentHTML("afterend","<line-loader-root></line-loader-root>");
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     {% comment %} <meta name="google-adsense-account" content="ca-pub-8932742283941573"> {% endcomment %}
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if template contains 'collection' and current_tags -%}
+      <meta name="robots" content="noindex">
+      <link rel="canonical" href="{{ shop.url }}{{ collection.url }}">
+    {%- else -%}
+      <link rel="canonical" href="{{ canonical_url }}">
+    {%- endif -%}
+    <meta name="viewport" content="width=device-width">
+    {%- if template == 'index' -%}
+      <style>main#MainContent {display: flex;flex-direction: column;}</style>
+    {%- endif -%}
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+    {%- render 'meta-tags' -%}
+    <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+    {%- comment -%} Removed render-blocking duplicate jQuery (1.7.1 over HTTP). Single deferred jQuery 3.6.0 is enough. {%- endcomment -%}
+    <script src="{{ 'jquery-3.6.0.min.js' | asset_url }}" defer></script>
+    <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" defer></script>
+    {%- if settings.animations_reveal_on_scroll -%}
+      <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+   
+    {{ content_for_header }}
+    {%- render 'css-variable' -%}
+    {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'custom-css.css' | asset_url | stylesheet_tag: preload: true }}
+    <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
+    {{ 'custom_mega_menu_css.css' | asset_url | stylesheet_tag: preload: true }}
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" media="print" onload="this.onload=null;this.removeAttribute('media');" fetchpriority="high">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap">
+    </noscript>
+    {%- if settings.cart_type == 'drawer' -%}
+      {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+      {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+      {{ 'component-totals.css' | asset_url | stylesheet_tag }}
+      {{ 'component-price.css' | asset_url | stylesheet_tag }}
+      {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+    {%- unless settings.type_body_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- unless settings.type_header_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- if template contains 'addresses' or template contains 'account' -%}
+      <link rel="preload" as="style" href="{{ 'new-account.css' | asset_url }}">
+      {{ 'new-account.css' | asset_url | stylesheet_tag }}
+          <link rel="preload" as="style" href="{{ 'account-recently-viewed.css' | asset_url }}">
+      {{ 'account-recently-viewed.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+     {%- if template.suffix == 'shipment-tracking' -%}
+      <link rel="preload" as="style" href="{{ 'shipping-tracking.css' | asset_url }}">
+      {{ 'shipping-tracking.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+    {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+      {{ 'component-localization-form.css' | asset_url | stylesheet_tag: preload: true }}
+      <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+    {%- if settings.predictive_search_enabled -%}
+      <link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
+    {%- endif -%}
+    <script> if (Shopify.designMode) {  document.documentElement.classList.add('shopify-design-mode');  } </script>
+    <style>
+      @media(max-width: 767px){ footer .footer-block__details-content {   display: none;    }   }
+    
+{%- if page == 'cart' -%}
+  .cart-item__image { height: auto; width: 70px; }
+{%- endif -%}
+      </style>
+     {%- if template == 'index' -%}
+      {%- unless customer -%}
+{%- section 'app-pop-up' -%}
+{%- endunless -%}
+    {%- endif -%} 
+  
+    
+     <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-5W7H98N');</script>
+  <!-- End Google Tag Manager -->
+      {%- if template.name == 'article' -%}
+      <style>
+        .subcollections-menu__menu-items h2, h6, .highlights-banner__heading, h5, h4, .featured-collection__title-card-heading, h3, h2, .slideshow-slide__heading, h1, .age-gate__heading { text-transform: none !important;}
+ a, .a, span, .span, p, .p, h2, .h2, h1, .h1, h3, .h3, h4, .h4, h5, .h5, h6, .h6 strong, .strong{ word-wrap: break-word;}
+       .rte blockquote { display: block !important;} 
+      </style>
+    {%- endif -%}
+  </head>
+  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5W7H98N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+  {{ 'accessibility.skip_to_text' | t }}
+    </a>
+    {%- if settings.cart_type == 'drawer' -%}
+      {%- render 'cart-drawer' -%}
+    {%- endif -%}
+    {%- sections 'header-group' -%}
+    {%- sections 'Breadcrumb' -%}
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {%- sections 'footer-group' -%}
+    <ul hidden>
+      <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+    </ul>
+   
+ <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+  
+   
+    <script>
+      window.shopUrl = '{{ request.origin }}';
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}',
+      };
+      window.cartStrings = {
+        error: `{{ 'sections.cart.cart_error' | t }}`,
+        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`,
+      };
+      window.variantStrings = {
+        addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+        soldOut: `{{ 'products.product.sold_out' | t }}`,
+        unavailable: `{{ 'products.product.unavailable' | t }}`,
+        unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`,
+      };
+      window.quickOrderListStrings = {
+        itemsAdded: `{{ 'sections.quick_order_list.items_added.other' | t: quantity: '[quantity]' }}`,
+        itemAdded: `{{ 'sections.quick_order_list.items_added.one' | t: quantity: '[quantity]' }}`,
+        itemsRemoved: `{{ 'sections.quick_order_list.items_removed.other' | t: quantity: '[quantity]' }}`,
+        itemRemoved: `{{ 'sections.quick_order_list.items_removed.one' | t: quantity: '[quantity]' }}`,
+        viewCart: `{{- 'sections.quick_order_list.view_cart' | t -}}`,
+        each: `{{- 'sections.quick_order_list.each' | t: money: '[money]' }}`,
+        min_error: `{{- 'sections.quick_order_list.min_error' | t: min: '[min]' }}`,
+        max_error: `{{- 'sections.quick_order_list.max_error' | t: max: '[max]' }}`,
+        step_error: `{{- 'sections.quick_order_list.step_error' | t: step: '[step]' }}`,
+      };
+      window.accessibilityStrings = {
+        imageAvailable: `{{ 'products.product.media.image_available' | t: index: '[index]' }}`,
+        shareSuccess: `{{ 'general.share.success_message' | t }}`,
+        pauseSlideshow: `{{ 'sections.slideshow.pause_slideshow' | t }}`,
+        playSlideshow: `{{ 'sections.slideshow.play_slideshow' | t }}`,
+        recipientFormExpanded: `{{ 'recipient.form.expanded' | t }}`,
+        recipientFormCollapsed: `{{ 'recipient.form.collapsed' | t }}`,
+        countrySelectorSearchCount: `{{ 'localization.country_results_count' | t: count: '[count]' }}`,
+      };
+    </script>
+    {%- if settings.predictive_search_enabled -%}
+      <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+    {%- if settings.cart_type == 'drawer' -%}
+      <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ 'general-script.js' | asset_url }}" defer="defer"></script>
+    {%- render 'razorpay-magic-checkout' -%}
+    {%- section 'Back-To-Top' -%}
+<script src="{{ 'temp-script.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'common-scripts.js' | asset_url }}" defer="defer"></script>
+    {%- render 'url-redirect' -%}
+  </body>
+</html>
+<script>
+  let starRatingText = ""
+  const temp = setInterval(() => {
+    const starRatings = document.querySelectorAll(".jdgm-prev-badge__text")
+    const prevBadges = document.querySelectorAll(".jdgm-prev-badge")
+    if (jdgmSettings.badge_n_reviews_text) {
+      starRatings.forEach((rating, idx) => {
+        const reviewCount = prevBadges[idx].dataset.numberOfReviews
+        starRatingText = jdgmSettings.badge_n_reviews_text.replace(/\{\{\sn\s\}\}/, reviewCount)
+        if (parseInt(reviewCount) > 0) {
+          rating.textContent = starRatingText
+        }
+      })
+    }
+  }, 5

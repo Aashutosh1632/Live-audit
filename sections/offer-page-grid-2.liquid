@@ -1,0 +1,85 @@
+
+{{ 'offer-page-grid-2.css' | asset_url | stylesheet_tag: preload: true }}
+
+<div class="custom-image-grid-section">
+  <div class="offer-page-image-grid page-width">   
+    <div class="grid-row custom-layout offer-pg-desktop-only">
+      {% assign first_four = section.blocks | slice: 0, 4 %}
+      {% for block in first_four %}
+        {% assign index = forloop.index0 %}
+        <div class="offer-page-grid-item 
+                    {% if index == 0 %}wide-item start-row{% endif %}
+                    {% if index == 1 %}normal-item second{% endif %}
+                    {% if index == 2 %}normal-item third{% endif %}
+                    {% if index == 3 %}wide-item end-row{% endif %}">
+          {% if block.settings.image %}
+            {% if block.settings.link != blank %}
+              <a href="{{ block.settings.link }}">
+                <img src="{{ block.settings.image | img_url: 'master' }}" alt="Image {{ index | plus: 1 }}" />
+              </a>
+            {% else %}
+              <img src="{{ block.settings.image | img_url: 'master' }}" alt="Image {{ index | plus: 1 }}" />
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="offer-pg-mobile-grid offer-pg-mobile-only">
+      {% for block in section.blocks %}
+        <div class="offer-pg-mobile-grid-item mobile-item-{{ forloop.index }}">
+         {% if block.settings.mobile_image %}
+          {% if block.settings.link != blank %}
+            <a href="{{ block.settings.link }}">
+              <img src="{{ block.settings.mobile_image | img_url: 'master' }}" alt="Mobile Image {{ forloop.index }}" />
+            </a>
+          {% else %}
+            <img src="{{ block.settings.mobile_image | img_url: 'master' }}" alt="Mobile Image {{ forloop.index }}" />
+          {% endif %}
+        {% else %}
+          <p style="color: red; font-size: 12px;">No mobile image for block {{ forloop.index }}</p>
+        {% endif %}
+        </div>
+      {% endfor %}
+    </div>  
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Image-Grid-Offer-2",
+  "tag": "section",
+  "class": "custom-image-grid-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "image_block",
+      "name": "Image Block",
+      "settings": [
+  {
+    "type": "image_picker",
+    "id": "image",
+    "label": "Desktop Image"
+  },
+  {
+    "type": "image_picker",
+    "id": "mobile_image",
+    "label": "Mobile Image"
+  },
+  {
+    "type": "url",
+    "id": "link",
+    "label": "Image Link"
+  }
+]
+
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Image-Grid-Offer-2"
+    }
+  ]
+}
+{% endschema %}

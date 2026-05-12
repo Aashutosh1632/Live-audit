@@ -1,0 +1,133 @@
+
+.vip-hero {
+  position: relative;
+  padding: 80px 40px;
+  color: #fff;
+  font-family: helvetica;
+}
+.vip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #6b1d1d;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-family: helvetica;
+}
+
+.vip-hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0px;
+color: #fff;
+font-family: helvetica;
+}
+
+.vip-highlight {
+  color: #f5b400;
+}
+
+.vip-hero p {
+  font-size: 18px;
+  max-width: 600px;
+  margin-bottom: 28px;
+  font-family: helvetica;
+}
+
+.vip-buttons {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.vip-btn-primary {
+  background: #e60023;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.vip-btn-secondary {
+  border: 1px solid #aaa;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: helvetica;
+}
+
+.vip-features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.vip-feature {
+  background: rgb(255 255 255 / 18%);
+    background: rgb(255 255 255 / 18%);
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid #bbbbbb;
+}
+
+.vip-feature h4 {
+  font-size: 16px;
+  margin-bottom: 6px;
+  font-family: helvetica;
+}
+
+.vip-feature span {
+  font-size: 14px;
+  opacity: 0.85;
+  font-family: helvetica;
+}
+
+@media (max-width: 768px) {
+  .vip-hero {
+    padding: 50px 20px;
+  }
+
+  .vip-hero h1 {
+    font-size: 32px;
+  }
+
+  .vip-features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bg-with-content__content {
+    padding: 0;
+  }
+}
+
+.text-deodap-gold {
+    color: #e7b008;
+}
+
+.vip-pg-content .title-wrapper-with-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vip-pg-content h2.title.inline-richtext.h1 {
+    font-family: helvetica;
+}
+.vip-pg-content h3.inline-richtext {
+    font-family: helvetica;
+    font-weight: 900;
+    letter-spacing: normal;
+    font-size: 20px;
+    color: #ec1a23;
+}
+.vip-pg-content .multicolumn.background-primary .multicolumn-card {
+  
+    border-radius: 12px;
+    background: #f1f1f1;
+    border: 2px solid #959595;
+
+}

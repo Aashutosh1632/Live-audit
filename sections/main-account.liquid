@@ -1,0 +1,1545 @@
+
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+{{ 'new-account.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'customer.js' | asset_url }}" defer></script>
+
+{%- style -%}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* ── Page Wrap ── */
+  .acc-page-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+  .acc-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 28px;
+    letter-spacing: -0.3px;
+  }
+
+  /* ── Grid: 2 columns ── */
+  .acc-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  @media (max-width: 640px) {
+    .acc-card-grid { grid-template-columns: 1fr; }
+    .acc-page-title { font-size: 22px; }
+  }
+
+  /* ── Card Wrapper ── */
+  .acc-card-wrap {
+    border: 1.5px solid #e8e8e8;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .acc-card-wrap.open {
+    border-color: #e8201f;
+    box-shadow: 0 4px 20px rgba(232,32,31,0.10);
+  }
+
+  /* ── Card Header (clickable row) ── */
+  .acc-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: #fff;
+    transition: background 0.15s;
+  }
+  .acc-card-wrap.open .acc-card-header { background: #fff9f9; }
+  .acc-card-header:hover { background: #fafafa; }
+
+  .acc-card-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e8201f;
+  }
+  .acc-card-icon svg { width: 28px; height: 28px; }
+
+  .acc-card-text { flex: 1; min-width: 0; }
+  .acc-card-title { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 2px; }
+  .acc-card-sub { font-size: 13px; color: #888; line-height: 1.4; }
+
+  /* Chevron rotates on open */
+  .acc-chevron {
+    flex-shrink: 0;
+    color: #bbb;
+    transition: transform 0.25s ease, color 0.2s;
+  }
+  .acc-card-wrap.open .acc-chevron {
+    transform: rotate(180deg);
+    color: #e8201f;
+  }
+
+  /* ── Expandable Content Body ── */
+  .acc-card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1);
+  }
+  .acc-card-wrap.open .acc-card-body { max-height: 2000px; }
+
+  .acc-card-body-inner {
+    padding: 20px 20px 20px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  /* ── Track Order ── */
+  .trk-head { font-size: 18px; font-weight: 700; color: #111; margin-top: 16px; text-transform: uppercase; }
+  .trk-con { font-size: 14px; color: #555; margin-top: 10px; line-height: 1.6; }
+  .trk-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-top: 16px; padding: 0 22px; height: 42px;
+    background: #e8201f; color: #fff !important; font-size: 14px; font-weight: 600;
+    border-radius: 6px; text-decoration: none !important; border: 1.5px solid #e8201f;
+    transition: background 0.18s, color 0.18s;
+  }
+  .trk-btn:hover { background: #fff; color: #e8201f !important; }
+
+  /* ── Address list ── */
+  .cst-deaf-add { list-style: none; margin-top: 12px; }
+  .cst-deaf-add li { padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+  .defa-text {
+    display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 600;
+    color: #e8201f; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .edit-btncst, .dlt-btncst {
+    display: inline-block; margin-top: 8px; margin-right: 6px; padding: 5px 12px;
+    border-radius: 5px; font-size: 13px; font-weight: 500; cursor: pointer;
+    border: 1.5px solid #ddd; background: #fff; color: #333; transition: all 0.15s;
+  }
+  .edit-btncst:hover { border-color: #333; }
+  .dlt-btncst { color: #e8201f; border-color: #e8201f; }
+  .dlt-btncst:hover { background: #e8201f; color: #fff; }
+  .cst-edit-address {
+    display: none; margin-top: 12px; padding: 14px;
+    background: #fafafa; border-radius: 8px; border: 1px solid #eee;
+  }
+  .cst-edit-address h2 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .cst-edit-address .field { margin-bottom: 10px; display: flex; flex-direction: column; gap: 3px; }
+  .cst-edit-address input, .cst-edit-address select {
+    width: 100%; padding: 8px 12px; border: 1.5px solid #ddd;
+    border-radius: 5px; font-size: 13px; outline: none; transition: border-color 0.15s;
+  }
+  .cst-edit-address input:focus, .cst-edit-address select:focus { border-color: #e8201f; }
+  .cst-edit-address label { font-size: 11px; color: #666; font-weight: 500; }
+  .cst-editsub, .cst-editclear {
+    padding: 7px 16px; border-radius: 5px; font-size: 13px;
+    font-weight: 600; cursor: pointer; margin-right: 6px; margin-top: 6px;
+  }
+  .cst-editsub { background: #e8201f; color: #fff; border: none; }
+  .cst-editclear { background: #fff; color: #333; border: 1.5px solid #ddd; }
+
+  /* ── Add New Address Button ── */
+  .new-acc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px 20px;
+    background: #fff;
+    color: #e8201f;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: border-color 0.18s, background 0.18s;
+  }
+  .new-acc:hover { border-color: #e8201f; background: #fff9f9; }
+
+  /* ── Add Address Form Box ── */
+  .cst-form {
+    margin-top: 14px;
+    background: #fff;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .cst-form-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 16px;
+  }
+
+  /* Two-column row */
+  .cst-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .cst-form-row.three-col { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* Single full-width field */
+  .cst-form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+  .cst-form-field input,
+  .cst-form-field select,
+  .cst-form-row input,
+  .cst-form-row select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #111;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .cst-form-field input:focus,
+  .cst-form-field select:focus,
+  .cst-form-row input:focus,
+  .cst-form-row select:focus { border-color: #e8201f; }
+  .cst-form-field input::placeholder,
+  .cst-form-row input::placeholder { color: #aaa; }
+
+  /* Phone + default checkbox row */
+  .cst-form-bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+  .cst-form-default {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #444;
+  }
+  .cst-form-default input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #e8201f;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* Action buttons */
+  .cst-form-actions { display: flex; gap: 12px; }
+  .add-addres-btn {
+    flex: 1;
+    padding: 11px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    transition: background 0.18s, color 0.18s;
+  }
+  .add-addres-btn:not(.close_form) {
+    background: #e8201f; color: #fff; border: 1.5px solid #e8201f;
+  }
+  .add-addres-btn:not(.close_form):hover { background: #c41a19; border-color: #c41a19; }
+  .add-addres-btn.close_form {
+    background: #e8201f; color: #fff; border: 1.5px solid #e8201f;
+  }
+  .add-addres-btn.close_form:hover { background: #c41a19; border-color: #c41a19; }
+
+  .lbl-clr { font-size: 12px; color: #555; }
+  .hidden { display: none !important; }
+
+  /* Pagination */
+  .pagination ul { display: flex; gap: 6px; list-style: none; margin-top: 16px; flex-wrap: wrap; }
+  .pagination a, .pagination span {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 5px; border: 1.5px solid #ddd;
+    font-size: 13px; color: #333; text-decoration: none; transition: all 0.15s;
+  }
+  .pagination a:hover { border-color: #e8201f; color: #e8201f; }
+  .pagination span[aria-current] { background: #e8201f; color: #fff; border-color: #e8201f; }
+
+
+
+  /* ── Tracking Orders List ── */
+.tracking-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+.tracking-order-item {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fafafa;
+  transition: all 0.2s;
+}
+.tracking-order-item:hover {
+  border-color: #e8201f;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.tracking-order-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tracking-order-number {
+  font-weight: 700;
+  font-size: 14px;
+  color: #111;
+}
+.tracking-order-date {
+  font-size: 12px;
+  color: #888;
+}
+.tracking-number-box {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 10px 0;
+  font-size: 13px;
+  border: 1px solid #e0e0e0;
+}
+.tracking-label {
+  color: #666;
+  font-weight: 500;
+}
+.tracking-value {
+  color: #e8201f;
+  font-weight: 600;
+  margin-left: 8px;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+
+
+
+/* ═══════════════════════════════════════════════════════
+   Account Card: Recently Viewed (pdp-slick scoped fix)
+════════════════════════════════════════════════════════ */
+
+/* Hide redundant title & clear-all header — card header already shows it */
+[data-card="recently_viewed"] .pdp-viewed-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+[data-card="recently_viewed"] .pdp-viewed-title {
+  display: none;
+}
+[data-card="recently_viewed"] .clear-all-btn {
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  color: #888;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+[data-card="recently_viewed"] .clear-all-btn:hover {
+  border-color: #e8201f;
+  color: #e8201f;
+}
+
+/* Wrapper sizing */
+[data-card="recently_viewed"] .pdp-viewed-wrapper {
+  padding: 0;
+  margin: 0;
+}
+
+/* Slick outer container — add side padding for arrow space */
+[data-card="recently_viewed"] .pdp-viewed-section {
+  margin: 0 28px;
+}
+
+/* Each slick slide — uniform card look */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide {
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════════════
+   Account Card: Recently Viewed — Card Styling
+════════════════════════════════════════════════ */
+
+/* Slide wrapper */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide {
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+
+/* Card box */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide > div {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide > div:hover {
+  box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+}
+
+/* Product image */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* ── X / Remove button — top right ── */
+[data-card="recently_viewed"] .pdp-viewed-section .remove-product,
+[data-card="recently_viewed"] .pdp-viewed-section .clear-product,
+[data-card="recently_viewed"] .pdp-viewed-section [class*="remove"],
+[data-card="recently_viewed"] .pdp-viewed-section [class*="close-btn"],
+[data-card="recently_viewed"] .pdp-viewed-section [class*="delete"] {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  color: #e8201f;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+[data-card="recently_viewed"] .pdp-viewed-section .remove-product:hover,
+[data-card="recently_viewed"] .pdp-viewed-section [class*="remove"]:hover {
+  background: #e8201f;
+  color: #fff;
+  border-color: #e8201f;
+}
+
+/* ── Card content padding area ── */
+[data-card="recently_viewed"] .pdp-viewed-section .product-info,
+[data-card="recently_viewed"] .pdp-viewed-section .card-info,
+[data-card="recently_viewed"] .pdp-viewed-section [class*="product-info"],
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide > div > a > div,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide > div > div:last-child {
+  padding: 8px 10px 10px;
+}
+
+/* ── Price row: sale + compare on same line ── */
+[data-card="recently_viewed"] .pdp-viewed-section .price,
+[data-card="recently_viewed"] .pdp-viewed-section [class*="price-wrapper"],
+[data-card="recently_viewed"] .pdp-viewed-section [class*="product-price"] {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+/* Sale / current price */
+[data-card="recently_viewed"] .pdp-viewed-section .price-item--sale,
+[data-card="recently_viewed"] .pdp-viewed-section .price-item--regular,
+[data-card="recently_viewed"] .pdp-viewed-section [class*="sale-price"],
+[data-card="recently_viewed"] .pdp-viewed-section [class*="current-price"],
+[data-card="recently_viewed"] .pdp-viewed-section .money:first-child {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e8201f;
+  text-decoration: none;
+}
+
+[data-card="recently_viewed"] .pdp-viewed-price{
+  color: #e8201f;
+}
+
+/* Compare / original price (strikethrough) */
+[data-card="recently_viewed"] .pdp-viewed-section .price-item--compare,
+[data-card="recently_viewed"] .pdp-viewed-section [class*="compare-price"],
+[data-card="recently_viewed"] .pdp-viewed-section [class*="original-price"],
+[data-card="recently_viewed"] .pdp-viewed-section s .money,
+[data-card="recently_viewed"] .pdp-viewed-section del .money,
+[data-card="recently_viewed"] .pdp-viewed-section s,
+[data-card="recently_viewed"] .pdp-viewed-section del {
+  font-size: 11px;
+  font-weight: 400;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* ── Product Title ── */
+[data-card="recently_viewed"] .pdp-viewed-section .product-title,
+[data-card="recently_viewed"] .pdp-viewed-section [class*="product-title"],
+[data-card="recently_viewed"] .pdp-viewed-section [class*="card-title"],
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide h2,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide h3,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide p.title,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-slide a p {
+  font-size: 12px;
+  font-weight: 500;
+  color: #222;
+  line-height: 1.45;
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+/* ── Slick Arrow Buttons ── */
+[data-card="recently_viewed"] .pdp-viewed-section {
+  margin: 0;
+  position: relative;
+}
+
+[data-card="recently_viewed"] .pdp-viewed-section .acc-slick-prev,
+[data-card="recently_viewed"] .pdp-viewed-section .acc-slick-next,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-prev,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.10);
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+
+[data-card="recently_viewed"] .pdp-viewed-section .slick-prev {
+  left: -6px;
+}
+[data-card="recently_viewed"] .pdp-viewed-section .slick-next {
+  right: -6px;
+}
+
+[data-card="recently_viewed"] .pdp-viewed-section .slick-prev:hover,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-next:hover {
+  border-color: #e8201f;
+  box-shadow: 0 2px 8px rgba(232,32,31,0.15);
+}
+
+/* Override Slick default arrows */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-prev::before,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-next::before {
+  display: none;
+}
+
+/* SVG icon */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-prev svg,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-next svg {
+  stroke: #555;
+  transition: stroke 0.18s;
+  display: block;
+}
+[data-card="recently_viewed"] .pdp-viewed-section .slick-prev:hover svg,
+[data-card="recently_viewed"] .pdp-viewed-section .slick-next:hover svg {
+  stroke: #e8201f;
+}
+
+
+[data-card="recently_viewed"] .pdp-viewed-section .slick-prev {
+  left: -10px !important;
+}
+
+[data-card="recently_viewed"] .pdp-viewed-section .slick-next {
+  right: -10px !important;
+}
+
+/* Disabled state */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Remove dots */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-dots {
+  display: none;
+}
+
+/* Padding fix */
+[data-card="recently_viewed"] .pdp-viewed-section .slick-list {
+  padding: 0 18px;
+}
+
+/* Bottom spacing */
+[data-card="recently_viewed"] .acc-card-body-inner {
+  padding-bottom: 20px;
+}
+
+
+{%- endstyle -%}
+
+<section id="new-acc-add" class="account-page section-{{ section.id }}-padding">
+  <div class="acc-page-wrap">
+    <h1 class="acc-page-title">Your Account</h1>
+
+    <div class="acc-card-grid">
+
+      <!-- ── Your Orders ── -->
+      <div class="acc-card-wrap" data-card="my_order">
+        <div class="acc-card-header" role="button" tabindex="0" aria-expanded="false" data-card-toggle>
+          <div class="acc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="18" rx="2"/>
+              <path d="M7 8h10M7 12h10M7 16h6"/>
+            </svg>
+          </div>
+          <div class="acc-card-text">
+            <div class="acc-card-title">Your Orders</div>
+            <div class="acc-card-sub">Track, return, or buy things again</div>
+          </div>
+          <div class="acc-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="acc-card-body">
+          <div class="acc-card-body-inner">
+            {%- render 'new-order' -%}
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Your Addresses ── -->
+      <div class="acc-card-wrap" data-card="addresses">
+        <div class="acc-card-header" role="button" tabindex="0" aria-expanded="false" data-card-toggle>
+          <div class="acc-card-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+            </svg>
+          </div>
+          <div class="acc-card-text">
+            <div class="acc-card-title">Your Addresses</div>
+            <div class="acc-card-sub">Edit addresses for orders and gifts</div>
+          </div>
+          <div class="acc-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="acc-card-body">
+          <div class="acc-card-body-inner" data-customer-addresses>
+            {%- paginate customer.addresses by 5 -%}
+            <ul role="list" class="cst-deaf-add">
+              {%- for address in customer.addresses -%}
+                <li data-address>
+                  {{ address | format_address }}
+                  {%- if address == customer.default_address -%}
+                    <p class="defa-text">Default</p>
+                  {%- endif -%}
+                  <button type="button" id="EditFormButton_{{ address.id }}"
+                    aria-label="{{ 'customer.addresses.edit_address' | t }} {{ forloop.index }}"
+                    aria-controls="EditAddress_{{ address.id }}" aria-expanded="false"
+                    data-address-id="{{ address.id }}" class="edit-btncst">
+                    {{ 'customer.addresses.edit' | t }}
+                  </button>
+                  <button type="button"
+                    aria-label="{{ 'customer.addresses.delete' | t }} {{ forloop.index }}"
+                    data-target="{{ address.url }}"
+                    data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
+                    class="dlt-btncst">
+                    {{ 'customer.addresses.delete' | t }}
+                  </button>
+                  <div class="cst-edit-address" id="EditAddress_{{ address.id }}">
+                    <h2>{{ 'customer.addresses.edit_address' | t }}</h2>
+                    {%- form 'customer_address', address -%}
+                      <input type="hidden" name="return_to" value="{{ request.path }}?tab=addresses">
+                      <div class="field"><input type="text" class="input-border" id="AddressFirstName_{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" placeholder="{{ 'customer.addresses.first_name' | t }}" required><label for="AddressFirstName_{{ form.id }}">{{ 'customer.addresses.first_name' | t }}</label></div>
+                      <div class="field"><input type="text" class="input-border" id="AddressLastName_{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" placeholder="{{ 'customer.addresses.last_name' | t }}" required><label for="AddressLastName_{{ form.id }}">{{ 'customer.addresses.last_name' | t }}</label></div>
+                      <div class="field"><input type="text" class="input-border" id="AddressAddress1_{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" placeholder="{{ 'customer.addresses.address1' | t }}" required><label for="AddressAddress1_{{ form.id }}">{{ 'customer.addresses.address1' | t }}</label></div>
+                      <div class="field"><input type="text" class="input-border" id="AddressCity_{{ form.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" placeholder="{{ 'customer.addresses.city' | t }}"><label for="AddressCity_{{ form.id }}">{{ 'customer.addresses.city' | t }}</label></div>
+                      <div><label for="AddressCountry_{{ form.id }}">{{ 'customer.addresses.country' | t }}</label><div class="select"><select id="AddressCountry_{{ form.id }}" class="input-border" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">{{ all_country_option_tags }}</select></div></div>
+                      <div id="AddressProvinceContainer_{{ form.id }}" style="display:none;"><label for="AddressProvince_{{ form.id }}">{{ 'customer.addresses.province' | t }}</label><div class="select"><select id="AddressProvince_{{ form.id }}" class="input-border" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select></div></div>
+                      <div class="field"><input type="text" id="AddressZip_{{ form.id }}" class="input-border" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" placeholder="{{ 'customer.addresses.zip' | t }}"><label for="AddressZip_{{ form.id }}">{{ 'customer.addresses.zip' | t }}</label></div>
+                      <div class="field"><input type="tel" id="AddressPhone_{{ form.id }}" class="input-border" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" placeholder="{{ 'customer.addresses.phone' | t }}" required><label for="AddressPhone_{{ form.id }}">{{ 'customer.addresses.phone' | t }}</label></div>
+                      <div>{{ form.set_as_default_checkbox }}<label for="address_default_address_{{ form.id }}">{{ 'customer.addresses.set_default' | t }}</label></div>
+                      <div><button class="cst-editsub">{{ 'customer.addresses.update' | t }}</button><button class="cst-editclear" type="reset">{{ 'customer.addresses.cancel' | t }}</button></div>
+                    {%- endform -%}
+                  </div>
+                </li>
+              {%- endfor -%}
+            </ul>
+            <div data-address>
+              <button class="new-acc" type="button" aria-expanded="false" aria-controls="AddAddress">
+                + {{ 'customer.addresses.add_new' | t }}
+              </button>
+              <div class="cst-form hidden" id="AddAddress">
+                {%- form 'customer_address', customer.new_address -%}
+                  <input type="hidden" name="return_to" value="{{ request.path }}?tab=addresses">
+                  <p class="cst-form-title">Add a new address</p>
+
+                  <!-- First name + Last name -->
+                  <div class="cst-form-row">
+                    <input type="text" id="AddressFirstNameNew" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" placeholder="First name" required>
+                    <input type="text" id="AddressLastNameNew" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" placeholder="Last name" required>
+                  </div>
+
+                  <!-- Company -->
+                  <div class="cst-form-field">
+                    <input type="text" id="AddressCompanyNew" name="address[company]" value="{{ form.company }}" autocomplete="organization" placeholder="Company">
+                  </div>
+
+                  <!-- Address 1 -->
+                  <div class="cst-form-field">
+                    <input type="text" id="AddressAddress1New" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" placeholder="Address 1" required>
+                  </div>
+
+                  <!-- Address 2 -->
+                  <div class="cst-form-field">
+                    <input type="text" id="AddressAddress2New" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" placeholder="Address 2">
+                  </div>
+
+                  <!-- City + Country -->
+                  <div class="cst-form-row">
+                    <input type="text" id="AddressCityNew" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" placeholder="City">
+                    <select id="AddressCountryNew" name="address[country]" data-default="{{ form.country }}" autocomplete="country" required>{{ all_country_option_tags }}</select>
+                  </div>
+
+                  <!-- Province (shown only if country has provinces) -->
+                  <div class="cst-form-field" id="AddressProvinceContainerNew" style="display:none;">
+                    <select id="AddressProvinceNew" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+                  </div>
+
+                  <!-- Postal code (half width) -->
+                  <div class="cst-form-row">
+                    <input type="text" id="AddressZipNew" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" placeholder="Postal/ZIP code">
+                    <span></span>
+                  </div>
+
+                  <!-- Phone + Set as default -->
+                  <div class="cst-form-bottom-row">
+                    <input type="tel" id="AddressPhoneNew" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" placeholder="Phone" required>
+                    <label class="cst-form-default">
+                      {{ form.set_as_default_checkbox }}
+                      <span>Set as default address</span>
+                    </label>
+                  </div>
+
+                  <!-- Buttons -->
+                  <div class="cst-form-actions">
+                    <button class="add-addres-btn" type="submit">Add address</button>
+                    <button class="add-addres-btn close_form" type="button">Close</button>
+                  </div>
+                {%- endform -%}
+              </div>
+            </div>
+            {%- if paginate.pages > 1 and paginate.parts.size > 0 -%}
+              <nav class="pagination" role="navigation">
+                <ul role="list">
+                  {%- if paginate.previous -%}<li><a href="{{ paginate.previous.url }}" aria-label="Previous">‹</a></li>{%- endif -%}
+                  {%- for part in paginate.parts -%}
+                    <li>
+                      {%- if part.is_link -%}<a href="{{ part.url }}">{{ part.title }}</a>
+                      {%- elsif part.title == paginate.current_page -%}<span aria-current="page">{{ part.title }}</span>
+                      {%- else -%}<span>{{ part.title }}</span>{%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                  {%- if paginate.next -%}<li><a href="{{ paginate.next.url }}" aria-label="Next">›</a></li>{%- endif -%}
+                </ul>
+              </nav>
+            {%- endif -%}
+            {%- endpaginate -%}
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Contact Us ── -->
+      <div class="acc-card-wrap" data-card="contact">
+        <div class="acc-card-header" role="button" tabindex="0" aria-expanded="false" data-card-toggle>
+          <div class="acc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </div>
+          <div class="acc-card-text">
+            <div class="acc-card-title">Contact Us</div>
+            <div class="acc-card-sub">Contact our customer service via phone or chat</div>
+          </div>
+          <div class="acc-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="acc-card-body">
+          <div class="acc-card-body-inner">
+            {%- render 'custom-contact' -%}
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Recently Viewed ── -->
+      <div class="acc-card-wrap" data-card="recently_viewed">
+        <div class="acc-card-header" role="button" tabindex="0" aria-expanded="false" data-card-toggle>
+          <div class="acc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="acc-card-text">
+            <div class="acc-card-title">Recently Viewed</div>
+            <div class="acc-card-sub">Products you recently browsed</div>
+          </div>
+          <div class="acc-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="acc-card-body">
+          <div class="acc-card-body-inner">
+            {% comment %} {%- render 'custom-recently-viewed' -%} {% endcomment %}
+            {%- render 'pdp-slick' -%}
+          </div>
+        </div>
+      </div>
+            
+      <!-- ── Track My Order ── -->
+      <div class="acc-card-wrap" data-card="track_order">
+        <div class="acc-card-header" role="button" tabindex="0" aria-expanded="false" data-card-toggle>
+          <div class="acc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="3" width="15" height="13" rx="1"/>
+              <path d="M16 8h4l3 3v5h-7V8z"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <div class="acc-card-text">
+            <div class="acc-card-title">Track My Order</div>
+            <div class="acc-card-sub">Stay updated on your delivery status</div>
+          </div>
+          <div class="acc-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="acc-card-body">
+          <div class="acc-card-body-inner">
+            <h2 class="trk-head">Track Your Orders</h2>
+      
+            {%- if customer -%}
+              {%- paginate customer.orders by 10 -%}
+                {%- if customer.orders.size > 0 -%}
+                  <div class="tracking-orders-list">
+                    {%- for order in customer.orders -%}
+                      {%- assign has_tracking = false -%}
+                      {%- assign tracking_number = '' -%}
+                      {%- assign tracking_url = '' -%}
+                
+                      {%- for line_item in order.line_items -%}
+                        {%- if line_item.fulfillment -%}
+                          {%- assign has_tracking = true -%}
+                          {%- assign tracking_number = line_item.fulfillment.tracking_number -%}
+                          {%- assign tracking_url = line_item.fulfillment.tracking_url -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                
+                      {%- if has_tracking and tracking_number != blank -%}
+                        <div class="tracking-order-item">
+                          <div class="tracking-order-info">
+                            <span class="tracking-order-number">Order #{{ order.order_number }}</span>
+                            <span class="tracking-order-date">{{ order.created_at | date: "%b %d, %Y" }}</span>
+                          </div>
+                          <div class="tracking-number-box">
+                            <span class="tracking-label">Tracking ID:</span>
+                            <span class="tracking-value">{{ tracking_number }}</span>
+                          </div>
+                          <a href="https://ship.deodap.in/tracking/{{ tracking_number }}" 
+                            class="trk-btn" 
+                            target="_blank"
+                            data-tracking="{{ tracking_number }}">
+                            Track Package →
+                          </a>
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                {%- else -%}
+                  <p class="trk-con">You don't have any orders yet.</p>
+                {%- endif -%}
+          
+                {%- if paginate.pages > 1 -%}
+                  <div class="pagination">
+                    {{ paginate | default_pagination }}
+                  </div>
+                {%- endif -%}
+              {%- endpaginate -%}
+            {%- else -%}
+              <p class="trk-con">Please <a href="/account/login">log in</a> to track your orders.</p>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+      <!-- ── Tickets ── -->
+      <div class="acc-card-wrap" data-card="tickets">
+        <div class="acc-card-header" role="button" tabindex="0" aria-expanded="false" data-card-toggle>
+          <div class="acc-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"/>
+              <line x1="9" y1="12" x2="15" y2="12"/>
+            </svg>
+          </div>
+          <div class="acc-card-text">
+            <div class="acc-card-title">Tickets</div>
+            <div class="acc-card-sub">Manage your support tickets</div>
+          </div>
+          <div class="acc-chevron">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="acc-card-body">
+          <div class="acc-card-body-inner">
+            {%- render 'care-tickets-api' -%}
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /acc-card-grid -->
+  </div>
+</section>
+
+<script>
+window.addEventListener('load', function () {
+  if (typeof CustomerAddresses !== 'undefined') new CustomerAddresses();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── Accordion ── */
+  document.querySelectorAll('[data-card-toggle]').forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+      var card = toggle.closest('[data-card]');
+      var isOpen = card.classList.contains('open');
+
+      // Close all first
+      document.querySelectorAll('[data-card]').forEach(function (c) {
+        c.classList.remove('open');
+        c.querySelector('[data-card-toggle]').setAttribute('aria-expanded', 'false');
+      });
+
+      // If it was closed, open it now
+      if (!isOpen) {
+        card.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+        setTimeout(function () {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
+      }
+    });
+
+    // Keyboard
+    toggle.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+    });
+  });
+
+  /* ── Add new address toggle ── */
+  var newAccBtn    = document.querySelector('.new-acc');
+  var addAddrForm  = document.getElementById('AddAddress');
+  var closeFormBtn = document.querySelector('.close_form');
+
+  if (newAccBtn && addAddrForm) {
+    newAccBtn.addEventListener('click', function () {
+      addAddrForm.classList.toggle('hidden');
+      newAccBtn.setAttribute('aria-expanded', !addAddrForm.classList.contains('hidden'));
+    });
+  }
+  if (closeFormBtn && addAddrForm) {
+    closeFormBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      addAddrForm.classList.add('hidden');
+      if (newAccBtn) newAccBtn.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  /* ── Auto-open from URL ?tab= ── */
+  var activeTab = new URLSearchParams(window.location.search).get('tab');
+  if (activeTab) {
+    var target = document.querySelector('[data-card="' + activeTab + '"]');
+    if (target) {
+      target.classList.add('open');
+      target.querySelector('[data-card-toggle]').setAttribute('aria-expanded', 'true');
+    }
+  }
+
+});
+
+/* ════════════════════════════════════════════════════════
+   Account Card: pdp-slick with 2 slides
+════════════════════════════════════════════════════════ */
+(function initAccRvSlick() {
+  var card = document.querySelector('[data-card="recently_viewed"]');
+  if (!card) return;
+
+  var slickTarget = card.querySelector('.js-pdp-viewed');
+  if (!slickTarget) return;
+
+  /* Wait for recently-viewed-product.js to populate + init Slick */
+  var attempts = 0;
+  var maxAttempts = 30; /* 3 seconds max */
+
+  var poll = setInterval(function () {
+    attempts++;
+
+    var $ = window.jQuery;
+    if (!$ || !$.fn || !$.fn.slick) {
+      if (attempts >= maxAttempts) clearInterval(poll);
+      return; /* Slick not loaded yet */
+    }
+
+    var $slider = $(slickTarget);
+
+    /* Wait until slick is initialized AND has at least 1 slide */
+    var isSlickInit = $slider.hasClass('slick-initialized');
+    var hasSlides   = slickTarget.querySelectorAll('.slick-slide:not(.slick-cloned)').length > 0;
+
+    if (!isSlickInit || !hasSlides) {
+      if (attempts >= maxAttempts) clearInterval(poll);
+      return;
+    }
+
+    clearInterval(poll);
+
+    /* Destroy existing instance, re-init with account card settings */
+    $slider.slick('unslick');
+
+$slider.slick({
+  slidesToShow  : 2,
+  slidesToScroll: 1,
+  infinite      : true,
+  arrows        : true,
+  dots          : false,   /* ← removes bullet dots completely */
+  adaptiveHeight: false,
+  swipeToSlide  : true,
+
+  /* Custom SVG caret arrows instead of "Previous / Next" text */
+  prevArrow: '<button type="button" class="acc-slick-prev slick-prev" aria-label="Previous">'
+           + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg>'
+           + '</button>',
+  nextArrow: '<button type="button" class="acc-slick-next slick-next" aria-label="Next">'
+           + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>'
+           + '</button>',
+
+  responsive: [
+    {
+      breakpoint: 480,
+      settings: { slidesToShow: 1, slidesToScroll: 1 }
+    }
+  ]
+});
+
+  }, 100); /* poll every 100ms */
+
+})();
+</script>
+
+
+
+
+
+
+
+{% comment %} {{ 'customer.css' | asset_url | stylesheet_tag }}
+{{ 'new-account.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'customer.js' | asset_url }}" defer></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .hidden { display: none; }
+
+  /* Tab content panels — hidden by default via CSS */
+  .custom-orderr,
+  .custom-contant,
+  .custom-recently-viewed,
+  .custom-top-selling,
+  .custom-track-ord,
+  .custom-tickets-api { display: none; }
+
+  /* Track order styles */
+  .trk-head { font-size: 24px; font-weight: bold; text-transform: uppercase; }
+  .trk-con { font-size: 18px; margin-top: 10px; line-height: 24px; }
+  .trk-btn {
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 16px !important;
+    font-weight: 600;
+    height: 40px;
+    width: 120px;
+    background-color: #ed2024 !important;
+    border: 1px solid #ed2024 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    cursor: pointer !important;
+    border-radius: 3px;
+  }
+  .trk-btn:hover { color: #ed2024 !important; background-color: white !important; }
+  @media (max-width: 768px) {
+    .trk-head { font-size: 22px; font-weight: 600; }
+    .trk-con { font-size: 16px; }
+  }
+{%- endstyle -%}
+
+<section id="new-acc-add" class="account-page account-page-addresses">
+  <div class="top-acc-nm customer account section-{{ section.id }}-padding page-width">
+    <h2 class="account-page-subtitle">
+      <span class="acc-tabs"><a class="acc-tabs" href="https://deodap.in">Home</a> / </span>
+      <span id="subtitle-text">{{ 'customer.addresses.title' | t }}</span>
+    </h2>
+    <h2 class="acc-wlc">welcome!</h2>
+  </div>
+
+  <div class="customer account section-{{ section.id }}-padding">
+    <div class="acc-box-sd">
+      <h2 class="acc-same-title">Manage my Account</h2>
+      <div class="cst-page-con">
+
+        <div class="custom-left-ads">
+          <a class="cstm-a {% if request.path == '/account' %}active{% endif %}" data-subtitle="Addresses" href="/account">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6956 8.36231C16.6956 9.94574 16.1459 11.4008 15.227 12.5471H15.2309C15.2309 12.5471 12.9039 15.6611 11.1011 17.8661C10.526 18.5695 9.47401 18.5693 8.89923 17.8655C7.10227 15.6654 4.77823 12.5538 4.77823 12.5538L4.77281 12.5471C3.8539 11.4008 3.30426 9.94574 3.30426 8.36231C3.30426 4.6644 6.30201 1.66666 9.99991 1.66666C13.6978 1.66666 16.6956 4.6644 16.6956 8.36231ZM12.5 8.33332C12.5 9.71404 11.3807 10.8333 10 10.8333C8.61931 10.8333 7.50002 9.71404 7.50002 8.33332C7.50002 6.95261 8.61931 5.83332 10 5.83332C11.3807 5.83332 12.5 6.95261 12.5 8.33332Z" fill="#6E6E6E"/>
+            </svg>
+            Addresses
+          </a>
+          <a class="cstm-a order-new {% if request.path == '/account' and request.query_string contains 'tab=my_order' %}active{% endif %}" data-subtitle="My Order" href="/account?tab=my_order">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M7.91675 17.5C8.6071 17.5 9.16675 16.9404 9.16675 16.25C9.16675 15.5596 8.6071 15 7.91675 15C7.22639 15 6.66675 15.5596 6.66675 16.25C6.66675 16.9404 7.22639 17.5 7.91675 17.5Z" fill="#6E6E6E"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5833 17.5C15.2736 17.5 15.8333 16.9404 15.8333 16.25C15.8333 15.5596 15.2736 15 14.5833 15C13.8929 15 13.3333 15.5596 13.3333 16.25C13.3333 16.9404 13.8929 17.5 14.5833 17.5Z" fill="#6E6E6E"/>
+              <path d="M2.50008 2.5C2.03984 2.5 1.66675 2.8731 1.66675 3.33333C1.66675 3.79357 2.03984 4.16667 2.50008 4.16667H2.86545C3.24784 4.16667 3.58116 4.42691 3.67391 4.79789L5.54269 12.273C5.82092 13.3859 6.82087 14.1667 7.96804 14.1667H14.4965C15.6682 14.1667 16.6827 13.3528 16.9369 12.209L17.8629 8.04233C18.2098 6.48104 17.0218 5 15.4224 5H5.44239L5.29081 4.39366C5.01258 3.28074 4.01262 2.5 2.86545 2.5H2.50008Z" fill="#6E6E6E"/>
+            </svg>
+            Your Order
+          </a>
+          <a class="cstm-a contct-new {% if request.path == '/account' and request.query_string contains 'tab=contact' %}active{% endif %}" data-subtitle="Contact Us" href="/account?tab=contact">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M2.07569 7.25739C1.15626 5.41222 2.08396 3.37584 3.85173 2.31518C4.70284 1.80451 5.80282 2.02613 6.38978 2.82653L7.692 4.60229C8.24626 5.35809 8.3312 6.36043 7.91205 7.19873L7.57061 7.88161C7.47177 8.07929 7.45614 8.30796 7.55725 8.50449C7.74146 8.86255 8.13372 9.49708 8.88938 10.2527C9.64505 11.0084 10.2796 11.4007 10.6376 11.5849C10.8342 11.686 11.0628 11.6704 11.2605 11.5715L11.9434 11.2301C12.7817 10.8109 13.784 10.8959 14.5398 11.4501L16.3156 12.7523C17.116 13.3393 17.3376 14.4393 16.8269 15.2904C15.7663 17.0582 13.7299 17.9859 11.8847 17.0664C10.3296 16.2915 8.34241 15.0091 6.23773 12.9044C4.13306 10.7997 2.85059 8.8125 2.07569 7.25739Z" fill="#6E6E6E"/>
+            </svg>
+            Contact Us
+          </a>
+          <a class="cstm-a recently-vw {% if request.path == '/account' and request.query_string contains 'tab=recently_viewed' %}active{% endif %}" data-subtitle="Recently Viewed" href="/account?tab=recently_viewed">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="20" width="20" viewBox="0 0 512 512" aria-hidden="true">
+              <path fill="#6e6e6e" d="M504 255.5c.3 136.6-111.2 248.4-247.8 248.5-59 0-113.2-20.5-155.8-54.9-11.1-8.9-11.9-25.5-1.8-35.6l11.3-11.3c8.6-8.6 22.4-9.6 31.9-2C173.1 425.1 212.8 440 256 440c101.7 0 184-82.3 184-184 0-101.7-82.3-184-184-184-48.8 0-93.1 19-126.1 49.9l50.8 50.8c10.1 10.1 2.9 27.3-11.3 27.3H24c-8.8 0-16-7.2-16-16V38.6c0-14.3 17.2-21.4 27.3-11.3l49.4 49.4C129.2 34.1 189.6 8 256 8c136.8 0 247.7 110.8 248 247.5zm-180.9 78.8l9.8-12.6c8.1-10.5 6.3-25.5-4.2-33.7L288 256.3V152c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v135.7l65.4 50.9c10.5 8.1 25.5 6.3 33.7-4.2z"/>
+            </svg>
+            Recently viewed
+          </a>
+          <a class="cstm-a track-ordr {% if request.path == '/account' and request.query_string contains 'tab=track_order' %}active{% endif %}" data-subtitle="Track My Order" href="/account?tab=track_order">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="20" width="20" viewBox="0 0 640 512" aria-hidden="true">
+              <path fill="#6e6e6e" d="M624 352h-16V243.9c0-12.7-5.1-24.9-14.1-33.9L494 110.1c-9-9-21.2-14.1-33.9-14.1H416V48c0-26.5-21.5-48-48-48H112C85.5 0 64 21.5 64 48v48H8c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8h272c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H8c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8h208c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H8c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8h208c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H64v128c0 53 43 96 96 96s96-43 96-96h128c0 53 43 96 96 96s96-43 96-96h48c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zM160 464c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm320 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-208H416V144h44.1l99.9 99.9V256z"/>
+            </svg>
+            Track My Order
+          </a>
+          <a class="cstm-a track-tkts {% if request.path == '/account' and request.query_string contains 'tab=tickets' %}active{% endif %}" data-subtitle="Tickets" href="/account?tab=tickets">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 492 428" fill="none" aria-hidden="true">
+              <path d="M480.67 235.33C486.005 235.33 491.34 229.995 491.34 224.66V160.66C491.34 142.525 477.475 128.66 459.34 128.66H374V427.33H459.33C477.465 427.33 491.33 413.465 491.33 395.33V331.33C491.324 328.502 490.199 325.791 488.199 323.791C486.199 321.791 483.488 320.665 480.66 320.66C469.459 320.486 458.775 315.915 450.916 307.933C443.056 299.95 438.651 289.197 438.651 277.995C438.651 266.793 443.056 256.04 450.916 248.057C458.775 240.075 469.459 235.504 480.66 235.33H480.67Z" fill="#6e6e6e"/>
+              <path d="M473.205 96.6701C478.54 94.5402 481.735 88.1402 479.605 82.8051L458.265 22C452.93 4.92992 433.689 -3.6 417.735 1.73504L114.805 106.265H456.135C461.194 102.055 466.978 98.8034 473.205 96.6701Z" fill="#6e6e6e"/>
+              <path d="M0.669922 160.67V224.67C0.669922 231.07 4.94 235.34 11.34 235.34C22.541 235.34 33.225 239.911 41.084 247.893C48.944 255.876 53.349 266.629 53.349 277.831C53.349 289.033 48.944 299.786 41.084 307.769C33.225 315.751 22.541 320.322 11.34 320.496C4.94 320.496 0.669922 324.766 0.669922 331.166V395.166C0.669922 413.301 14.5349 427.166 32.6699 427.166H352.67V128.496H32.6699C14.5758 128.496 0.669922 142.361 0.669922 160.496V160.67ZM128.67 214H192.67C199.07 214 203.34 218.27 203.34 224.67C203.34 231.07 199.07 235.34 192.67 235.34H128.67C122.27 235.34 118 231.07 118 224.67C118 218.27 122.27 214 128.67 214ZM128.67 267.33H267.33C273.73 267.33 278 271.6 278 278C278 284.4 273.73 288.67 267.33 288.67H128.67C122.27 288.67 118 284.4 118 278C118 271.6 122.27 267.33 128.67 267.33ZM128.67 320.66H267.33C273.73 320.66 278 324.93 278 331.33C278 337.73 273.73 342 267.33 342H128.67C122.27 342 118 337.73 118 331.33C118 324.93 122.27 320.67 128.67 320.67V320.66Z" fill="#6e6e6e"/>
+            </svg>
+            Tickets
+          </a>
+          <a class="cstm-a site-header__account-link--logout" href="/account/logout" data-no-instant>
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M13.7646 6.77369V5.91844C13.7646 4.05303 12.2521 2.54053 10.3867 2.54053H5.91795C4.05345 2.54053 2.54095 4.05303 2.54095 5.91844V16.1209C2.54095 17.9864 4.05345 19.4989 5.91795 19.4989H10.3959C12.2558 19.4989 13.7646 17.9909 13.7646 16.131V15.2666" stroke="#6E6E6E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19.9921 11.0197H8.95447" stroke="#6E6E6E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.3077 8.34758L19.9917 11.0197L17.3077 13.6927" stroke="#6E6E6E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Logout
+          </a>
+        </div>
+
+        <div class="custom-rig-ads">
+          {%- paginate customer.addresses by 5 -%}
+          <div class="custom-adrs-act customer addresses section-{{ section.id }}-padding" data-customer-addresses>
+            <ul role="list" class="cst-deaf-add">
+              {%- for address in customer.addresses -%}
+                <li data-address>
+                  {{ address | format_address }}
+                  {%- if address == customer.default_address -%}
+                    <p class="defa-text">{{ 'customer.addresses.default' | t }}</p>
+                  {%- endif -%}
+                  <button
+                    type="button"
+                    id="EditFormButton_{{ address.id }}"
+                    aria-label="{{ 'customer.addresses.edit_address' | t }} {{ forloop.index }}"
+                    aria-controls="EditAddress_{{ address.id }}"
+                    aria-expanded="false"
+                    data-address-id="{{ address.id }}"
+                    class="edit-btncst"
+                  >{{ 'customer.addresses.edit' | t }}</button>
+                  <button
+                    type="button"
+                    aria-label="{{ 'customer.addresses.delete' | t }} {{ forloop.index }}"
+                    data-target="{{ address.url }}"
+                    data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
+                    class="dlt-btncst"
+                  >{{ 'customer.addresses.delete' | t }}</button>
+
+                  <div class="cst-edit-address" id="EditAddress_{{ address.id }}">
+                    <h2>{{ 'customer.addresses.edit_address' | t }}</h2>
+                    {%- form 'customer_address', address -%}
+                      <div class="field">
+                        <input type="text" class="input-border" id="AddressFirstName_{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" placeholder="{{ 'customer.addresses.first_name' | t }}" required>
+                        <label for="AddressFirstName_{{ form.id }}">{{ 'customer.addresses.first_name' | t }}</label>
+                      </div>
+                      <div class="field">
+                        <input type="text" class="input-border" id="AddressLastName_{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" placeholder="{{ 'customer.addresses.last_name' | t }}" required>
+                        <label for="AddressLastName_{{ form.id }}">{{ 'customer.addresses.last_name' | t }}</label>
+                      </div>
+                      <div class="field">
+                        <input type="text" class="input-border" id="AddressCompany_{{ form.id }}" name="address[company]" value="{{ form.company }}" autocomplete="organization" placeholder="{{ 'customer.addresses.company' | t }}">
+                        <label for="AddressCompany_{{ form.id }}">{{ 'customer.addresses.company' | t }}</label>
+                      </div>
+                      <div class="field">
+                        <input type="text" class="input-border" id="AddressAddress1_{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" placeholder="{{ 'customer.addresses.address1' | t }}" required>
+                        <label for="AddressAddress1_{{ form.id }}">{{ 'customer.addresses.address1' | t }}</label>
+                      </div>
+                      <div class="field">
+                        <input type="text" class="input-border" id="AddressAddress2_{{ form.id }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" placeholder="{{ 'customer.addresses.address2' | t }}">
+                        <label for="AddressAddress2_{{ form.id }}">{{ 'customer.addresses.address2' | t }}</label>
+                      </div>
+                      <div class="field">
+                        <input type="text" class="input-border" id="AddressCity_{{ form.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" placeholder="{{ 'customer.addresses.city' | t }}">
+                        <label for="AddressCity_{{ form.id }}">{{ 'customer.addresses.city' | t }}</label>
+                      </div>
+                      <div>
+                        <label for="AddressCountry_{{ form.id }}">{{ 'customer.addresses.country' | t }}</label>
+                        <div class="select">
+                          <select id="AddressCountry_{{ form.id }}" class="input-border" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">
+                            {{ all_country_option_tags }}
+                          </select>
+                          <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                        </div>
+                      </div>
+                      <div id="AddressProvinceContainer_{{ form.id }}" style="display:none;">
+                        <label for="AddressProvince_{{ form.id }}">{{ 'customer.addresses.province' | t }}</label>
+                        <div class="select">
+                          <select id="AddressProvince_{{ form.id }}" class="input-border" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+                          <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <input type="text" id="AddressZip_{{ form.id }}" class="input-border" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" placeholder="{{ 'customer.addresses.zip' | t }}">
+                        <label for="AddressZip_{{ form.id }}">{{ 'customer.addresses.zip' | t }}</label>
+                      </div>
+                      <div class="field">
+                        <input type="tel" id="AddressPhone_{{ form.id }}" class="input-border" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" placeholder="{{ 'customer.addresses.phone' | t }}" required>
+                        <label for="AddressPhone_{{ form.id }}">{{ 'customer.addresses.phone' | t }}</label>
+                      </div>
+                      <div>
+                        {{ form.set_as_default_checkbox }}
+                        <label for="address_default_address_{{ form.id }}">{{ 'customer.addresses.set_default' | t }}</label>
+                      </div>
+                      <div>
+                        <button class="cst-editsub">{{ 'customer.addresses.update' | t }}</button>
+                        <button class="cst-editclear" type="reset">{{ 'customer.addresses.cancel' | t }}</button>
+                      </div>
+                    {%- endform -%}
+                  </div>
+                </li>
+              {%- endfor -%}
+            </ul>
+
+            <div data-address>
+              <button class="new-acc" type="button" aria-expanded="false" aria-controls="AddAddress">
+                + {{ 'customer.addresses.add_new' | t }}
+              </button>
+              <div class="custom-form-style hidden cst-form">
+                <div id="AddAddress">
+                  <h2 id="AddressNewHeading">{{ 'customer.addresses.add_new' | t }}</h2>
+                  {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading' -%}
+                    <div class="field">
+                      <input type="text" id="AddressFirstNameNew" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" placeholder="{{ 'customer.addresses.first_name' | t }}" required>
+                      <label for="AddressFirstNameNew">{{ 'customer.addresses.first_name' | t }}</label>
+                    </div>
+                    <div class="field">
+                      <input type="text" id="AddressLastNameNew" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" placeholder="{{ 'customer.addresses.last_name' | t }}" required>
+                      <label for="AddressLastNameNew">{{ 'customer.addresses.last_name' | t }}</label>
+                    </div>
+                    <div class="field">
+                      <input type="text" id="AddressCompanyNew" name="address[company]" value="{{ form.company }}" autocomplete="organization" placeholder="{{ 'customer.addresses.company' | t }}">
+                      <label for="AddressCompanyNew">{{ 'customer.addresses.company' | t }}</label>
+                    </div>
+                    <div class="field">
+                      <input type="text" id="AddressAddress1New" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" placeholder="{{ 'customer.addresses.address1' | t }}" required>
+                      <label for="AddressAddress1New">{{ 'customer.addresses.address1' | t }}</label>
+                    </div>
+                    <div class="field">
+                      <input type="text" id="AddressAddress2New" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" placeholder="{{ 'customer.addresses.address2' | t }}">
+                      <label for="AddressAddress2New">{{ 'customer.addresses.address2' | t }}</label>
+                    </div>
+                    <div class="custom-spacing-form">
+                      <div class="field custom-spacing-form-sub">
+                        <input type="text" id="AddressCityNew" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" placeholder="{{ 'customer.addresses.city' | t }}">
+                        <label for="AddressCityNew">{{ 'customer.addresses.city' | t }}</label>
+                      </div>
+                      <div class="custom-spacing-form-sub">
+                        <div class="select">
+                          <select id="AddressCountryNew" name="address[country]" data-default="{{ form.country }}" autocomplete="country" required>
+                            {{ all_country_option_tags }}
+                          </select>
+                          <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="custom-spacing-form">
+                      <div class="custom-spacing-form-sub" id="AddressProvinceContainerNew" style="display:none;">
+                        <div class="select">
+                          <select id="AddressProvinceNew" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+                          <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                        </div>
+                      </div>
+                      <div class="field custom-spacing-form-sub zip-add-cst">
+                        <input type="text" id="AddressZipNew" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" placeholder="{{ 'customer.addresses.zip' | t }}">
+                        <label for="AddressZipNew">{{ 'customer.addresses.zip' | t }}</label>
+                      </div>
+                    </div>
+                    <div class="custom-spacing-form">
+                      <div class="field custom-spacing-form-sub">
+                        <input type="tel" id="AddressPhoneNew" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" placeholder="{{ 'customer.addresses.phone' | t }}" required>
+                        <label for="AddressPhoneNew">{{ 'customer.addresses.phone' | t }}</label>
+                      </div>
+                      <div class="custom-spacing-form-sub">
+                        {{ form.set_as_default_checkbox }}
+                        <label class="lbl-clr" for="address_default_address_new">{{ 'customer.addresses.set_default' | t }}</label>
+                      </div>
+                    </div>
+                    <div class="form-btn-wrap">
+                      <button class="add-addres-btn">{{ 'customer.addresses.add' | t }}</button>
+                      <button class="add-addres-btn close_form">Close</button>
+                    </div>
+                  {%- endform -%}
+                </div>
+              </div>
+            </div>
+
+            {%- if paginate.pages > 1 and paginate.parts.size > 0 -%}
+              <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+                <ul role="list">
+                  {%- if paginate.previous -%}
+                    <li>
+                      <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
+                        <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                  {%- for part in paginate.parts -%}
+                    <li>
+                      {%- if part.is_link -%}
+                        <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+                      {%- elsif part.title == paginate.current_page -%}
+                        <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</span>
+                      {%- else -%}
+                        <span>{{ part.title }}</span>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                  {%- if paginate.next -%}
+                    <li>
+                      <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
+                        <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              </nav>
+            {%- endif -%}
+          </div>
+          {%- endpaginate -%}
+        </div>
+
+        <div class="custom-orderr">{%- render 'new-order' -%}</div>
+        <div class="custom-contant">{%- render 'custom-contact' -%}</div>
+        <div class="custom-recently-viewed">{%- render 'custom-recently-viewed' -%}</div>
+        <div class="custom-top-selling">{%- render 'custom-best-selling' -%}</div>
+        <div class="custom-track-ord">
+          <h2 class="trk-head">Track Your Order</h2>
+          <p class="trk-con">Track order easily with your details and stay updated on the latest delivery status! To track your order, please click the button below.</p>
+          <a class="trk-btn" href="https://deodap.in/pages/shipment-tracking" target="_blank" rel="noopener">Click Here</a>
+        </div>
+        <div class="custom-tickets-api">{%- render 'care-tickets-api' -%}</div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  window.addEventListener('load', function() {
+    if (typeof CustomerAddresses !== 'undefined') new CustomerAddresses();
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var customAdd             = document.querySelector('.custom-rig-ads');
+    var customOrderDiv        = document.querySelector('.custom-orderr');
+    var customContactDiv      = document.querySelector('.custom-contant');
+    var customRecentlyViewed  = document.querySelector('.custom-recently-viewed');
+    var customTopSelling      = document.querySelector('.custom-top-selling');
+    var customTrackOrder      = document.querySelector('.custom-track-ord');
+    var customTickets         = document.querySelector('.custom-tickets-api');
+    var allLinks              = document.querySelectorAll('.cstm-a');
+    var subtitleText          = document.getElementById('subtitle-text');
+    var newAccBtn             = document.querySelector('.new-acc');
+    var cstForm               = document.querySelector('.cst-form');
+    var closeFormBtn          = document.querySelector('.close_form');
+
+    // ── Add new address form toggle ──
+    if (newAccBtn && cstForm) {
+      newAccBtn.addEventListener('click', function() {
+        cstForm.classList.toggle('hidden');
+        newAccBtn.setAttribute('aria-expanded', !cstForm.classList.contains('hidden'));
+      });
+    }
+    if (closeFormBtn && cstForm) {
+      closeFormBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        cstForm.classList.add('hidden');
+        if (newAccBtn) newAccBtn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    // ── Mega menu hover (inline menu) ──
+    var inlineMenu = document.querySelector('.header__inline-menu');
+    if (inlineMenu) {
+      inlineMenu.querySelectorAll('details').forEach(function(el) {
+        el.addEventListener('mouseover', function() {
+          el.setAttribute('open', true);
+          var ul = el.querySelector('ul');
+          if (ul) ul.addEventListener('mouseleave', function() { el.removeAttribute('open'); });
+          el.addEventListener('mouseleave', function() { el.removeAttribute('open'); });
+        });
+      });
+    }
+
+    // ── Tab switching ──
+    function hideAllSections() {
+      customAdd.style.display = 'none';
+      customOrderDiv.style.display = 'none';
+      customContactDiv.style.display = 'none';
+      customRecentlyViewed.style.display = 'none';
+      customTopSelling.style.display = 'none';
+      customTrackOrder.style.display = 'none';
+      customTickets.style.display = 'none';
+    }
+
+    function removeActiveClass() {
+      allLinks.forEach(function(l) { l.classList.remove('active'); });
+      document.querySelectorAll('.header-cstm-a').forEach(function(l) { l.classList.remove('active'); });
+    }
+
+    function activateTab(tabName) {
+      hideAllSections();
+      removeActiveClass();
+
+      var linkToActivate = document.querySelector('.cstm-a[href*="' + tabName + '"]');
+      var headerLink = document.querySelector('.header-cstm-a[href*="' + tabName + '"]');
+      if (linkToActivate) {
+        linkToActivate.classList.add('active');
+        subtitleText.textContent = linkToActivate.getAttribute('data-subtitle') || '';
+      }
+      if (headerLink) headerLink.classList.add('active');
+
+      switch (tabName) {
+        case 'my_order':        customOrderDiv.style.display = 'block'; break;
+        case 'contact':         customContactDiv.style.display = 'block'; break;
+        case 'recently_viewed': customRecentlyViewed.style.display = 'block'; break;
+        case 'top_order_products': customTopSelling.style.display = 'block'; break;
+        case 'track_order':     customTrackOrder.style.display = 'block'; break;
+        case 'tickets':         customTickets.style.display = 'block'; break;
+        default:
+          customAdd.style.display = 'block';
+          var defaultLink = document.querySelector(".cstm-a[href='/account']");
+          var defaultHeaderLink = document.querySelector(".header-cstm-a[href='/account']");
+          if (defaultLink) { defaultLink.classList.add('active'); subtitleText.textContent = defaultLink.getAttribute('data-subtitle') || ''; }
+          if (defaultHeaderLink) defaultHeaderLink.classList.add('active');
+      }
+    }
+    var activeTab = new URLSearchParams(window.location.search).get('tab');
+    activateTab(activeTab || '');
+    allLinks.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var tab = (link.getAttribute('href').split('=')[1] || '');
+        if (tab) {
+          e.preventDefault();
+          history.pushState(null, '', '/account?tab=' + tab);
+          activateTab(tab);
+        } else {
+          removeActiveClass();
+          link.classList.add('active');
+          history.pushState(null, '', '/account');
+          subtitleText.textContent = link.getAttribute('data-subtitle') || '';
+          hideAllSections();
+          customAdd.style.display = 'block';
+        }
+      });
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('.header-cstm-a')) {
+        var tab = (e.target.getAttribute('href').split('=')[1] || '');
+        if (tab) {
+          e.preventDefault();
+          history.pushState(null, '', '/account?tab=' + tab);
+          activateTab(tab);
+        }
+      }
+    });
+  });
+</script> {% endcomment %}

@@ -1,0 +1,22 @@
+ <div class="share-buttons--list">
+                  <a class="share-buttons--button share-buttons--facebook" target="_blank"href="//www.facebook.com/sharer.php?u={{ share_url }}">
+                    <img class="new" src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Group_5_71a81309-e37f-4f5e-9eab-557f7720e2a8.png?v=1719986712" alt="facebook">
+                    <span class="visually-hidden">{{ 'general.accessibility.share_on_facebook' | t }}</span>
+                  </a>
+                  <a class="share-buttons--button share-buttons--x" target="_blank" href="//x.com/intent/tweet?url={{ share_url }}">
+                    <img class="new" src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Group_4_bb31e3f0-03d8-4691-bd4a-569de7ecb940.png?v=1719986645" alt="X">
+                    <span class="visually-hidden">{{ 'general.accessibility.share_on_x' | t }}</span>
+                  </a>
+                  <a class="share-buttons--button share-buttons--linkedin" target="_blank" href="//www.linkedin.com/shareArticle?mini=true&url={{ share_url }}&title={{ share_title }}">
+                    <img class="new" src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Group_3_9c6d8469-7853-4db8-8f04-35eefe31958c.png?v=1719986527" alt="linkedin">
+                    <span class="visually-hidden">{{ 'general.accessibility.share_on_linkedin' | t }}</span>
+                  </a>
+                    <a class="share-buttons--button share-buttons--pinterest" target="_blank" href="//pinterest.com/pin/create/button/?url={{ share_url }}&amp;media={{ share_image }}&amp;description={{ share_title }}">
+                      <img class="new" src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Group_2_e9f7f15a-f1f3-446c-bd27-6dcaf4aba126.png?v=1719986420" alt="pinterest">
+                      <span class="visually-hidden">{{ 'general.accessibility.share_on_pinterest' | t }}</span>
+                    </a>
+                  <a class="share-buttons--button share-buttons--whatsapp" target="_blank" rel="noopener" href="https://api.whatsapp.com/send?text={{ share_title }} {{ shop.url }}{{ product.url | absolute_url }}">
+                    <img class="new" src="https://cdn.shopify.com/s/files/1/0782/3284/6646/files/Group_b99392df-e12b-4aea-954e-7902e897651d.png?v=1719985939" alt="whatsapp">
+                    <span class="visually-hidden">{{ 'general.accessibility.share_on_whatsapp' | t }}</span>
+                  </a>
+                </div>

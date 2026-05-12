@@ -1,0 +1,59 @@
+{{ 'subcollection-section.css' | asset_url | stylesheet_tag: preload: true }}
+<script src="{{ 'subcollection-section.js' | asset_url }}" defer="defer"></script>
+
+{% assign menu_handle = collection.handle %} 
+{% assign menu = linklists[menu_handle] %}
+
+{% if menu %}
+  <div class="subcollection-wrapper" style="display: none; opacity: 0; transition: opacity 0.5s ease;"> 
+    <div class="page-width">
+      <div class="sub-collection-title">
+        <h1 class="sub-collection-title-txt collection-hero__title">
+          <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+          {{- collection.title | escape -}}
+        </h1>
+      </div>
+
+      <div class="subcoll swiper-container">
+        <div class="swiper-wrapper">
+          {% for link in menu.links %}
+            {% assign collection_link = link.object %}
+            {% if collection_link and collection_link.image %}
+              {% assign collection_image = collection_link.image %}
+            {% elsif collection_link and collection_link.products.first %}
+              {% assign collection_image = collection_link.products.first.featured_image %}
+            {% else %}
+              {% assign collection_image = null %}
+            {% endif %}
+
+            <div class="swiper-slide">
+              <a href="{{ link.url }}" class="sub-coll-block">
+                {% if collection_image %}
+                  {{ collection_image | image_url: width: 400 | image_tag: widths: '150,250,400,600', sizes: '(min-width: 750px) 200px, 150px', loading: 'lazy', alt: link.title, class: 'coll-menu-imgs' }}
+                {% endif %}
+                <span class="subcollections-grid__item-title">{{ link.title }}</span>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="sub-collection swiper-button-prev"><span></span></div>
+        <div class="sub-collection swiper-button-next"><span></span></div>
+      </div>
+      <div class="subcollections-collection__border"></div>
+    </div>
+  </div>
+{% endif %}
+
+
+
+{% schema %}
+  {
+    "name": "subcollection section",
+    "settings": [],
+    "presets": [
+      {
+        "name": "subcollection section"
+      }
+    ]
+  }
+{% endschema %}

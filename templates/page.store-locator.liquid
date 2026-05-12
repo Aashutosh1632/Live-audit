@@ -1,0 +1,17 @@
+{{ 'section-store-locator.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-store-locator.js' | asset_url }}" defer="defer"></script>
+
+<div class="merge-secc-left page__container page-width">
+  <h1 class="main-cst-title">Store Locator</h1>
+  <div class="left-right">
+    <div class="left-section" id="search-results">
+      <input type="text" id="store-search" placeholder="Search for a store" class="store-search-input page__container">
+      {% section 'store-locator' %}
+      {% section 'store-locator-2' %}
+    </div>
+    <div class="right-section">
+      {% section 'right-store' %}
+      {% section 'right-store-2' %}
+    </div>
+  </div>
+</div>

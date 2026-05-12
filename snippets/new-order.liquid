@@ -1,0 +1,68 @@
+{{ 'new-order.css' | asset_url | stylesheet_tag: preload: true }}
+
+<div class="account-page--column-large account-order-history">
+  <h2 class="account-page-subtitle">
+     {{ 'customer.orders.title' | t }}
+  </h2>
+
+  {% if customer.orders.size > 0 %}
+    {% paginate customer.orders by 20 %}
+      <table class="account-table account-order-list">
+                  <thead>
+             <tr class="cst-row">
+              <th class="account-order-number">
+                  Order number
+              </th>
+              <th class="account-order-date">
+                 Order date
+              </th>
+              <th class="account-order-content">
+                 Payment status
+              </th>
+              <th class="account-order-status">
+                 Fulfillment status	
+              </th>
+              <th class="account-order-total">
+                 Order total	
+              </th>
+            </tr>
+          </thead>
+       
+
+        <tbody class="customer-order-history-table">
+          {% for order in customer.orders %}
+            <tr class="new-ord-tr">
+            <td class="account-order-number" data-label="Order number">
+                  {{ order.name | strip_newlines | link_to: order.customer_url, order.name }}
+              </td>
+              <td class="account-order-date" data-label="Date">
+                 {{ order.created_at | date: "%d-%b-%Y" }}
+              </td>
+              <td data-label="Payment status">
+                <div class="new-order-status-align">
+                <p class="payment-status--{{ order.financial_status }}">
+                  {{ order.financial_status_label }}
+                </p>
+                </div>
+              </td>
+              <td data-label="Fulfilment status">
+                <div class="new-order-status-align">
+                <p class="fulfillment-status--{{ order.fulfillment_status }}">
+                  {{ order.fulfillment_status_label }}
+                </p>
+                </div>
+              </td>
+              <td class="account-order-list-total" data-label="Order total">
+                <span class="money">{{ order.total_price | money }}</span>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% render 'pagination', paginate: paginate %}
+    {% endpaginate %}
+  {% else %}
+    <p class="empty">{{ 'customer.orders.none' | t }}</p>
+  {% endif %}
+</div>

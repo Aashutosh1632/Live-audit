@@ -1,0 +1,251 @@
+{{ 'more-less-text.css' | asset_url | stylesheet_tag }}
+
+<div class="more-less">
+  <div class="section-wrapper promo-grid--container page-width">
+    {% if section.settings.title != blank %} <h2 class="colle-heading">{{ section.settings.title }}</h2> {% endif %}
+     {% if section.settings.des != blank %}
+    <div class="more-handle">
+      <p>{{ section.settings.des }}</p>
+    </div>
+       {% endif %}
+    {% if section.settings.battery_message != blank or section.settings.advance_content != blank %}
+  <div class="after-more">
+    {% if section.settings.battery_message != blank %}
+      <p>{{ section.settings.battery_message }}</p>
+    {% endif %}
+    {% if section.settings.advance_content != blank %}
+      <p>{{ section.settings.advance_content }}</p>
+    {% endif %}
+
+<section class="ch-custom-blog-posts AUto-getpost">
+  <div class="{{ section.settings.class }}">
+    <div class="blog-pg-custom-sec page-width">
+      <div class="cublog-posts-wrapper">
+        <div class="cublog-posts">
+          {% for i in (1..3) %}
+  {% assign image_id = "image_" | append: i %}
+  {% assign date_id = "date_" | append: i %}
+  {% assign heading_id = "heading_" | append: i %}
+  {% assign url_id = "readmore_url_" | append: i %}
+  {% assign image = section.settings[image_id] %}
+  {% assign date = section.settings[date_id] %}
+  {% assign heading = section.settings[heading_id] %}
+  {% assign url = section.settings[url_id] %}
+
+  {% if heading != blank %}
+    <div class="cublog-post blog-grid-{{ i }}">
+      {% if image != blank %}
+        <div class="blog-image">
+          <img src="{{ image | img_url: 'master' }}" alt="{{ heading | escape }}">
+        </div>
+      {% endif %}
+      {% if date != blank %}
+        <p class="blog-date">{{ date }}</p>
+      {% endif %}
+      <h3 class="blog-title">{{ heading }}</h3>
+      {% if url != blank %}
+        <a class="read-more-link" href="{{ url }}">READ MORE →</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div>
+{% endif %}
+
+    {% if section.settings.button != blank %}
+      <a class="moreless-button" href="#">{{ section.settings.button }}</a>
+    {% endif %}
+  </div>
+</div>
+
+<script src="{{ 'more-less-txt.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "more-less-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Headings"
+    },
+    {
+      "type": "liquid",
+      "id": "des",
+      "label": "Description before click on Read More button"
+    },
+    {
+      "type": "liquid",
+      "id": "battery_message",
+      "label": "More after text"
+    },
+    {
+      "type": "richtext",
+      "id": "advance_content",
+      "label": "Advanced content for collection"
+    },
+    {
+      "type": "text",
+      "id": "button",
+      "label": "Button name"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Blog posts",
+      "label": "Section Heading"
+    },
+
+    // ------- Blog Post 1 -------
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image 1"
+    },
+    {
+      "type": "text",
+      "id": "date_1",
+      "label": "Date 1"
+    },
+    {
+      "type": "text",
+      "id": "heading_1",
+      "label": "Heading 1"
+    },
+    {
+      "type": "url",
+      "id": "readmore_url_1",
+      "label": "Read More URL 1"
+    },
+
+    // ------- Blog Post 2 -------
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "text",
+      "id": "date_2",
+      "label": "Date 2"
+    },
+    {
+      "type": "text",
+      "id": "heading_2",
+      "label": "Heading 2"
+    },
+    {
+      "type": "url",
+      "id": "readmore_url_2",
+      "label": "Read More URL 2"
+    },
+
+    // ------- Blog Post 3 -------
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "text",
+      "id": "date_3",
+      "label": "Date 3"
+    },
+    {
+      "type": "text",
+      "id": "heading_3",
+      "label": "Heading 3"
+    },
+    {
+      "type": "url",
+      "id": "readmore_url_3",
+      "label": "Read More URL 3"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "Show Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "Show Date"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "Show Author"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show View All Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "description",
+      "label": "Show Description",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "read_button",
+      "label": "Show Read More",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "slider",
+      "label": "Enable Slider on Desktop",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "label": "Number of Posts to Display"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "more-less-text",
+      "category": "slider"
+    }
+  ]
+}
+{% endschema %}

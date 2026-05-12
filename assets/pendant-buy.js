@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){let n=document.getElementById("gokwik-buy-now");function t(){n.classList.contains("pendant-buy")&&(n.classList.add("shake"),setTimeout(()=>{n.classList.remove("shake")},500))}!function n(){t(),setTimeout(t,500),setTimeout(()=>{n()},3500)}()});

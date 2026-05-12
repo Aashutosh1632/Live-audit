@@ -1,0 +1,100 @@
+{{ 'header-mega-menu.css' | asset_url | stylesheet_tag: preload: true }}
+<script src="{{ 'header-mega-menu.js' | asset_url }}" defer="defer"></script>
+
+{% assign shop_by_titles = 'Shop by,द्वारा खरीदारी' | split: ',' %}
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li class="header__menu-li">
+        {%- if link.links != blank -%}
+          <header-menu>
+            {%- assign has_grandchild = false -%}
+            {%- assign first_l2_handle = nil -%}
+            {%- for child in link.links -%}
+              {%- if child.links != blank -%}
+                {%- assign has_grandchild = true -%}
+                {%- if first_l2_handle == nil -%}
+                  {%- assign first_l2_handle = child.handle -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            <details id="Details-HeaderMenu-{{ forloop.index }}"
+                     class="mega-menu {% unless has_grandchild %}no_grandchild_mega{% endunless %}">
+              <summary id="HeaderMenu-{{ link.handle }}"
+                       class="header__menu-item list-menu__item link focus-inset">
+                <span {%- if link.child_active %} class="header__active-menu-item" {% endif %}>
+                  <a href="{{ link.url }}" class="header__menu-link">
+                    <span class="title">{{ link.title | escape }}</span>
+                  </a>
+                  {{ 'icon-caret.svg' | inline_asset_content }}
+                </span>
+              </summary>
+
+              <!-- ==== MEGA MENU ==== -->
+              <div id="MegaMenu-Content-{{ forloop.index }}"
+                   class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup
+                          {% if shop_by_titles contains link.title %}{{ link.title | handleize }}{% endif %}"
+                   tabindex="-1">
+
+                <div class="mega-menu__wrapper page-width">
+                  <!-- LEFT: Level-2 -->
+                  <ul class="mega-menu__l2-list" role="list">
+                    {%- for child in link.links -%}
+                      {%- assign l2_handle = child.handle -%}
+                      <li class="mega-menu__l2-item"
+                          data-l2="{{ l2_handle }}"
+                          {% if forloop.first %}data-default{% endif %}>
+                        <a href="{{ child.url }}"
+                           class="mega-menu__l2-link{% if child.current %} mega-menu__l2-link--active{% endif %}">
+                          {{ child.title | escape }}
+                          {%- if child.links != blank -%}
+                            <svg class="mega-menu__caret" width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                              <path d="M2 1l4 4-4 4"/>
+                            </svg>
+                          {%- endif -%}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+
+                  <!-- RIGHT: Level-3 -->
+                  <div class="mega-menu__l3-panel">
+                    {%- for child in link.links -%}
+                      {%- if child.links != blank -%}
+                        <ul class="mega-menu__l3-list list-unstyled"
+                            data-l2="{{ child.handle }}">
+                          {%- for grand in child.links -%}
+                            <li>
+                              <a href="{{ grand.url }}"
+                                 class="mega-menu__l3-link{% if grand.current %} mega-menu__l3-link--active{% endif %}">
+                                {{ grand.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+            </details>
+          </header-menu>
+
+        {%- else -%}
+          <div>
+            <a id="HeaderMenu-{{ link.handle }}"
+               href="{{ link.url }}"
+               class="header__menu-item list-menu__item link link--text focus-inset"
+               {% if link.current %}aria-current="page"{% endif %}>
+              <span {%- if link.current %} class="header__active-menu-item" {% endif %}>
+                {{ link.title | escape }}
+              </span>
+            </a>
+          </div>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>
