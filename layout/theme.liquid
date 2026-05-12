@@ -90,6 +90,13 @@
       {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
       {%- endif -%}
+      {%- if template == 'product' and product.featured_media != blank -%}
+        {%- assign lcp_img = product.featured_media.preview_image -%}
+        <link rel="preload" as="image" fetchpriority="high"
+              href="{{ lcp_img | image_url: width: 1100 }}"
+              imagesrcset="{{ lcp_img | image_url: width: 600 }} 600w, {{ lcp_img | image_url: width: 990 }} 990w, {{ lcp_img | image_url: width: 1100 }} 1100w, {{ lcp_img | image_url: width: 1446 }} 1446w"
+              imagesizes="(min-width: 990px) 55vw, (min-width: 750px) 90vw, 100vw">
+      {%- endif -%}
       {{ content_for_header }}
       {%- render 'css-variable' -%}
       {%- unless template == 'index' -%}

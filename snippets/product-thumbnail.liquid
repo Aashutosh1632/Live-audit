@@ -1,7 +1,11 @@
 {%- liquid
-  unless lazy_load == false
+  if lazy_load == false
+    assign lazy = 'eager'
+    assign fetch_priority = 'high'
+  else
     assign lazy = 'lazy'
-  endunless
+    assign fetch_priority = 'auto'
+  endif
 
   assign desktop_columns = 1
   if desktop_layout == 'columns' and media_count > 1
@@ -14,7 +18,7 @@
   endif
 
   if media.media_type == 'image'
-    assign image_class = 'image-magnify-hover' 
+    assign image_class = 'image-magnify-hover'
   endif
 -%}
 {%- capture sizes -%}
@@ -34,7 +38,7 @@
     </span>
     {%- render 'loading-spinner' -%}
     <div class="test product__media media media--transparent">
-      {{ media.preview_image | image_url: width: 1946 | image_tag: class: image_class, loading: lazy, sizes: sizes, widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946', alt: media.alt | default: product.title }}
+      {{ media.preview_image | image_url: width: 1946 | image_tag: class: image_class, loading: lazy, fetchpriority: fetch_priority, sizes: sizes, widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946', alt: media.alt | default: product.title }}
     </div>
     <button class="product__media-toggle quick-add-hidden product__media-zoom-hover" type="button" aria-haspopup="dialog" data-media-id="{{ media.id }}"><span class="visually-hidden">{{ 'products.product.media.open_media' | t: index: position }}</span></button>
   </modal-opener>
