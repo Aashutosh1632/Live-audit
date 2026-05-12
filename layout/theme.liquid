@@ -213,6 +213,7 @@
       <noscript ><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5W7H98N" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- End Google Tag Manager (noscript) -->
       <a class="skip-to-content-link button visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
+      {%- if template == 'index' -%}<h1 class="visually-hidden">Online Shopping Site for Home, Electronics, Kitchen &amp; More &ndash; DeoDap</h1>{%- endif -%}
       {%- if settings.cart_type == 'drawer' -%}{%- render 'cart-drawer' -%}{%- endif -%}
       {%- sections 'header-group' -%}
       {%- sections 'Breadcrumb' -%}
