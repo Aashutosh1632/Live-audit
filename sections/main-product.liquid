@@ -442,24 +442,6 @@
         assign seo_media = product.featured_media
       endif
     -%}
- 
-        {%- assign review_count = product.metafields.judgeme.badge | split: "data-number-of-reviews='" | last | split: "'" |first | plus: 0 -%}
-    {%- assign review_value = product.metafields.judgeme.badge | split: "data-average-rating='" | last | split: "'" |first | plus: 0 -%}
-    {% if review_count > 0 %}
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org/",
-    "@type": {% if product.has_only_default_variant %}"Product",{% else %}"ProductGroup",{% endif %}
-    "@id": {{ canonical_url | append: "#product" | json }},
-    "name": {{ product.title | json }},
-     "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": {{ review_value }},
-        "reviewCount": {{ review_count }}
-    }
-}
-</script>
-  {%- endif -%}
 
     
   <script type="application/ld+json">
