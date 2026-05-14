@@ -325,14 +325,56 @@
   });
 {% endjavascript %}
 
+{%- # SEO-003: Organization (OnlineStore) schema for the brand. Emitted once globally from header.liquid. -%}
 <script type="application/ld+json">
   {
-    "@context": "http://schema.org",
-    "@type": "Organization",
+    "@context": "https://schema.org",
+    "@type": "OnlineStore",
+    "@id": {{ request.origin | append: '#organization' | json }},
     "name": {{ shop.name | json }},
+    "legalName": "DEODAP INTERNATIONAL PRIVATE LIMITED",
+    "url": {{ request.origin | json }},
     {% if settings.logo %}
       "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
     {% endif %}
+    "description": {{ shop.description | default: shop.name | json }},
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Vadodara",
+      "addressRegion": "Gujarat",
+      "addressCountry": "IN"
+    },
+    "contactPoint": [
+      {%- assign cp_sep = '' -%}
+      {%- if shop.email != blank -%}
+        {{ cp_sep }}{
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": {{ shop.email | json }},
+          "areaServed": "IN",
+          "availableLanguage": ["en", "hi"]
+        }
+        {%- assign cp_sep = ',' -%}
+      {%- endif -%}
+      {%- if shop.phone != blank -%}
+        {{ cp_sep }}{
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": {{ shop.phone | json }},
+          "areaServed": "IN",
+          "availableLanguage": ["en", "hi"]
+        }
+      {%- endif -%}
+    ],
+    "priceRange": "₹₹",
+    {%- comment -%}
+      Merchant-managed fields below — fill in via Shopify Admin metafields
+      (shop.metafields.legal.gstin etc.) or hardcode here once confirmed.
+      Examples (uncomment and complete):
+      "taxID": "24AAJCD1234A1ZP",
+      "foundingDate": "2018-01-01",
+      "founder": { "@type": "Person", "name": "..." },
+    {%- endcomment -%}
     "sameAs": [
       {%- assign social_sep = '' -%}
       {%- if settings.social_twitter_link != blank -%}{{ social_sep }}{{ settings.social_twitter_link | json }}{%- assign social_sep = ',' -%}{%- endif -%}
@@ -346,8 +388,7 @@
       {%- if settings.social_vimeo_link != blank -%}{{ social_sep }}{{ settings.social_vimeo_link | json }}{%- assign social_sep = ',' -%}{%- endif -%}
       {%- if settings.social_linkedin_link != blank -%}{{ social_sep }}{{ settings.social_linkedin_link | json }}{%- assign social_sep = ',' -%}{%- endif -%}
       {%- if settings.social_whatsapp_link != blank -%}{{ social_sep }}{{ settings.social_whatsapp_link | json }}{%- assign social_sep = ',' -%}{%- endif -%}
-    ],
-    "url": {{ request.origin | append: page.url | json }}
+    ]
   }
 </script>
 
