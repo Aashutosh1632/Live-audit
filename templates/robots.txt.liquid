@@ -1,0 +1,51 @@
+{%- # SEO-031: Customised robots.txt with explicit AI bot policy. -%}
+{%- # Starts from Shopify's default robots groups, then appends an
+    AI-bot section so the merchant's stance on AI crawlers is
+    documented and persists across Shopify default updates. -%}
+
+{%- for group in robots.default_groups -%}
+  {{- group.user_agent }}
+
+  {%- for rule in group.rules -%}
+    {{ rule }}
+  {%- endfor -%}
+
+  {%- if group.sitemap != blank -%}
+    {{ group.sitemap }}
+  {%- endif -%}
+{%- endfor -%}
+
+# SEO-031 — AI / LLM crawler policy
+# Verified search/answer-engine crawlers are explicitly allowed so
+# the store is discoverable in ChatGPT, Claude, Perplexity, etc.
+# Change to `Disallow: /` if the merchant opts out of AI indexing.
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
