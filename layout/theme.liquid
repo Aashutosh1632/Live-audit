@@ -105,6 +105,10 @@
           <link rel="canonical" href="{{ shop.url }}{{ collection.url }}">
         {%- endif -%}
       {%- endif -%}
+      {%- comment -%} SEO-029: noindex utility pages (search, login, register, account, cart, addresses, orders, gift card) {%- endcomment -%}
+      {%- if template == 'search' or template contains 'customers/' or template == 'cart' or template == 'gift_card' or template == 'password' -%}
+        <meta name="robots" content="noindex,follow">
+      {%- endif -%}
       {%- render 'css-variable' -%}
       {%- unless template == 'index' -%}
       {{ 'swiper-slim.min.css' | asset_url | stylesheet_tag: preload: true }}
