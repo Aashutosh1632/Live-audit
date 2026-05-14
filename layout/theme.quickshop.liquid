@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="js" lang="{{ request.locale.iso_code }}">
+<html class="js" lang="{% if request.locale.iso_code == 'en' %}en-IN{% else %}{{ request.locale.iso_code }}{% endif %}">
   <head>
     {% render 'shogun-optimizer' %}
 
