@@ -98,6 +98,13 @@
               imagesizes="(min-width: 990px) 55vw, (min-width: 750px) 90vw, 100vw">
       {%- endif -%}
       {{ content_for_header }}
+      {%- comment -%} SEO-009: noindex tag-trap (/collections/{handle}/{anything}) {%- endcomment -%}
+      {%- if template == 'collection' and current_tags != blank -%}
+        <meta name="robots" content="noindex,follow">
+        {%- if collection.url != blank -%}
+          <link rel="canonical" href="{{ shop.url }}{{ collection.url }}">
+        {%- endif -%}
+      {%- endif -%}
       {%- render 'css-variable' -%}
       {%- unless template == 'index' -%}
       {{ 'swiper-slim.min.css' | asset_url | stylesheet_tag: preload: true }}
