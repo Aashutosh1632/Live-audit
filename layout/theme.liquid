@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="js" lang="{{ request.locale.iso_code }}">
+<html class="js" lang="{% if request.locale.iso_code == 'en' %}en-IN{% else %}{{ request.locale.iso_code }}{% endif %}">
    <head>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -98,6 +98,17 @@
               imagesizes="(min-width: 990px) 55vw, (min-width: 750px) 90vw, 100vw">
       {%- endif -%}
       {{ content_for_header }}
+      {%- comment -%} SEO-009: noindex tag-trap (/collections/{handle}/{anything}) {%- endcomment -%}
+      {%- if template == 'collection' and current_tags != blank -%}
+        <meta name="robots" content="noindex,follow">
+        {%- if collection.url != blank -%}
+          <link rel="canonical" href="{{ shop.url }}{{ collection.url }}">
+        {%- endif -%}
+      {%- endif -%}
+      {%- comment -%} SEO-029: noindex utility pages (search, login, register, account, cart, addresses, orders, gift card) {%- endcomment -%}
+      {%- if template == 'search' or template contains 'customers/' or template == 'cart' or template == 'gift_card' or template == 'password' -%}
+        <meta name="robots" content="noindex,follow">
+      {%- endif -%}
       {%- render 'css-variable' -%}
       {%- unless template == 'index' -%}
       {{ 'swiper-slim.min.css' | asset_url | stylesheet_tag: preload: true }}

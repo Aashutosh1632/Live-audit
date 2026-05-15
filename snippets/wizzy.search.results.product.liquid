@@ -11,36 +11,16 @@
  data-groupId="[[#groupId]][[groupId]][[/groupId]][[#singleVarientGroupId]][[singleVarientGroupId]][[/singleVarientGroupId]]"
  data-product-handle="[[handle]]"
 >
- <link
-   href="//deodap.in/cdn/shop/t/468/assets/component-rating.css?v=179577762467860590411760085952"
-   rel="stylesheet"
-   type="text/css"
-   media="all"
- >
- <link
-   href="//deodap.in/cdn/shop/t/468/assets/component-volume-pricing.css?v=111870094811454961941760085955"
-   rel="stylesheet"
-   type="text/css"
-   media="all"
- >
- <link
-   href="//deodap.in/cdn/shop/t/468/assets/component-price.css?v=26783064957516339121760085951"
-   rel="stylesheet"
-   type="text/css"
-   media="all"
- >
- <link
-   href="//deodap.in/cdn/shop/t/468/assets/quick-order-list.css?v=129932180309343703061760086016"
-   rel="stylesheet"
-   type="text/css"
-   media="all"
- >
- <link
-   href="//deodap.in/cdn/shop/t/468/assets/quantity-popover.css?v=129068967981937647381760086013"
-   rel="stylesheet"
-   type="text/css"
-   media="all"
- >
+{%- comment -%}
+  SEO-040: removed 5 hardcoded <link rel="stylesheet"> tags pointing to
+  /cdn/shop/t/468/... (a stale theme path that 404s on the current
+  theme). Those stylesheets (component-rating, component-volume-pricing,
+  component-price, quick-order-list, quantity-popover) are already
+  loaded globally via {{ 'X.css' | asset_url }} in sections/header.liquid,
+  featured-collection.liquid, main-collection-product-grid.liquid, etc.
+  Wizzy's client-side template was injecting one copy per result tile,
+  producing dozens of duplicate <link> tags per search results page.
+{%- endcomment -%}
  <div class="card-coll-new card-wrapper product-card-wrapper underline-links-hover" data-animation-state="">
    <div class="card card--standard  card--media" style="--ratio-percent: 100%;">
      <div class="Quick-veiew-icon">

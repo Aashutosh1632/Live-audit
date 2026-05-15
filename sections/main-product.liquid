@@ -119,9 +119,9 @@
                 <p class="product__text inline-richtext{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}" {{ block.shopify_attributes }}>{{- block.settings.text -}}</p>
               {%- when 'title' -%}
                <div class="product__title" {{ block.shopify_attributes }}>
-                      <h1>{{ product.title | escape }} <span class="variant-name"></span></h1>
+                      <h1>{{ product.title | escape | capitalize }} <span class="variant-name"></span></h1>
                       <a href="{{ product.url }}" class="product__title">
-                        <h2 class="h1">{{ product.title | escape }} {% if product.type == 'Mobile Cover' %}<span class="variant-name"></span> {% endif %}</h2>
+                        <h2 class="h1">{{ product.title | escape | capitalize }} {% if product.type == 'Mobile Cover' %}<span class="variant-name"></span> {% endif %}</h2>
                       </a>
                     </div>
               {%- when 'price' -%}    

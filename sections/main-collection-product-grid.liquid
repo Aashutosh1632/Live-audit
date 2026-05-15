@@ -40,6 +40,10 @@
   
 
   {%- paginate collection.products by section.settings.products_per_page -%}
+    {%- comment -%} SEO-010: noindex pages beyond the last real paginated page (e.g. ?page=999) {%- endcomment -%}
+    {%- if paginate.current_page > paginate.pages and paginate.pages > 0 -%}
+      <meta name="robots" content="noindex,follow">
+    {%- endif -%}
     <div class="custom-collection-page-grid {% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
 
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
