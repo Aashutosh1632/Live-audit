@@ -81,6 +81,32 @@ Landed `2026-05-12 18:03:43 → 18:11:04` IST.
 
 ---
 
+## Tier 3A — SEO quick-wins batch (10 audit tasks)
+
+Landed `2026-05-14 17:21:44 → 18:24:23` IST.
+
+### ✅ Done
+
+| Audit ID | When | What |
+|---|---|---|
+| **SEO-017** | 17:21:44 | Set `<html lang>` to `en-IN` for English locale across all 4 layouts (`theme.liquid`, `theme.appbrew.liquid`, `theme.quickshop.liquid`, `password.liquid`). Conditional preserves any other locale the merchant adds. |
+| **SEO-026** | 17:22:31 | Added `\| capitalize` to product H1 in `sections/main-product.liquid` (both `<h1>` and the duplicate `<h2 class="h1">`). Fixes "couch" → "Couch". Liquid `capitalize` only sentence-cases the first word; properly-cased titles unaffected. |
+| **SEO-015** | 17:23:24 | Removed the `<span class="visually-hidden">Collection:</span>` prefix from `sections/main-collection-banner.liquid` H1. Cleans up Google's parse of the H1 across 1,315 collection URLs. |
+| **SEO-009** | 17:24:14 | Closed the tag-trap in `layout/theme.liquid` `<head>`: when `template == 'collection' and current_tags != blank`, emits `noindex,follow` + a canonical override pointing back at the parent collection. |
+| **SEO-029** | 17:25:13 | `noindex,follow` for utility templates (search, customers/*, cart, gift_card, password) added next to SEO-009 in `theme.liquid`. |
+| **SEO-031** | 17:26:21 | Created `templates/robots.txt.liquid`. Preserves Shopify's default robots groups via `for group in robots.default_groups`, then appends explicit `Allow: /` for verified AI crawlers (GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, Claude-Web, PerplexityBot, Google-Extended, Applebot-Extended) and `Disallow: /` for Bytespider + CCBot. |
+| **SEO-003** | 17:27:34 | Rewrote the Organization JSON-LD in `sections/header.liquid` as `OnlineStore` with `@id` anchor, `legalName`, `PostalAddress` (Vadodara/Gujarat/IN), `contactPoint` array using `shop.email` + `shop.phone`, `priceRange`, and preserved `sameAs` social-link logic. Placeholders for `taxID` (GSTIN) and `foundingDate` are commented in the source for the merchant to fill. |
+| **SEO-010** | 17:28:22 | In `sections/main-collection-product-grid.liquid` inside the paginate block, emit `noindex,follow` when `paginate.current_page > paginate.pages`. Shopify Liquid cannot return real HTTP 404; noindex is the strongest theme-only signal. |
+| **SEO-040** | 18:24:23 | Stripped 5 hardcoded `<link rel="stylesheet" href="//deodap.in/cdn/shop/t/468/...">` tags from `snippets/wizzy.search.results.product.liquid`. The theme path 468 is stale (current is 564); the same CSS files are already loaded globally elsewhere. Was creating duplicate broken `<link>` tags per search-result tile. |
+
+### ⊘ Skipped — Admin task, not theme code
+
+| Audit ID | When | Why |
+|---|---|---|
+| **SEO-021** | 17:21:44 | Tighten homepage meta description ≤155 chars. The theme renders `{{ page_description }}` verbatim; the actual string lives in Shopify Admin → Online Store → Preferences → Meta description. Truncating in Liquid would cut mid-word. Merchant rewrite needed in Admin. |
+
+---
+
 ## Hand-off checklist for next Shopify-pushed theme update
 
 When Shopify's GitHub integration auto-commits `"Update from Shopify for theme Live-audit/main"`:
@@ -104,6 +130,6 @@ When Shopify's GitHub integration auto-commits `"Update from Shopify for theme L
 ## Reference
 
 - **Master audit backlog:** `DeoDap Master Audit & Implementation Tracker` Google Sheet (95 tasks across 9 categories).
-- **Audit coverage so far:** 10 task IDs touched (6 in code + 4 documented as N/A).
-- **PRs merged:** #1 (CODE-007), #4 (Tier 1), #5 (Tier 1 follow-up).
-- **PR open:** Tier 2 (`perf/tier-2` branch) — pending review.
+- **Audit coverage so far:** 20 task IDs touched (15 in code + 5 documented as N/A or Admin-only).
+- **PRs merged:** #1 (CODE-007), #4 (Tier 1), #5 (Tier 1 follow-up), #6+#7 (Tier 2 + restructure).
+- **PR open:** Tier 3A (`seo/tier-3a` branch) — pending review.
