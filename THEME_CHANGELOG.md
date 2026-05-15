@@ -107,6 +107,18 @@ Landed `2026-05-14 17:21:44 → 18:24:23` IST.
 
 ---
 
+## Feature batch (off-audit, merchant request)
+
+Landed `2026-05-14 19:15:00` IST.
+
+### ✅ Done
+
+| ID | When | What |
+|---|---|---|
+| **CUSTOM-001** | 19:15:00 | Hide PDP buy buttons (`.buy-btn-part` + `#gokwik-buy-now`) until all required Product Customizer fields are filled. New asset `assets/customizer-buy-btn-gate.js` (loaded `defer` from `snippets/buy-buttons.liquid`). Uses event delegation at the document level so it survives the customizer app re-rendering its DOM. No-op on products without customizer fields. |
+
+---
+
 ## Hand-off checklist for next Shopify-pushed theme update
 
 When Shopify's GitHub integration auto-commits `"Update from Shopify for theme Live-audit/main"`:

@@ -322,6 +322,8 @@
                   </div>
                 </div>
               {%- endif -%}
+              {%- comment -%} Hide buy buttons until required Product Customizer fields are filled. {%- endcomment -%}
+              <script src="{{ 'customizer-buy-btn-gate.js' | asset_url }}" defer="defer"></script>
               <div class="buy-btn-part">
                 <button
                   id="ProductSubmitButton-{{ section_id }}"
